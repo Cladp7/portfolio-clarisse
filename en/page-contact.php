@@ -1,16 +1,9 @@
 <?php
 /**
- * Page « Contact » : WordPress l'utilise automatiquement grâce à son nom : page-{slug}.php
+ * VERSION ANGLAISE de la page « Contact » (/en/contact/), chargée par page-contact.php
  * Pas de formulaire : l'hébergement gratuit bloque l'envoi d'e-mails par PHP,
  * les messages n'arriveraient jamais. Des liens directs, c'est plus fiable.
  */
-
-// Sur /en/…, on affiche la version anglaise de cette page (dossier en/)
-if (clarisse_en()) {
-    require get_stylesheet_directory() . '/en/page-contact.php';
-    return;
-}
-
 
 // Lien vers le CV (même adresse que sur la page Mon parcours)
 $lien_cv = home_url('/wp-content/uploads/2026/09/cv-clarisse-dupont.pdf');
@@ -24,8 +17,8 @@ get_header();
     <!-- 1. En-tête -->
     <section class="projet__entete">
         <div class="projet__conteneur">
-            <h1 class="projet__titre">Me contacter</h1>
-            <p class="projets__intro parcours__intro">Une question, une proposition de stage ? Un petit message suffit, la réponse arrive vite.</p>
+            <h1 class="projet__titre">Contact me</h1>
+            <p class="projets__intro parcours__intro">A question, an internship offer? A short message is all it takes, and you will get a quick reply.</p>
         </div>
     </section>
 
@@ -34,7 +27,7 @@ get_header();
         <div class="projet__conteneur">
             <ul class="demarche">
                 <li class="demarche__carte">
-                    <h2 class="demarche__titre">E-mail</h2>
+                    <h2 class="demarche__titre">Email</h2>
                     <!-- mailto: ouvre directement la messagerie du visiteur -->
                     <a class="contact__lien" href="mailto:dupont.clarisse@hotmail.com">dupont.clarisse@hotmail.com</a>
                 </li>
@@ -55,11 +48,11 @@ get_header();
     <section class="projet__section">
         <div class="projet__conteneur">
             <div class="parcours__appel">
-                <h2 class="parcours__appel-titre">Disponible pour un stage</h2>
-                <p>200 heures minimum, période à convenir, région indifférente (permis B et voiture). Échanges possibles en français ou en anglais.</p>
+                <h2 class="parcours__appel-titre">Available for an internship</h2>
+                <p>200 hours minimum, dates to be agreed, any region (driving licence and own car). Happy to work in French or in English.</p>
                 <div class="projet__actions">
-                    <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_cv); ?>" target="_blank" rel="noopener">Télécharger mon CV</a>
-                    <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">Voir mes projets</a>
+                    <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_cv); ?>" target="_blank" rel="noopener">Download my CV (in French)</a>
+                    <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">See my projects</a>
                 </div>
             </div>
         </div>

@@ -12,8 +12,8 @@ get_header();
     <!-- En-tête de la page -->
     <section class="projet__entete">
         <div class="projet__conteneur">
-            <h1 class="projet__titre">Mes projets</h1>
-            <p class="projets__intro">Sites, applications et maquettes réalisés pendant ma formation en web design.</p>
+            <h1 class="projet__titre"><?php echo cl_t('Mes projets', 'My projects'); ?></h1>
+            <p class="projets__intro"><?php echo cl_t('Sites, applications et maquettes réalisés pendant ma formation en web design.', 'Websites, apps and mock-ups created during my web design training.'); ?></p>
         </div>
     </section>
 
@@ -27,7 +27,7 @@ get_header();
                     <?php endwhile; ?>
                 </div>
             <?php else : ?>
-                <p>Les projets arrivent bientôt ✨</p>
+                <p><?php echo cl_t('Les projets arrivent bientôt ✨', 'Projects coming soon ✨'); ?></p>
             <?php endif; ?>
         </div>
     </section>

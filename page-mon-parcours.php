@@ -8,6 +8,13 @@
  * on change le texte entre les balises, on enregistre, on recharge la page.
  */
 
+// Sur /en/…, on affiche la version anglaise de cette page (dossier en/)
+if (clarisse_en()) {
+    require get_stylesheet_directory() . '/en/page-mon-parcours.php';
+    return;
+}
+
+
 // Lien vers le CV en PDF : à coller ici quand le PDF sera dans la médiathèque
 // (Médias → cliquer sur le PDF → « Copier l'URL »). Tant que c'est vide, le bouton ne s'affiche pas.
 $lien_cv = home_url('/wp-content/uploads/2026/09/cv-clarisse-dupont.pdf');

@@ -23,7 +23,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                 <!-- Fil d'Ariane : « Projets / Nom du projet » -->
                 <p class="projet__ariane">
                     <!-- get_post_type_archive_link('projet') = l'adresse de la page /projets/ -->
-                    <a href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">Projets</a>
+                    <a href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>"><?php echo cl_t('Projets', 'Projects'); ?></a>
                     / <?php the_title(); ?>
                 </p>
 
@@ -58,12 +58,12 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
             <div class="projet__conteneur projet__colonnes">
 
                 <div class="projet__texte">
-                    <h2 class="titre-section">Le contexte</h2>
+                    <h2 class="titre-section"><?php echo cl_t('Le contexte', 'Context'); ?></h2>
                     <?php // wp_kses_post : garde les <p> créés par ACF, mais retire tout code dangereux 
                     ?>
                     <?php echo wp_kses_post(get_field('contexte')); ?>
 
-                    <h2 class="titre-section">L'objectif</h2>
+                    <h2 class="titre-section"><?php echo cl_t('L’objectif', 'Goal'); ?></h2>
                     <?php echo wp_kses_post(get_field('objectif')); ?>
                 </div>
 
@@ -71,7 +71,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                 ?>
                 <?php if ($outils) : ?>
                     <aside class="projet__encadre">
-                        <h3 class="projet__encadre-titre">Outils et techniques</h3>
+                        <h3 class="projet__encadre-titre"><?php echo cl_t('Outils et techniques', 'Tools and techniques'); ?></h3>
                         <ul class="pastilles">
                             <?php foreach ($outils as $outil) : // une pastille par outil coché 
                             ?>
@@ -87,19 +87,20 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
         <!-- =====================================================
          3. LA DÉMARCHE (répéteur « etapes »)
          ===================================================== -->
-        <?php if (have_rows('etapes')) : // seulement s'il y a au moins une étape 
+        <?php $etapes = get_field('etapes'); // toutes les étapes d'un coup (traduites sur /en/) ?>
+        <?php if ($etapes) : // seulement s'il y a au moins une étape 
         ?>
             <section class="projet__section">
                 <div class="projet__conteneur">
-                    <h2 class="titre-section">La démarche</h2>
+                    <h2 class="titre-section"><?php echo cl_t('La démarche', 'Process'); ?></h2>
                     <ol class="etapes">
-                        <?php while (have_rows('etapes')) : the_row(); // une ligne du répéteur = une étape 
+                        <?php foreach ($etapes as $etape) : // une ligne du répéteur = une étape 
                         ?>
                             <li class="etape">
-                                <h3 class="etape__titre"><?php echo esc_html(get_sub_field('titre_etape')); ?></h3>
-                                <div class="etape__texte"><?php echo wp_kses_post(get_sub_field('description_etape')); ?></div>
+                                <h3 class="etape__titre"><?php echo esc_html($etape['titre_etape']); ?></h3>
+                                <div class="etape__texte"><?php echo wp_kses_post(wpautop($etape['description_etape'])); ?></div>
                             </li>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </ol>
                 </div>
             </section>
@@ -113,7 +114,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
         <?php if ($images) : ?>
             <section class="projet__section">
                 <div class="projet__conteneur">
-                    <h2 class="titre-section">En images</h2>
+                    <h2 class="titre-section"><?php echo cl_t('En images', 'In pictures'); ?></h2>
                     <div class="galerie">
                         <?php foreach ($images as $image) : ?>
                             <figure class="galerie__item">
@@ -153,7 +154,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
             <section class="projet__section">
                 <div class="projet__conteneur">
                     <div class="projet__appris">
-                        <h2 class="projet__appris-titre">Ce que j'ai appris</h2>
+                        <h2 class="projet__appris-titre"><?php echo cl_t('Ce que j’ai appris', 'What I learned'); ?></h2>
                         <div class="projet__appris-texte"><?php echo wp_kses_post(get_field('apprentissages')); ?></div> <!-- conteneur pour couler le texte sur 2 colonnes -->
                     </div>
                 </div>
@@ -169,10 +170,10 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                 <div class="projet__actions">
                     <?php if (get_field('lien_site')) : // bouton affiché SEULEMENT si le lien existe 
                     ?>
-                        <a class="bouton bouton--primaire" href="<?php echo esc_url(get_field('lien_site')); ?>" target="_blank" rel="noopener">Voir le site en ligne</a>
+                        <a class="bouton bouton--primaire" href="<?php echo esc_url(get_field('lien_site')); ?>" target="_blank" rel="noopener"><?php echo (strpos(get_field('lien_site'), 'github.com') !== false) ? cl_t('Voir le code sur GitHub', 'View the code on GitHub') : cl_t('Voir le site en ligne', 'Visit the live site'); // lien GitHub = projet de code ?></a>
                     <?php endif; ?>
                     <?php if (get_field('lien_figma')) : ?>
-                        <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_field('lien_figma')); ?>" target="_blank" rel="noopener">Voir la maquette Figma</a>
+                        <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_field('lien_figma')); ?>" target="_blank" rel="noopener"><?php echo cl_t('Voir la maquette Figma', 'View the Figma mock-up'); ?></a>
                     <?php endif; ?>
                 </div>
 
@@ -180,7 +181,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                 ?>
                 <?php if ($suivant) : ?>
                     <a class="projet__suivant" href="<?php echo esc_url(get_permalink($suivant)); ?>">
-                        <span class="projet__suivant-label">Projet suivant</span>
+                        <span class="projet__suivant-label"><?php echo cl_t('Projet suivant', 'Next project'); ?></span>
                         <?php echo esc_html(get_the_title($suivant)); ?> →
                     </a>
                 <?php endif; ?>

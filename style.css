@@ -1529,3 +1529,101 @@ main .projet__entete,
   border: 1px solid #D6CCF7;
   box-shadow: 0 4px 12px rgba(30, 26, 74, .08);
 }
+
+
+/* =========================================================
+   17. ÉCRANS D'ORDINATEUR PORTABLE (zoom Windows 125–150 %)
+   Sur ces écrans, Chrome à 100 % n'a qu'environ 1 330 × 640 px « web » :
+   le hero ne tenait pas en hauteur et le contenu touchait presque les bords.
+   Ces règles ne s'activent QUE sur ces écrans ; les grands écrans ne changent pas.
+   Toutes les valeurs restent sur l'échelle 4-8-12-16-24-32-48-64-96-128.
+   ========================================================= */
+
+/* --- 17.1 Largeur moyenne (1 025 → 1 440 px) : plus d'air sur les côtés (64px au lieu de ~38px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  body {
+    --global-content-edge-padding: 64px;
+  }
+  /* L'illustration grandit moins : elle ne se fait plus couper à droite */
+  .entry-content > .hero.alignfull::after {
+    transform: scale(1.15);
+  }
+}
+
+/* --- 17.2 Écrans peu hauts (≤ 800 px) : tout le hero tient dans l'écran */
+@media (min-width: 1025px) and (max-height: 800px) {
+  /* En-tête : 16 + logo 64 + 16 = 96px (marche inférieure de l'échelle) */
+  :root {
+    --hauteur-entete: 96px;
+  }
+  .site-branding .brand {
+    width: 102px;                                   /* 102 × 222/354 ≈ 64px de haut */
+  }
+  /* Hero : marges resserrées d'une marche (48 → 32, 96 → 64) */
+  .entry-content > .hero.alignfull {
+    padding-top: calc(var(--hauteur-entete) + 32px);
+    padding-bottom: 64px;
+  }
+  .hero .hero__surtitre {
+    margin-bottom: 32px;
+  }
+  /* Titre : sa taille suit aussi la HAUTEUR de l'écran (7 % de la hauteur), entre 36 et 64px */
+  .hero .hero__titre {
+    font-size: clamp(36px, min(4.2vw, 7vh), 64px);
+    margin-bottom: 32px;
+  }
+  .hero .hero__atouts {
+    margin-top: 24px;
+  }
+}
+
+/* --- 17.3 Tablette et mobile : l'illustration ne passe plus SOUS le texte (inutile, elle allongeait la page).
+   Elle devient un décor de fond DERRIÈRE le texte, très transparent (12 %) : le texte reste parfaitement lisible. */
+@media (max-width: 1024px) {
+  .entry-content > .hero.alignfull {
+    position: relative;
+    isolation: isolate;                             /* le décor reste derrière le contenu du hero */
+  }
+  .entry-content > .hero.alignfull::after {
+    position: absolute;
+    inset: var(--hauteur-entete) 0 0 0;             /* toute la surface du hero, sous le menu */
+    width: auto;
+    height: auto;
+    aspect-ratio: auto;
+    margin: 0;
+    transform: none;
+    background-size: min(100%, 640px) auto;
+    background-position: center;
+    opacity: .12;
+    z-index: -1;
+    pointer-events: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* --- 17.4 Mobile (retour de Clarisse) : l'illustration un peu plus visible (12 % → 22 %)
+   et centrée sur le bloc de texte du hero (avant, elle partait vers le bas et la droite) */
+@media (max-width: 1024px) {
+  .entry-content > .hero.alignfull::after {
+    inset: var(--hauteur-entete) var(--global-content-edge-padding, 24px) 0;   /* mêmes marges que le texte */
+    background-size: min(100%, 560px) auto;
+    background-position: center 40%;                /* à hauteur du titre et des boutons */
+    opacity: .22;
+  }
+}
+
+/* --- 17.5 4e catégorie : bleu nuit = back-end (la couleur la plus sombre du coucher de soleil)
+   Texte #2A3577 sur fond #E4E7FA : contraste 9:1 */
+.carte-projet--nuit, .etiquette--nuit {
+  --cat-texte: #2A3577;
+  --cat-fond:  #E4E7FA;
+  --cat-ombre: rgba(42, 53, 119, .38);
+}
+
+/* --- 17.6 Bouton de langue FR / EN dans le menu : petit, discret, à droite de « Me contacter » */
+.menu-langue > a {
+  font-weight: 700;
+  letter-spacing: .08em;
+  font-size: 14px;
+}

@@ -35,7 +35,7 @@ $couleur = get_field('couleur_carte') ? get_field('couleur_carte') : 'violet';
             <p class="carte-projet__texte"><?php echo esc_html(get_the_excerpt()); ?></p>
         <?php endif; ?>
 
-        <span class="carte-projet__voir" aria-hidden="true">Voir le projet →</span>
+        <span class="carte-projet__voir" aria-hidden="true"><?php echo cl_t('Voir le projet →', 'View project →'); ?></span>
     </div>
 
 </article>

@@ -18,10 +18,10 @@ if ($projets_phares->have_posts()) : ?>
             <!-- En-tête de section : titre + phrase à gauche, lien « Tous les projets » à droite -->
             <div class="accueil-projets__entete">
                 <div>
-                    <h2 class="titre-section">Projets phares</h2>
-                    <p class="accueil-projets__intro">Design, intégration et WordPress : trois projets, trois facettes.</p>
+                    <h2 class="titre-section"><?php echo cl_t('Projets phares', 'Featured projects'); ?></h2>
+                    <p class="accueil-projets__intro"><?php echo cl_t('Design, intégration et WordPress : trois projets, trois facettes.', 'Design, front-end and WordPress: three projects, three sides of my work.'); ?></p>
                 </div>
-                <a class="accueil-projets__tous" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">Tous les projets →</a>
+                <a class="accueil-projets__tous" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>"><?php echo cl_t('Tous les projets →', 'All projects →'); ?></a>
             </div>
 
             <div class="grille-projets">

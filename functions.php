@@ -1,6 +1,9 @@
 <?php
 // Ce fichier s'exécute automatiquement quand le thème enfant est actif.
 
+// Version anglaise du portfolio (adresses /en/…, traductions, bouton FR / EN)
+require_once get_stylesheet_directory() . '/inc/langue.php';
+
 // On "accroche" notre fonction au moment où WordPress charge les styles et scripts du site.
 add_action('wp_enqueue_scripts', 'clarisse_charger_styles');
 
@@ -100,4 +103,78 @@ function clarisse_ajouter_projets_phares($contenu)
     ob_start();                                                   // on « enregistre » ce qui va être affiché…
     get_template_part('template-parts/accueil-projets');
     return $contenu . ob_get_clean();                             // …et on l'ajoute après le hero
+}
+
+
+/* =========================================================
+   Aperçu du lien quand on partage le portfolio (WhatsApp, Messenger, LinkedIn…)
+   Sans ces balises « Open Graph », les applis prenaient la 1re grande image de la page
+   (la carte de La Vallée du Savoir) : l'aperçu ne représentait pas le portfolio.
+   - Partout : l'image apercu-portfolio.jpg (1200 × 630 px, le format conseillé)
+   - Sur une page projet : la couverture du projet + son résumé
+   ========================================================= */
+add_action('wp_head', 'clarisse_apercu_partage', 5);
+
+function clarisse_apercu_partage()
+{
+    $titre       = wp_get_document_title();
+    $description = get_bloginfo('description');                       // « Ancienne institutrice bilingue, future web designer »
+    $image       = get_stylesheet_directory_uri() . '/images/apercu-portfolio.jpg';
+    global $wp;
+    $adresse     = home_url($wp->request ? trailingslashit($wp->request) : '/');  // l'adresse de la page affichée
+
+    // Page d'un projet : on montre CE projet
+    if (is_singular('projet')) {
+        if (has_excerpt()) {
+            $description = wp_strip_all_tags(get_the_excerpt());
+        }
+        if (has_post_thumbnail()) {
+            $image = get_the_post_thumbnail_url(null, 'full');
+        }
+    }
+
+    echo '<meta property="og:type" content="website">' . "\n";
+    echo '<meta property="og:site_name" content="Clarisse Dupont – Portfolio">' . "\n";
+    echo '<meta property="og:locale" content="' . (clarisse_en() ? 'en_GB' : 'fr_BE') . '">' . "\n";
+    echo '<meta property="og:title" content="' . esc_attr($titre) . '">' . "\n";
+    echo '<meta property="og:description" content="' . esc_attr($description) . '">' . "\n";
+    echo '<meta property="og:url" content="' . esc_url($adresse) . '">' . "\n";
+    echo '<meta property="og:image" content="' . esc_url($image) . '">' . "\n";
+    echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+    echo '<meta name="description" content="' . esc_attr($description) . '">' . "\n";
+}
+
+
+/* =========================================================
+   Nouvelles options pour les fiches projet (ACF), sans toucher au groupe de champs :
+   - une 4e couleur de catégorie « nuit » (bleu nuit) pour les projets back-end
+   - de nouveaux outils dans la liste à cocher
+   ========================================================= */
+add_filter('acf/load_field/name=couleur_carte', 'clarisse_couleur_nuit');
+
+function clarisse_couleur_nuit($champ)
+{
+    $champ['choices']['nuit'] = 'Bleu nuit (back-end)';
+    return $champ;
+}
+
+add_filter('acf/load_field/name=outils', 'clarisse_outils_supplementaires');
+
+function clarisse_outils_supplementaires($champ)
+{
+    foreach (array('PHP', 'Voyager', 'MySQL', 'Vite', 'Agent IA (Copilot)') as $outil) {
+        $champ['choices'][$outil] = $outil;
+    }
+    return $champ;
+}
+
+
+/* Page « Mes projets » : TOUS les projets sur une seule page (WordPress s'arrêtait à 10) */
+add_action('pre_get_posts', 'clarisse_tous_les_projets');
+
+function clarisse_tous_les_projets($requete)
+{
+    if (!is_admin() && $requete->is_main_query() && $requete->is_post_type_archive('projet')) {
+        $requete->set('posts_per_page', -1);   // -1 = aucune limite
+    }
 }
