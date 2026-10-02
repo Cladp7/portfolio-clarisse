@@ -1,0 +1,1531 @@
+/*
+Theme Name:   Kadence Child – Portfolio Clarisse
+Template:     kadence
+Author:       Clarisse Dupont
+Description:  Thème enfant de Kadence pour le portfolio de Clarisse Dupont.
+Version:      1.0.0
+Text Domain:  kadence-child
+*/
+
+/* Theme Name : le nom qui s'affichera dans Apparence → Thèmes.
+   Template   : LA ligne la plus importante. C'est le nom du DOSSIER du thème parent ("kadence").
+                C'est elle qui dit à WordPress « ce thème est l'enfant de Kadence ».
+   Author, Description, Version : des infos pour toi (et pour un recruteur qui ouvrirait ton code).
+   Text Domain : l'identifiant du thème, utile pour les traductions. */
+
+   /* =========================================================
+   1. VARIABLES (design tokens)
+   Les mêmes valeurs que dans Figma.
+   :root = la racine de la page → ces variables sont utilisables partout.
+   ========================================================= */
+:root {
+  /* Couleurs d'accent pour les détails (étincelles, filets) */
+  --magenta-500: #D9467E;
+  --orange-500:  #FF9F42;
+  --soleil-500:  #FFD08A;
+
+  /* Le dégradé coucher de soleil : lavande en haut → doré en bas */
+  --degrade-page: linear-gradient(180deg, #E9E4FF 0%, #F6E3F7 30%, #FFE3EC 55%, #FFE6DA 80%, #FFEFD6 100%);
+
+  /* Rayons des coins */
+  --rayon-moyen: 16px;
+  --rayon-grand: 24px;
+  --rayon-pilule: 999px;
+
+  /* Texte foncé « saturé » : violet 900 plutôt que le quasi-noir neutre 900
+     (cours Couleurs : éviter le noir, saturer ses gris) */
+  --violet-900: #1E1A4A;
+
+  /* Hauteur de l'en-tête (même valeur que dans le Customizer) */
+  --hauteur-entete: 112px;
+
+  /* Ombres en 2 parties (cours « La profondeur ») */
+  --ombre-carte:  0 3px 6px rgba(16,15,34,.15), 0 2px 4px rgba(16,15,34,.12);
+  --ombre-survol: 0 10px 20px rgba(16,15,34,.15), 0 3px 6px rgba(16,15,34,.10);
+}
+
+/* =========================================================
+   2. FOND DE PAGE : le dégradé coucher de soleil
+   ========================================================= */
+body {
+  background: var(--degrade-page);   /* var(--nom) = on réutilise la variable du dessus */
+}
+/* Sur toutes les pages SAUF l'accueil (qui a déjà le pinceau dans son hero),
+   on pose le coup de pinceau et les étincelles en haut de la page.
+   « body:not(.home) » = le body qui n'a PAS la classe « home »
+   (WordPress ajoute cette classe uniquement sur la page d'accueil). */
+body:not(.home) {
+  background:
+    /* 1re couche (au-dessus) : le pinceau, en haut, centré, sans répétition.
+       Largeur = 100% de l'écran, mais jamais moins de 1200px :
+       sur mobile, on garde un pinceau assez grand (recadré sur les côtés) */
+    url('images/hero-pinceau.svg') center top / max(100%, 1200px) auto no-repeat,
+    /* 2e couche (en dessous) : le dégradé coucher de soleil habituel */
+    var(--degrade-page);
+}
+
+/* =========================================================
+   3. FOND DU CONTENU TRANSPARENT
+   En mode "Sans cadre", Kadence met un fond blanc sur tout le contenu,
+   ce qui cache notre dégradé. On le rend transparent pour laisser voir le body.
+   ========================================================= */
+.content-bg,                          /* le fond blanc des blocs de contenu */
+body.content-style-unboxed .site {    /* le fond du site entier quand le style est "Sans cadre" */
+  background: transparent;            /* transparent = on voit ce qu'il y a derrière (le dégradé) */
+}
+
+/* =========================================================
+   4. HERO (page d'accueil)
+   ========================================================= */
+.hero {
+  /* Le coup de pinceau en arrière-plan (chemin relatif à style.css) */
+  background: url('images/hero-pinceau.svg') center / cover no-repeat;
+  /* haut = hauteur de l'en-tête transparent + 48px d'air : le logo est plus grand que l'ancien texte,
+     il faut que le surtitre reste plus proche de son titre (32px) que du logo (48px).
+     Avec l'espace sous le logo, le surtitre reste visuellement plus loin du menu
+     que de son titre (32px) : il appartient bien au hero (loi de proximité). */
+  padding-top: calc(var(--hauteur-entete) + 48px);
+  padding-bottom: 42px;
+  margin-top: 0;
+}
+
+/* Le surtitre : violet 600, taille Body L */
+.hero__surtitre {
+  color: var(--global-palette2);   /* violet 600, défini dans la palette Kadence */
+  font-size: 20px;
+  line-height: 34px;
+}
+
+/* Le grand titre : style Hero XS de l'échelle du cours (Laptop 52/57) */
+.hero__titre {
+  font-size: 52px;
+  line-height: 62px;               /* ≈ 1,2 : un peu plus aéré, reste serré comme un grand titre doit l'être */
+  max-width: 760px;                /* limite la longueur des lignes (cours « Les textes ») */
+}
+
+/* Bouton principal : fond violet plein, en pilule (action primaire, cours « Hiérarchie 4 ») */
+.bouton-primaire .wp-block-button__link {
+  background: var(--global-palette1);
+  color: #fff;
+  border-radius: var(--rayon-pilule);
+  padding: 16px 32px;
+  font-weight: 700;
+  box-shadow: var(--ombre-carte);
+  transition: all .2s ease;        /* animation douce au survol */
+}
+.bouton-primaire .wp-block-button__link:hover {
+  background: var(--global-palette2);
+  box-shadow: var(--ombre-survol);
+  transform: translateY(-2px);     /* le bouton "monte" légèrement */
+}
+
+/* Bouton secondaire en style lien (action tertiaire) */
+.bouton-lien .wp-block-button__link {
+  background: transparent;
+  color: var(--global-palette1);
+  padding: 16px 8px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;      /* souligné un peu décollé du texte, plus élégant */
+}
+
+/* Tablette */
+@media (max-width: 1024px) {
+  .hero { padding: calc(var(--hauteur-entete) + 48px) 24px 96px; }
+  .hero__titre { font-size: 44px; line-height: 53px; }   /* Hero XS tablette */
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .hero { padding: 128px 16px 64px; }
+  .hero__surtitre { font-size: 18px; line-height: 30px; }
+  .hero__titre { font-size: 36px; line-height: 43px; }   /* Hero XS mobile */
+}
+
+
+/* 4c. HERO – marges intérieures prioritaires
+   Kadence met « padding: 0 » sur tous les blocs pleine largeur (.alignfull).
+   Notre sélecteur a 3 classes (entry-content + hero + alignfull)
+   contre 2 pour Kadence : le plus précis l'emporte. */
+.entry-content > .hero.alignfull {
+  /* Kadence calcule la pleine largeur avec 100vw, qui INCLUT la barre de défilement :
+     le hero débordait de quelques pixels et le texte se décalait par rapport au logo.
+     On lui donne exactement la largeur de la page. */
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  /* Même calcul que le conteneur du menu Kadence :
+     (largeur de l'écran - largeur du contenu) / 2 + marge intérieure du conteneur.
+     --global-content-width et --global-content-edge-padding sont des variables
+     de Kadence, réglées dans le Customizer. */
+  /* EXACTEMENT le même calcul que le conteneur de l'en-tête, sur toutes les largeurs d'écran :
+     (espace libre de chaque côté du conteneur, jamais négatif) + marge intérieure de Kadence.
+     Plus de « minimum 80px » ni de valeurs tablette/mobile à part : c'est ce qui
+     décalait le texte par rapport au logo sur les écrans de portable. */
+  padding-left: calc(max(0px, (100% - var(--global-content-width)) / 2) + var(--global-content-edge-padding));
+  padding-right: calc(max(0px, (100% - var(--global-content-width)) / 2) + var(--global-content-edge-padding));
+}
+/* 4d. HERO – espacements (loi de proximité)
+   « .hero .hero__titre » (2 classes) est plus fort que la règle
+   de Kadence « .single-content h1 » (1 classe + 1 balise). */
+.hero .hero__surtitre {
+  margin: 0 0 48px;      /* surtitre → titre : 32px. Le surtitre remonte de 8px, le titre ne bouge pas (24 + 34 + 32 = 32 + 34 + 24) */
+}
+.hero .hero__titre {
+  margin: 0 0 32px;      /* titre → boutons : 32px, un peu plus d'air avant l'action */
+  color: var(--violet-900);
+}
+.hero .wp-block-buttons {
+  gap: 24px;             /* 24px entre les boutons au lieu de 9px */
+}
+
+/* 4e. HERO – étincelles à gauche du texte
+   Elles sont accrochées au bloc de texte (et non au fond), pour rester
+   toujours au même endroit par rapport au titre, quelle que soit la largeur d'écran. */
+.hero .wp-block-group__inner-container {
+  position: relative;    /* repère pour placer les étincelles */
+}
+.hero .wp-block-group__inner-container::before {
+  content: "";           /* un pseudo-élément a besoin d'un contenu, même vide */
+  position: absolute;
+  top: -38px;            /* la petite étincelle dorée tombe pile à la hauteur du surtitre */
+  left: -80px;           /* entièrement dans la marge gauche (80px) : ne touche jamais le texte */
+  width: 72px;
+  height: 72px;
+  background: url('images/etincelles-gauche.svg') center / contain no-repeat;
+  pointer-events: none;  /* décoratif : ne gêne pas les clics */
+}
+/* Tablette et mobile : la marge est trop étroite, on les cache */
+@media (max-width: 1024px) {
+  .hero .wp-block-group__inner-container::before { display: none; }
+}
+
+/* =========================================================
+   5. EN-TÊTE
+   ========================================================= */
+/* Le logo « Miss Clarisse » à la place du texte « Clarisse Dupont ».
+   Le texte reste dans le code (pour Google et les lecteurs d'écran),
+   mais il est caché visuellement et remplacé par l'image du logo.
+   .brand = le lien vers l'accueil créé par Kadence (ordinateur ET mobile). */
+.site-branding .brand {
+  display: block;
+  width: 136px;                                     /* 85px de haut : ~14px d'air au-dessus et en dessous (retour de Clarisse : « collé »)*/                                     /* ≈ 95px de haut, dans un en-tête de 112px */
+  aspect-ratio: 354 / 222;                          /* proportions exactes du dessin (recadré au ras des poignées) */
+  background: url('images/logo-miss-clarisse.webp') left center / contain no-repeat;
+}
+/* Texte caché visuellement mais toujours lu par les lecteurs d'écran (technique « visually hidden ») */
+.site-branding .site-title-wrap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* En-tête un peu plus haut pour laisser respirer le logo (même valeur que --hauteur-entete) */
+.site-header .site-main-header-inner-wrap {
+  min-height: var(--hauteur-entete);
+}
+/* Mobile : logo un peu plus petit */
+@media (max-width: 767px) {
+  .site-branding .brand { width: 112px; }
+  :root { --hauteur-entete: 88px; }                 /* en-tête moins haut sur mobile (utilisé partout) */
+}
+
+/* Le lien « Me contacter » transformé en bouton à contour (action secondaire, cours « Hiérarchie »).
+   Il suffit d'ajouter la classe CSS « menu-bouton » à l'élément de menu
+   (Apparence → Menus → Options de l'écran → cocher « Classes CSS »). */
+.header-navigation .header-menu-container ul li.menu-bouton > a {
+  border: 2px solid var(--global-palette1);   /* contour violet 500 */
+  border-radius: var(--rayon-pilule);
+  padding: 10px 22px;                         /* 10 + 20 (interligne) + 10 + 2×2 (bordure) = 44px de haut, comme la maquette */
+  color: var(--global-palette1);
+  font-weight: 700;
+  transition: all .2s ease;
+}
+.header-navigation .header-menu-container ul li.menu-bouton > a:hover {
+  background: var(--global-palette1);         /* au survol : le bouton se remplit */
+  color: #fff;
+}
+/* =========================================================
+   6. PAGE PROJET (single-projet.php)
+   ========================================================= */
+
+/* Le conteneur : même largeur et mêmes marges que le menu de Kadence,
+   pour que tout soit aligné sur la même ligne verticale */
+.projet__conteneur {
+  max-width: var(--global-content-width);
+  margin: 0 auto;                                   /* centré */
+  padding: 0 var(--global-content-edge-padding);
+}
+
+/* --- 6.1 En-tête du projet --- */
+.projet__entete {
+  /* haut = en-tête transparent + 8px d'air : le fil d'Ariane (navigation) reste proche du menu,
+     et l'étiquette + le titre forment un groupe à part, 48px plus bas ; bas = 32px */
+  padding: calc(var(--hauteur-entete) + 24px) 0 32px;   /* 24px sous le logo, 48px avant l'étiquette */
+}
+
+/* Fil d'Ariane : petit texte discret (style Caption de l'échelle) */
+.projet .projet__ariane {   /* « .projet » devant : sinon la règle « .projet p » (plus forte) écrase la marge */
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--global-palette5);                    /* gris secondaire */
+  margin: 0 0 48px;                                 /* 48px : l'étiquette appartient au TITRE (24px), pas au fil d'Ariane */
+}
+.projet__ariane a {
+  color: var(--global-palette1);                    /* lien en violet 500 */
+}
+
+/* Étiquette : le petit badge doré (réutilisé plus tard sur les cartes) */
+.etiquette {
+  display: inline-block;                            /* se comporte comme un bloc, mais reste sur la ligne */
+  background: var(--soleil-500);
+  color: var(--violet-900);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  padding: 4px 12px;                                /* 4 + 20 + 4 = 28px de haut, comme la maquette */
+  border-radius: var(--rayon-pilule);
+  margin-bottom: 32px;                              /* 32px sous l'étiquette : elle respire, et reste plus proche du titre (32) que du fil d'Ariane (48) */
+}
+
+/* Titre : style Title LG de l'échelle (Laptop 48/55),
+   plus petit que le titre du hero de l'accueil, qui reste la page la plus importante */
+.projet .projet__titre {
+  font-size: 48px;
+  line-height: 55px;
+  color: var(--violet-900);
+  margin: 0 0 24px;
+}
+
+/* Introduction : Body L (20/34), limitée à 760px pour garder des lignes lisibles */
+.projet .projet__intro {    /* idem : plus fort que « .projet p » */
+  font-size: 20px;
+  line-height: 34px;
+  max-width: 760px;
+  margin: 0 0 48px;
+  text-wrap: pretty;                                /* évite un mot tout seul sur la dernière ligne */
+}
+
+/* Grande capture : format paysage 2:1 comme la maquette (1280 × 640) */
+.projet__visuel img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;                              /* hauteur = la moitié de la largeur */
+  object-fit: cover;                                /* remplit le cadre sans déformer l'image */
+  object-position: top;                             /* on garde le HAUT de la capture */
+  border-radius: var(--rayon-grand);
+  box-shadow: var(--ombre-carte);
+}
+
+/* --- 6.2 Sections communes --- */
+.projet__section {
+  /* 32px en haut + 32px en bas = 64px entre deux sections.
+     64 reste plus grand que le plus grand espace À L'INTÉRIEUR d'une section (48px) :
+     cours « Éviter les espacements ambigus » */
+  padding: 32px 0;
+}
+
+/* Titre de section + filet d'accent magenta en dessous (Title MD Laptop 36/43) */
+.titre-section {
+  font-size: 36px;
+  line-height: 43px;
+  color: var(--violet-900);
+  margin: 0 0 32px;          /* titre → texte : 32px (plus proche de SON texte que du bloc précédent) */
+  position: relative;                               /* repère pour placer le filet */
+}
+.titre-section::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -16px;                                    /* le filet à mi-chemin entre le titre et le texte */
+  width: 48px;
+  height: 4px;
+  border-radius: var(--rayon-pilule);
+  background: var(--magenta-500);
+}
+
+/* --- 6.3 Contexte / objectif + encadré outils --- */
+.projet__colonnes {
+  display: grid;
+  grid-template-columns: minmax(0, 680px) minmax(0, 504px); /* texte à gauche, encadré à droite */
+  justify-content: space-between;
+  gap: 48px;
+  align-items: start;                               /* l'encadré ne s'étire pas en hauteur */
+}
+.projet__texte p {
+  font-size: 18px;
+  line-height: 30px;
+}
+.projet__texte .titre-section:not(:first-child) {
+  margin-top: 48px;                                 /* espace avant « L'objectif » */
+}
+
+/* L'encadré « Outils et techniques » : une carte blanche */
+.projet__encadre {
+  background: rgba(255, 255, 255, .8);              /* blanc légèrement transparent : on devine le fond */
+  border-radius: var(--rayon-grand);
+  padding: 32px;
+  box-shadow: var(--ombre-carte);
+}
+.projet__encadre-titre {
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--violet-900);
+  margin: 0 0 16px;
+}
+
+/* Les pastilles (liste sans puces, en ligne) */
+.pastilles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;                                  /* passent à la ligne si besoin */
+  gap: 8px;
+}
+.pastille {
+  background: var(--global-palette8);               /* neutre 100 */
+  border: 1px solid #CAC8EA;                         /* violet 200 */
+  color: var(--global-palette2);                    /* violet 600 */
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--rayon-pilule);
+}
+
+/* --- 6.4 La démarche : étapes numérotées sur 2 colonnes ---
+   5 colonnes = ~20 caractères par ligne (trop court) ; 1 colonne = page trop longue
+   et moitié droite vide. 2 colonnes = ~60 caractères par ligne (cours « Les textes »)
+   et une page équilibrée sur toute la largeur de la grille. */
+.etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);            /* 2 colonnes : lignes d'environ 60 caractères (45–75 = confortable) */
+  gap: 24px;                                        /* même gouttière que la grille 12 colonnes (24px) */
+  counter-reset: etape;                             /* on lance un compteur CSS */
+}
+.etape {
+  display: grid;
+  grid-template-columns: 44px 1fr;                  /* le numéro à gauche, le texte à droite */
+  column-gap: 24px;
+  align-items: start;
+  background: rgba(255, 255, 255, .8);
+  border-radius: var(--rayon-moyen);
+  padding: 24px;
+  box-shadow: var(--ombre-carte);
+  counter-increment: etape;                         /* +1 à chaque étape */
+}
+.etape::before {
+  content: counter(etape);                          /* affiche 1, 2, 3… automatiquement */
+  grid-row: 1 / span 2;                             /* le numéro occupe la hauteur du titre + du texte */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--global-palette1);               /* violet 500 */
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+}
+.etape__titre {
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--violet-900);
+  margin: 6px 0 8px;                                /* 6px : centré sur le rond ; 8px : collé à son texte */
+}
+.etape__texte,
+.etape__texte p {
+  font-size: 16px;
+  line-height: 26px;
+  margin: 0;
+}
+
+/* --- 6.5 Galerie : 3 captures côte à côte, chacune avec son titre et son explication ---
+   Image au-dessus, texte en dessous (proximité : chaque texte est collé à SON image). */
+.galerie {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);            /* 3 colonnes = 4 colonnes chacune sur la grille de 12 */
+  gap: 24px;
+  align-items: start;
+}
+.galerie__item {
+  margin: 0;
+}
+.galerie__image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;                            /* toutes les captures ont la même forme : grille régulière */
+  object-fit: cover;
+  object-position: top;                             /* on garde le haut de la capture (titre de la page) */
+  border-radius: var(--rayon-moyen);
+  box-shadow: var(--ombre-carte);
+  transition: all .2s ease;
+}
+.galerie__image:hover img {
+  box-shadow: var(--ombre-survol);                  /* au survol : l'image « monte », elle est cliquable */
+  transform: translateY(-4px);
+}
+.galerie__texte {
+  margin-top: 16px;
+}
+.galerie__titre {
+  font-size: 20px;                                  /* Title XS mobile / Body L : sous-titre de carte */
+  line-height: 28px;
+  color: var(--violet-900);
+  margin: 0 0 8px;                                  /* collé à sa description */
+}
+.galerie__texte p {
+  font-size: 16px;                                  /* Body S : ~50 caractères par ligne dans une colonne */
+  line-height: 26px;
+}
+
+/* --- 6.6 Ce que j'ai appris : encadré avec bordure d'accent (cours « Hiérarchie ») --- */
+.projet__appris {
+  background: rgba(255, 255, 255, .8);
+  border-left: 6px solid var(--magenta-500);        /* la bordure d'accent à gauche */
+  border-radius: var(--rayon-grand);
+  padding: 48px;
+  box-shadow: var(--ombre-carte);
+}
+.projet__appris-titre {
+  font-size: 28px;
+  line-height: 35px;
+  color: var(--violet-900);
+  margin: 0 0 16px;
+}
+.projet__appris-texte {
+  max-width: 760px;                                 /* un seul paragraphe : lignes de longueur lisible */
+  column-gap: 48px;
+}
+/* S'il y a PLUSIEURS paragraphes (p + p), on les répartit sur 3 colonnes, une idée par colonne */
+.projet__appris-texte:has(p + p) {
+  max-width: none;
+  columns: 3;
+}
+.projet__appris p {
+  font-size: 18px;
+  line-height: 30px;
+  break-inside: avoid;                              /* un paragraphe n'est jamais coupé entre 2 colonnes */
+}
+
+/* --- 6.7 Liens et projet suivant --- */
+.projet__liens {
+  display: flex;
+  justify-content: space-between;                   /* boutons à gauche, projet suivant à droite */
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.projet__actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+/* Boutons réutilisables partout (mêmes styles que ceux du hero) */
+.bouton {
+  display: inline-block;
+  padding: 16px 32px;
+  border-radius: var(--rayon-pilule);
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .2s ease;
+}
+.bouton--primaire {
+  background: var(--global-palette1);
+  color: #fff;
+  box-shadow: var(--ombre-carte);
+}
+.bouton--primaire:hover {
+  background: var(--global-palette2);
+  color: #fff;
+  box-shadow: var(--ombre-survol);
+  transform: translateY(-2px);
+}
+.bouton--secondaire {
+  border: 2px solid var(--global-palette1);
+  color: var(--global-palette1);
+  padding: 14px 30px;                               /* 2px de moins pour compenser la bordure */
+}
+.bouton--secondaire:hover {
+  background: var(--global-palette1);
+  color: #fff;
+}
+.projet__suivant {
+  text-align: right;
+  font-size: 28px;
+  line-height: 35px;
+  font-weight: 700;
+  color: var(--global-palette1);
+  text-decoration: none;
+}
+.projet__suivant-label {
+  display: block;                                   /* « Projet suivant » sur sa propre ligne */
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: var(--global-palette5);
+}
+/* --- 6.8 Corrections d'espacement --- */
+
+/* Kadence met 18px au-dessus ET en dessous de chaque paragraphe.
+   Sur la page projet, on garde seulement 16px ENTRE deux paragraphes. */
+.projet p {
+  margin: 0 0 16px;
+}
+.projet p:last-child {
+  margin-bottom: 0;          /* le dernier paragraphe d'un bloc ne pousse plus rien en dessous */
+}
+/* Tablette */
+@media (max-width: 1024px) {
+  .projet .projet__titre { font-size: 40px; line-height: 48px; }
+  .projet__colonnes { grid-template-columns: 1fr; }        /* encadré sous le texte */
+  .galerie { grid-template-columns: repeat(2, 1fr); }      /* 2 captures par ligne */
+  .projet__appris-texte:has(p + p) { columns: 1; }         /* 1 seule colonne de texte */
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .projet .projet__titre { font-size: 36px; line-height: 43px; }
+  .projet__intro { font-size: 18px; line-height: 30px; }
+  .projet__visuel img { aspect-ratio: 4 / 3; }      /* un peu plus haute sur petit écran */
+  .projet__appris { padding: 32px 24px; }
+  .etapes, .galerie { grid-template-columns: 1fr; }       /* tout en 1 colonne */
+  .projet__suivant { text-align: left; }
+}
+/* Liens du menu : violet 600 au lieu du gris (le gris donnait l'impression de liens désactivés).
+   :not(.menu-bouton) = tous les liens SAUF le bouton « Me contacter », qui garde son propre style. */
+.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a {
+  color: var(--global-palette2);                    /* violet 600 : contraste ~8:1 sur le fond clair */
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: transparent;               /* soulignement invisible au repos… */
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  transition: all .2s ease;
+}
+/* …qui apparaît au survol et sur la page où l'on se trouve (repère de navigation) */
+.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a:hover,
+.header-navigation .header-menu-container ul li.current-menu-item:not(.menu-bouton) > a {
+  color: var(--global-palette1);                    /* violet 500 */
+  text-decoration-color: var(--magenta-500);        /* soulignement magenta, comme les filets d'accent */
+}
+
+/* En-tête : Kadence emboîte DEUX conteneurs qui ajoutent chacun 24px de marge intérieure.
+   Sur les écrans de portable, le logo se retrouvait donc 24px plus à droite que le texte du hero.
+   On retire la marge du conteneur intérieur : le logo s'aligne pile sur le contenu de la page. */
+.site-header .site-main-header-wrap .site-container {   /* ordinateur ET mobile */
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* =========================================================
+   7. PAGE PROJETS + CARTES DE PROJET (comme la maquette « Projets phares »)
+   ========================================================= */
+/* Titre « Mes projets » : il reprend le style .projet__titre (48px, violet 900, comme le titre du hero) */
+/* Phrase d'intro : en couleur et en italique */
+.projets .projets__intro {
+  font-size: 20px;
+  line-height: 34px;
+  font-style: italic;
+  color: var(--global-palette1);                    /* violet 500 : contraste ~6:1 sur le fond clair */
+  margin: 0;                                        /* pas de largeur max : la phrase tient sur une ligne */
+  text-wrap: pretty;
+}
+/* Pas de fil d'Ariane ni de surtitre ici : le titre est le premier élément sous le logo,
+   on lui laisse 48px d'air, comme le hero de l'accueil */
+.projets .projet__entete {
+  padding-top: calc(var(--hauteur-entete) + 48px);
+}
+
+/* Grille : 3 cartes par ligne (3 × 4 colonnes de la grille 12), gouttière 24px */
+.grille-projets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* La carte */
+.carte-projet {
+  position: relative;                               /* repère pour le lien qui couvre toute la carte */
+  display: flex;
+  flex-direction: column;                           /* image en haut, contenu en dessous */
+  border-radius: var(--rayon-grand);
+  overflow: hidden;                                 /* l'image suit les coins arrondis */
+  box-shadow: var(--ombre-carte);
+  transition: all .2s ease;
+}
+.carte-projet:hover {
+  box-shadow: var(--ombre-survol);                  /* au survol, la carte « monte » */
+  transform: translateY(-4px);
+}
+
+/* Image : même hauteur pour toutes les cartes (maquette : 240px) */
+.carte-projet__image {
+  aspect-ratio: 16 / 9;
+  background: var(--global-palette8);
+}
+.carte-projet__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Contenu coloré */
+.carte-projet__contenu {
+  flex: 1;                                          /* toutes les cartes d'une ligne ont la même hauteur */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+}
+.carte-projet .etiquette {
+  margin-bottom: 12px;
+}
+.carte-projet .carte-projet__titre {
+  font-size: 28px;                                  /* Title SM */
+  line-height: 35px;
+  margin: 0 0 12px;
+}
+.carte-projet__lien {
+  color: inherit;
+  text-decoration: none;
+}
+/* Astuce accessible : un pseudo-élément étend la zone cliquable du lien à toute la carte */
+.carte-projet__lien::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.carte-projet .carte-projet__texte {
+  font-size: 16px;                                  /* Body S */
+  line-height: 26px;
+  margin: 0 0 16px;
+  flex: 1;                                          /* pousse « Voir le projet » tout en bas */
+}
+.carte-projet__voir {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+/* Les 3 couleurs (champ ACF « couleur_carte ») — contrastes vérifiés ≥ 4,5:1 */
+.carte-projet--violet .carte-projet__contenu  { background: var(--global-palette1); color: #fff; }   /* violet 500 */
+.carte-projet--magenta .carte-projet__contenu { background: #B12D62; color: #fff; }                   /* magenta 600 */
+.carte-projet--orange .carte-projet__contenu  { background: var(--orange-500); color: var(--violet-900); }
+.carte-projet--violet .carte-projet__titre,
+.carte-projet--magenta .carte-projet__titre { color: #fff; }
+.carte-projet--orange .carte-projet__titre { color: var(--violet-900); }
+
+/* Tablette : 2 cartes par ligne ; mobile : 1 */
+@media (max-width: 1024px) {
+  .grille-projets { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .grille-projets { grid-template-columns: 1fr; }
+}
+
+
+/* =========================================================
+   8. PIED DE PAGE
+   ========================================================= */
+.site-footer .footer-html-inner p {
+  color: var(--violet-900);
+  font-size: 16px;
+  line-height: 26px;
+  margin: 0;
+}
+.site-footer .footer-html-inner a {
+  color: var(--global-palette2);                    /* violet 600, comme les liens du menu */
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: all .2s ease;
+}
+.site-footer .footer-html-inner a:hover {
+  text-decoration-color: var(--magenta-500);        /* même soulignement magenta que le menu */
+}
+
+
+/* =========================================================
+   9. ACCUEIL – SECTION « PROJETS PHARES »
+   ========================================================= */
+/* Même correction que le hero : pleine largeur exacte (sans la barre de défilement) */
+.entry-content > .accueil-projets.alignfull {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 0 96px;                                /* 96px avant le pied de page */
+}
+/* Titre + phrase à gauche, lien à droite, alignés sur la même ligne de base en bas */
+.accueil-projets__entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 48px;                              /* 48px avant les cartes */
+}
+.accueil-projets .accueil-projets__intro {
+  font-size: 20px;
+  line-height: 34px;
+  font-style: italic;
+  color: var(--global-palette1);                    /* même style que l'intro de la page Projets */
+  margin: 0;
+}
+.accueil-projets__tous {
+  font-weight: 700;
+  color: var(--global-palette1);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  white-space: nowrap;
+  transition: all .2s ease;
+}
+.accueil-projets__tous:hover {
+  text-decoration-color: var(--magenta-500);
+}
+@media (max-width: 767px) {
+  .accueil-projets__entete { flex-direction: column; align-items: flex-start; }
+}
+
+
+/* =========================================================
+   10. PAGE « MON PARCOURS » (page-mon-parcours.php)
+   Même en-tête et mêmes sections que la page « Mes projets »
+   (64px entre deux sections), mêmes cartes blanches que la page projet.
+   ========================================================= */
+
+/* Intro : ici la phrase est plus longue → on la limite à 760px (45–75 caractères par ligne) */
+.parcours .parcours__intro {
+  max-width: 760px;
+}
+
+/* Fin de page : 32px (section) + 64px = 96px avant le pied de page, comme l'accueil */
+main.parcours {
+  padding-bottom: 64px;
+}
+
+/* --- 10.1 Recherche de stage : une grande carte blanche --- */
+.parcours__stage {
+  background: rgba(255, 255, 255, .8);
+  border-radius: var(--rayon-grand);
+  padding: 48px;
+  box-shadow: var(--ombre-carte);
+}
+.parcours .parcours__stage-titre {
+  font-size: 28px;
+  line-height: 35px;
+  color: var(--violet-900);
+  margin: 0 0 8px;                                  /* titre collé à SA phrase (proximité) */
+}
+.parcours .parcours__stage-texte {
+  font-size: 18px;
+  line-height: 30px;
+  margin: 0;
+}
+/* Les 4 infos côte à côte (4 × 3 colonnes de la grille 12) */
+.parcours__infos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin: 32px 0;                                   /* 32px : plus d'air entre les groupes qu'à l'intérieur (8px) */
+}
+.parcours__infos dt {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;                            /* petites capitales espacées = plus lisibles */
+  color: var(--global-palette1);                    /* violet 500 */
+  margin: 0 0 4px;
+}
+.parcours__infos dd {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--violet-900);
+  margin: 0;
+}
+
+/* --- 10.2 Ma démarche : 3 cartes (3 × 4 colonnes) --- */
+.demarche,
+.competences {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.demarche__carte,
+.competences__carte {
+  background: rgba(255, 255, 255, .8);
+  border-radius: var(--rayon-moyen);
+  padding: 32px;
+  box-shadow: var(--ombre-carte);
+}
+/* Petite étincelle dorée devant chaque mot : rappel du décor du site */
+.demarche__titre::before {
+  content: "✦";
+  color: var(--orange-500);
+  margin-right: 8px;
+}
+.parcours .demarche__titre,
+.parcours .competences__titre {
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--violet-900);
+  margin: 0 0 16px;
+}
+.demarche__carte p {
+  font-size: 18px;
+  line-height: 30px;
+}
+
+/* --- 10.3 La frise : date à gauche, contenu à droite relié par une ligne verticale --- */
+.frise {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 920px;                                 /* texte ≈ 680px : lignes de 60–70 caractères */
+}
+.frise__etape {
+  display: grid;
+  grid-template-columns: 160px 1fr;                 /* colonne des dates / colonne du contenu */
+  column-gap: 24px;
+}
+.parcours .frise__date {
+  font-size: 16px;
+  line-height: 32px;                                /* même hauteur de ligne que le titre : alignés */
+  font-weight: 700;
+  color: var(--global-palette1);
+  margin: 0;
+  text-align: right;
+}
+.frise__contenu {
+  position: relative;                               /* repère pour la pastille */
+  border-left: 2px solid #CAC8EA;                   /* la ligne verticale (violet 200) */
+  padding: 0 0 48px 32px;                           /* 48px entre deux étapes */
+}
+.frise__etape:last-child .frise__contenu {
+  padding-bottom: 0;
+}
+/* La pastille magenta sur la ligne, à hauteur du titre */
+.frise__contenu::before {
+  content: "";
+  position: absolute;
+  left: -9px;                                       /* (16px de pastille + 2px de ligne) / 2 */
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--magenta-500);
+  box-shadow: 0 0 0 4px #F6E3F7;                    /* petit halo couleur du fond */
+}
+.parcours .frise__titre {
+  font-size: 24px;
+  line-height: 32px;
+  color: var(--violet-900);
+  margin: 0 0 4px;
+}
+.parcours .frise__lieu {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--global-palette5);
+  margin: 0 0 12px;
+}
+.frise__contenu p {
+  font-size: 18px;
+  line-height: 30px;
+}
+.parcours .frise__design {
+  font-size: 16px;
+  line-height: 26px;
+  font-style: italic;
+  color: var(--global-palette2);                    /* violet 600 */
+  margin-top: 12px;
+}
+
+/* --- 10.4 Appel final : carte centrée --- */
+.parcours__appel {
+  text-align: center;
+  background: rgba(255, 255, 255, .8);
+  border-radius: var(--rayon-grand);
+  padding: 64px 48px;
+  box-shadow: var(--ombre-carte);
+}
+.parcours .parcours__appel-titre {
+  font-size: 36px;
+  line-height: 43px;
+  color: var(--violet-900);
+  margin: 0 0 16px;
+}
+.parcours__appel p {
+  font-size: 18px;
+  line-height: 30px;
+  margin: 0 0 32px;
+}
+.parcours__appel .projet__actions {
+  justify-content: center;
+}
+
+/* Tablette */
+@media (max-width: 1024px) {
+  .parcours__infos { grid-template-columns: repeat(2, 1fr); }
+  .demarche, .competences { grid-template-columns: 1fr; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .parcours__stage { padding: 32px 24px; }
+  .parcours__infos { grid-template-columns: 1fr; gap: 16px; }
+  .frise__etape { grid-template-columns: 1fr; }     /* la date passe au-dessus */
+  .parcours .frise__date { text-align: left; padding-left: 34px; line-height: 26px; }
+  .parcours__appel { padding: 48px 24px; }
+  .parcours .parcours__appel-titre { font-size: 28px; line-height: 35px; }
+}
+
+/* 10.5 Réussite de la 1re année : petit encadré doré pour la mettre en valeur */
+.parcours .frise__reussite {
+  display: inline-block;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--violet-900);
+  background: rgba(255, 208, 138, .45);             /* soleil 500 adouci */
+  border-left: 4px solid var(--orange-500);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+}
+
+/* =========================================================
+   11. PAGE CONTACT
+   ========================================================= */
+/* Les liens des cartes : violet 500, gras, soulignement magenta au survol (comme le menu) */
+.contact__lien {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--global-palette1);
+  word-break: break-word;             /* la longue adresse e-mail passe à la ligne sur mobile */
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  transition: all .2s ease;
+}
+.contact__lien:hover {
+  text-decoration-color: var(--magenta-500);
+}
+
+/* =========================================================
+   13. REFONTE (conseils de Julien et d'Elodie, 30/09)
+   Tout est regroupé ici et écrase les règles plus haut.
+   ========================================================= */
+
+/* --- 13.1 Police des titres : Fredoka (ronde, joyeuse, très lisible)
+   Julien : « police du hero pas assez impactante ».
+   2 polices maximum (cours « Les textes ») : Fredoka pour les titres, Nunito pour le texte.
+   Hébergée dans le thème (dossier fonts) : pas d'appel à Google = plus rapide et RGPD. */
+@font-face {
+  font-family: 'Fredoka';
+  src: url('fonts/fredoka-latin-600-normal.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;          /* le texte s'affiche tout de suite, la police arrive ensuite */
+}
+@font-face {
+  font-family: 'Fredoka';
+  src: url('fonts/fredoka-latin-700-normal.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+:root {
+  --police-titres: 'Fredoka', 'Nunito', sans-serif;
+}
+.hero__titre,
+.projet__titre,
+.titre-section,
+.carte-projet__titre,
+.parcours__stage-titre,
+.parcours__appel-titre,
+.demarche__titre,
+.competences__titre,
+.frise__titre,
+.projet__encadre-titre,
+.projet__suivant {
+  font-family: var(--police-titres);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* --- 13.2 Moins de décor (Julien + Elodie : les deux grandes vagues surchargent)
+   Plus de vagues nulle part : juste le dégradé coucher de soleil. */
+body:not(.home) {
+  background: var(--degrade-page);
+}
+
+/* --- 13.3 HERO plein écran (Elodie : « la section ne prend pas toute la hauteur »)
+   min-height 100svh = toute la hauteur visible de l'écran (svh = aussi correct sur mobile).
+   Le contenu est centré verticalement : il respire, et « Projets phares » arrive au défilement. */
+.entry-content > .hero.alignfull {
+  background: none;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: calc(var(--hauteur-entete) + 48px);
+  padding-bottom: 96px;
+}
+/* Le titre : plus grand et plus gras (marche suivante de l'échelle) */
+.hero .hero__titre {
+  font-size: clamp(44px, 4.4vw, 68px);  /* 44px (mobile) → 68px (grand écran) */
+  line-height: 1.1;
+  font-weight: 700;
+  max-width: min(760px, 52%);           /* laisse la moitié droite au visuel */
+}
+/* « apprendre en s'amusant. » souligné d'UN trait de pinceau droit (préférence d'Elodie) */
+.hero__surligne {
+  background: url('images/trait-pinceau.svg') left bottom 0.06em / 100% 0.38em no-repeat;
+  padding: 0 0.06em;
+  -webkit-box-decoration-break: clone;  /* si le texte passe à la ligne, chaque ligne a son trait */
+  box-decoration-break: clone;
+}
+@media (max-width: 1199px) {
+  .hero .hero__titre { max-width: 760px; }
+}
+
+/* --- 13.4 Hiérarchie des boutons (Elodie, cours « Hiérarchie 4 »)
+   Primaire = fond plein · Secondaire = contour · Tertiaire = lien.
+   « Télécharger mon CV » devient un vrai SECONDAIRE (contour arrondi), en 18px (plus lisible). */
+.hero .wp-block-button__link {
+  font-size: 18px;
+  line-height: 24px;
+  border-radius: var(--rayon-pilule);   /* arrondi dans TOUS les états : plus de coins carrés sous l'ombre */
+}
+.bouton-secondaire .wp-block-button__link {
+  background: transparent;
+  color: var(--global-palette1);
+  border: 2px solid var(--global-palette1);
+  padding: 14px 30px;                   /* 2px de moins que le primaire : même hauteur totale */
+  font-weight: 700;
+  box-shadow: none;
+  transition: all .2s ease;
+}
+.bouton-secondaire .wp-block-button__link:hover,
+.bouton-secondaire .wp-block-button__link:focus {
+  background: var(--global-palette1);   /* se remplit au survol, comme « Me contacter » */
+  color: #fff;
+  box-shadow: none;
+}
+.bouton {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+/* --- 13.5 En-tête : une barre légèrement blanche et floutée (effet verre)
+   Elodie : le logo et le menu n'avaient pas l'air d'aller ensemble.
+   Un fond commun les réunit en un seul groupe (loi de région commune). */
+#masthead .site-header-upper-inner-wrap {        /* toute la largeur de l'écran (la rangée Kadence, elle, est « contenue ») */
+  background: rgba(255, 255, 255, .55);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom: 1px solid rgba(255, 255, 255, .8);
+  box-shadow: 0 1px 0 rgba(30, 26, 74, .06);
+}
+#masthead .site-main-header-wrap,
+#masthead .site-main-header-wrap .site-header-row-container-inner {
+  background: transparent;                         /* le fond est porté par la barre entière */
+}
+
+/* --- 13.6 Haut des autres pages : un peu plus de hauteur (Elodie) */
+.projets .projet__entete {
+  padding-top: calc(var(--hauteur-entete) + 96px);
+  padding-bottom: 48px;
+}
+.projet__entete {
+  padding-top: calc(var(--hauteur-entete) + 48px);
+}
+
+/* --- 13.7 Une couleur = une catégorie (Elodie)
+   violet = site WordPress · magenta = application mobile · orange = page web.
+   Teintes foncées sur fond clair : contrastes ≥ 5,9:1 (WCAG AA). */
+.carte-projet--violet, .etiquette--violet   { --cat-texte: #4B35A8; --cat-fond: #ECE7FF; --cat-ombre: rgba(109, 79, 216, .38); }
+.carte-projet--magenta, .etiquette--magenta { --cat-texte: #A3244F; --cat-fond: #FFE3EC; --cat-ombre: rgba(217, 70, 126, .38); }
+.carte-projet--orange, .etiquette--orange   { --cat-texte: #9A4A00; --cat-fond: #FFEBD2; --cat-ombre: rgba(255, 159, 66, .48); }
+
+.etiquette[class*="etiquette--"] {
+  background: var(--cat-fond);
+  color: var(--cat-texte);
+}
+
+/* --- 13.8 Cartes projets : fond BLANC + ombre colorée (Elodie + Julien)
+   Le texte reste foncé sur blanc, même au survol : plus de titre qui disparaît dans le fond. */
+.grille-projets .carte-projet {
+  background: #fff;
+  box-shadow: 0 16px 32px -14px var(--cat-ombre), 0 2px 6px rgba(30, 26, 74, .06);
+}
+.grille-projets .carte-projet:hover {
+  box-shadow: 0 24px 44px -14px var(--cat-ombre), 0 4px 10px rgba(30, 26, 74, .08);
+  transform: translateY(-4px);
+}
+.grille-projets .carte-projet .carte-projet__contenu {
+  background: #fff;
+  color: var(--violet-900);
+}
+.grille-projets .carte-projet .carte-projet__titre,
+.grille-projets .carte-projet:hover .carte-projet__titre {
+  color: var(--violet-900);
+}
+.grille-projets .carte-projet .carte-projet__voir {
+  color: var(--cat-texte);
+}
+.grille-projets .carte-projet:hover .carte-projet__voir {
+  text-decoration: underline;
+  text-decoration-color: var(--magenta-500);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+/* --- 13.9 Page projet : l'étiquette de catégorie bien visible (Julien : « la première chose à savoir ») */
+.projet__entete .etiquette {
+  font-size: 16px;
+  line-height: 24px;
+  padding: 8px 18px;
+  margin-bottom: 24px;
+}
+
+/* =========================================================
+   14. RETOURS DE CLARISSE (30/09)
+   ========================================================= */
+
+/* --- 14.1 Hero en 2 colonnes : texte à gauche, visuel à droite
+   (inspiré des portfolios de la classe : un visuel fort en face du titre).
+   L'illustration = un tableau interactif, une tablette scolaire et un téléphone avec des applis pour enfants,
+   en couleurs très pâles et fondue vers le bas : elle habille sans attirer l'œil avant le titre. */
+.entry-content > .hero.alignfull {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);  /* ≈ 6 colonnes / 6 colonnes de la grille 12 */
+  align-items: center;
+  column-gap: 48px;
+  background: none;
+}
+.entry-content > .hero.alignfull::after {
+  content: "";
+  width: 100%;
+  height: min(580px, calc(100svh - var(--hauteur-entete) - 160px));  /* ne passe jamais sous le menu */
+  background: url('images/hero-illustration.svg') center / contain no-repeat;   /* illustration douce : tableau interactif, tablette, téléphone */
+}
+.hero .hero__titre {
+  font-size: clamp(40px, 4.2vw, 64px);
+  max-width: none;                                  /* la colonne limite déjà la longueur des lignes */
+}
+/* Petites pastilles d'atouts sous les boutons : infos secondaires, donc plus petites et discrètes */
+.hero .hero__atouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 32px 0 0;
+}
+.hero__atouts span {
+  background: rgba(255, 255, 255, .7);
+  border: 1px solid #CAC8EA;                        /* violet 200 */
+  color: var(--global-palette2);                    /* violet 600 : contraste > 7:1 */
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: var(--rayon-pilule);
+}
+/* Tablette et mobile : le visuel passe SOUS le texte */
+@media (max-width: 1024px) {
+  .entry-content > .hero.alignfull { grid-template-columns: 1fr; }
+  .entry-content > .hero.alignfull::after {
+    width: min(100%, 520px);
+    height: auto;
+    aspect-ratio: 900 / 720;                        /* proportions de l'illustration */
+    margin: 48px auto 0;
+  }
+}
+
+/* --- 14.2 En-tête « fondu » : plus de trait net, un voile blanc qui s'efface vers le bas */
+#masthead .site-header-upper-inner-wrap {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, .5) 55%, rgba(255, 255, 255, 0) 100%);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom: 0;
+  box-shadow: none;
+}
+
+/* --- 14.3 Page projet : étiquette PLEINE dans la couleur de sa catégorie (texte blanc, contraste ≥ 6:1)
+   Julien : c'est la première chose à savoir en arrivant sur le projet. */
+.projet__entete .etiquette[class*="etiquette--"] {
+  background: var(--cat-texte);
+  color: #fff;
+  font-size: 18px;
+  line-height: 24px;
+  padding: 10px 20px;
+  box-shadow: 0 10px 24px -10px var(--cat-ombre);
+}
+
+/* --- 14.4 Galerie : on voit TOUT l'écran (contain) au lieu d'un morceau recadré */
+.galerie__image img {
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+  background: #F3EEFF;                              /* lavande très clair derrière les écrans */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* --- 14.5 Cartes : l'image de couverture entière (format 2:1, comme les couvertures) */
+.carte-projet__image {
+  aspect-ratio: 2 / 1;
+}
+
+/* =========================================================
+   15. RETOURS DE CLARISSE (01/10)
+   ========================================================= */
+
+/* --- 15.1 En-tête : logo et menu centrés sur la même ligne
+   Kadence ajoutait 26px au-dessus du logo : il était décalé vers le bas.
+   Échelle : 16px + logo 80px + 16px = 112px = --hauteur-entete. */
+.site-header .site-branding {
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.site-branding .brand {
+  width: 128px;                                     /* 128 × 222/354 ≈ 80px de haut */
+}
+.site-header .site-main-header-inner-wrap {
+  align-items: center;
+}
+
+/* --- 15.2 En-tête « à la TF1 » : fondu en haut, visible au survol, puis fixe et blanc quand on descend
+   (la classe .est-defile est ajoutée par js/entete.js) */
+#masthead,
+.transparent-header #masthead,
+.mobile-transparent-header #masthead {            /* même force que la règle de Kadence, sinon elle gagne */
+  position: fixed;
+  top: var(--wp-admin--admin-bar--height, 0px);    /* sous la barre noire de WordPress quand on est connectée */
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+#masthead .site-header-upper-inner-wrap {
+  transition: background .3s ease, box-shadow .3s ease;
+}
+#masthead:hover .site-header-upper-inner-wrap,
+#masthead.est-defile .site-header-upper-inner-wrap {
+  background: rgba(255, 255, 255, .92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(30, 26, 74, .08);    /* ombre douce : la barre se détache du contenu */
+}
+
+/* --- 15.3 Vagues douces entre les sections (comme la capture de Clarisse)
+   Une bande plus claire, au bord supérieur ondulé. */
+:root {
+  --vague: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 44 C240 8 480 4 720 30 C960 56 1200 66 1440 28 V80 H0 Z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
+  --bande-claire: rgba(255, 255, 255, .5);
+}
+/* Accueil : entre le hero et « Projets phares » */
+.entry-content > .accueil-projets.alignfull {
+  position: relative;
+  background: var(--bande-claire);
+  padding-top: 64px;
+}
+.entry-content > .accueil-projets.alignfull::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;                                     /* collée au-dessus de la bande */
+  height: 80px;
+  background: var(--vague) center bottom / 100% 100% no-repeat;
+  pointer-events: none;
+}
+/* Autres pages : entre l'en-tête de page et le contenu */
+.projet__entete {
+  position: relative;
+}
+.projet__entete ~ .projet__section {
+  background: var(--bande-claire);
+}
+.projet__entete + .projet__section {
+  position: relative;
+  padding-top: 64px;
+}
+.projet__entete + .projet__section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 80px;
+  background: var(--vague) center bottom / 100% 100% no-repeat;
+  pointer-events: none;
+}
+main.projet {
+  overflow-x: clip;                                 /* la vague pleine largeur ne crée pas de barre horizontale */
+}
+
+/* --- 15.4 Les cartes se détachent bien du fond (fond blanc plein + fin contour violet 100) */
+.etape,
+.projet__encadre,
+.projet__appris,
+.demarche__carte,
+.competences__carte,
+.parcours__stage,
+.parcours__appel {
+  background: #fff;
+  border: 1px solid #E6E0FB;
+}
+.galerie__image img {
+  background: #fff;
+  border: 1px solid #E6E0FB;
+}
+
+/* --- 15.5 Pastilles du hero : plus des boutons, mais du texte posé sur un trait de pinceau
+   (mêmes couleurs que le soulignement de « apprendre en s'amusant ») */
+.hero .hero__atouts {
+  gap: 16px;
+}
+.hero__atouts span {
+  background: url('images/trait-pinceau.svg') center / 100% 100% no-repeat;
+  border: 0;
+  border-radius: 0;
+  color: var(--violet-900);
+  font-size: 16px;
+  line-height: 24px;
+  padding: 4px 16px;
+}
+
+/* --- 15.6 Illustration : plus grande, plus pâle et fondue sur les bords : elle devient un décor de fond
+   (toujours dans la colonne de droite, jamais sous le texte) */
+.entry-content > .hero.alignfull {
+  overflow-x: clip;
+}
+@media (min-width: 1025px) {
+  .entry-content > .hero.alignfull::after {
+    height: min(720px, calc(100svh - var(--hauteur-entete) - 96px));
+    transform: translateX(12%) scale(1.25);          /* agrandie vers la droite, pas vers le texte */
+    opacity: .55;
+    -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);  /* bords qui s'effacent */
+    pointer-events: none;
+  }
+}
+@media (max-width: 1024px) {
+  .entry-content > .hero.alignfull::after { opacity: .6; }
+}
+
+/* --- 15.7 Bilingue : la pastille « langue » ressort un peu plus que les autres */
+.hero__atouts .atout--langue {
+  font-weight: 800;
+}
+
+/* 15.8 La carte « Recherche de stage » a maintenant 5 infos (Langues ajoutée) : la grille s'adapte toute seule */
+.parcours__infos {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+/* --- 15.9 Cartes projets : même bord fin violet 100 que les autres cartes blanches (15.4)
+   → le haut de la carte (image claire) ne se fond plus dans la bande claire de fond */
+.carte-projet {
+  border: 1px solid #E6E0FB;
+}
+.carte-projet img {
+  border-bottom: 1px solid #E6E0FB;                 /* sépare l'image du texte */
+}
+
+
+/* =========================================================
+   16. RETOURS DE CLARISSE (01/10, 2e passage)
+   ========================================================= */
+
+/* --- 16.1 Police du titre du hero : Titan One (gratuite, licence OFL), plus ronde et plus « école »
+   Uniquement le H1 du hero : les autres titres gardent Fredoka (une seule police d'accroche, sinon trop chargé) */
+@font-face {
+  font-family: 'Titan One';
+  src: url('fonts/titan-one-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+.hero .hero__titre {
+  font-family: 'Titan One', var(--police-titres);
+  font-weight: 400;                                 /* Titan One n'existe qu'en une graisse, déjà très épaisse */
+  letter-spacing: 0;
+  line-height: 1.15;
+  color: var(--violet-900);
+}
+/* Un groupe de mots = une couleur du site (comme l'alphabet coloré du modèle).
+   Couleurs foncées vérifiées : contraste ≥ 4,5:1 sur le fond du hero */
+.hero__titre .mot--violet  { color: #6D4FD8; }      /* violet 500 : 4,5:1 */
+.hero__titre .mot--magenta { color: #B12D62; }      /* magenta 600 : 5:1 */
+.hero__titre .mot--orange  { color: #A84E00; }      /* orange foncé : 4,5:1 (l'orange 500 clair ne passe pas) */
+
+/* --- 16.2 Navbar : une ombre très légère, même tout en haut, pour qu'on sache qu'elle est là */
+#masthead .site-header-upper-inner-wrap {
+  background: rgba(255, 255, 255, .35);
+  box-shadow: 0 4px 16px rgba(30, 26, 74, .05);
+}
+
+/* --- 16.3 Illustration encore plus grande : elle grandit vers la DROITE (point d'ancrage à gauche),
+   donc elle ne s'approche jamais du texte */
+@media (min-width: 1025px) {
+  .entry-content > .hero.alignfull::after {
+    transform-origin: left center;
+    transform: scale(1.4);
+  }
+}
+
+/* --- 16.4 Les vagues ne coupent plus les phrases :
+   la vague (80px) se dessine dans le bas de l'en-tête de page → on lui réserve sa place :
+   48px d'air sous le texte + 80px de vague = 128px (échelle) */
+main .projet__entete,
+.projets .projet__entete {
+  padding-bottom: 128px;
+}
+
+/* --- 16.5 Cartes : une limite nette (Gestalt : région commune)
+   bord violet un peu plus foncé + ombre neutre tout autour, et bande de fond plus blanche */
+:root {
+  --bande-claire: rgba(255, 255, 255, .7);
+}
+.carte-projet {
+  border: 1px solid #D6CCF7;
+  box-shadow: 0 16px 32px -14px var(--cat-ombre, rgba(109, 79, 216, .38)), 0 4px 12px rgba(30, 26, 74, .08);
+}
+.carte-projet img {
+  border-bottom-color: #D6CCF7;
+}
+.etape,
+.projet__encadre,
+.projet__appris,
+.demarche__carte,
+.competences__carte,
+.parcours__stage,
+.parcours__appel,
+.galerie__image img {
+  border-color: #D6CCF7;
+}
+.hero__titre .mot {
+  white-space: nowrap;                              /* « à l'écran » ne se coupe jamais en deux lignes */
+}
+/* Grande image de couverture de la page projet : même bord net que les cartes (elle aussi se fondait dans le fond) */
+.projet__visuel img {
+  border: 1px solid #D6CCF7;
+  box-shadow: 0 4px 12px rgba(30, 26, 74, .08);
+}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 48" preserveAspectRatio="none">
+  <!-- Un seul trait de pinceau droit (conseil d'Elodie), en dégradé coucher de soleil -->
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#F29BB0"/>
+      <stop offset=".55" stop-color="#FFB27A"/>
+      <stop offset="1" stop-color="#FFD08A"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#g)" d="M6 18 C60 9 140 12 220 10 C320 7 420 11 520 9 C556 8 584 10 596 14 C598 22 594 30 590 36 C520 40 430 37 330 40 C230 43 130 39 40 42 C24 43 10 41 4 36 C2 30 3 24 6 18 Z"/>
+  <path fill="#FFFFFF" opacity=".25" d="M40 20 C160 16 300 17 440 15 C300 20 170 22 40 24 Z"/>
+</svg>

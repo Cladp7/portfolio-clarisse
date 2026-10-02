@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
+  <!-- Deux étincelles décoratives, placées à gauche du texte du hero -->
+  <defs>
+    <path id="etincelle" d="M0 -14 C2 -2 2 -2 14 0 C2 2 2 2 0 14 C-2 2 -2 2 -14 0 C-2 -2 -2 -2 0 -14Z"/>
+  </defs>
+  <use href="#etincelle" transform="translate(34 38) scale(1.9)" fill="#D9467E"/>
+  <use href="#etincelle" transform="translate(74 72) scale(0.9)" fill="#FF9F42"/>
+</svg>

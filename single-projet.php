@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * Modèle d'une fiche projet.
+ * WordPress l'utilise automatiquement grâce à son nom :
+ * single-{clé du type de contenu}.php → single-projet.php
+ */
+
+get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
+?>
+
+<main class="projet">
+
+    <?php while (have_posts()) : the_post(); // la Boucle : ici, elle ne contient qu'un seul projet 
+    ?>
+
+        <!-- =====================================================
+         1. EN-TÊTE DU PROJET
+         ===================================================== -->
+        <section class="projet__entete">
+            <div class="projet__conteneur">
+
+                <!-- Fil d'Ariane : « Projets / Nom du projet » -->
+                <p class="projet__ariane">
+                    <!-- get_post_type_archive_link('projet') = l'adresse de la page /projets/ -->
+                    <a href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">Projets</a>
+                    / <?php the_title(); ?>
+                </p>
+
+                <?php if (get_field('etiquette')) : // on affiche le badge seulement s'il est rempli 
+                ?>
+                    <?php $couleur = get_field('couleur_carte') ? get_field('couleur_carte') : 'violet'; // même couleur que la carte = la catégorie du projet ?>
+                    <span class="etiquette etiquette--<?php echo esc_attr($couleur); ?>"><?php echo esc_html(get_field('etiquette')); ?></span>
+                <?php endif; ?>
+
+                <h1 class="projet__titre"><?php the_title(); ?></h1>
+
+                <?php if (has_excerpt()) : // l'extrait sert d'introduction 
+                ?>
+                    <p class="projet__intro"><?php echo esc_html(get_the_excerpt()); ?></p>
+                <?php endif; ?>
+
+                <?php if (has_post_thumbnail()) : // la grande capture du projet 
+                ?>
+                    <div class="projet__visuel">
+                        <?php the_post_thumbnail('full'); // 'full' = l'image en taille originale 
+                        ?>
+                    </div>
+                <?php endif; ?>
+
+            </div>
+        </section>
+
+        <!-- =====================================================
+         2. CONTEXTE, OBJECTIF ET OUTILS
+         ===================================================== -->
+        <section class="projet__section">
+            <div class="projet__conteneur projet__colonnes">
+
+                <div class="projet__texte">
+                    <h2 class="titre-section">Le contexte</h2>
+                    <?php // wp_kses_post : garde les <p> créés par ACF, mais retire tout code dangereux 
+                    ?>
+                    <?php echo wp_kses_post(get_field('contexte')); ?>
+
+                    <h2 class="titre-section">L'objectif</h2>
+                    <?php echo wp_kses_post(get_field('objectif')); ?>
+                </div>
+
+                <?php $outils = get_field('outils'); // un tableau, ex. ['WordPress', 'HTML/CSS'] 
+                ?>
+                <?php if ($outils) : ?>
+                    <aside class="projet__encadre">
+                        <h3 class="projet__encadre-titre">Outils et techniques</h3>
+                        <ul class="pastilles">
+                            <?php foreach ($outils as $outil) : // une pastille par outil coché 
+                            ?>
+                                <li class="pastille"><?php echo esc_html($outil); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </aside>
+                <?php endif; ?>
+
+            </div>
+        </section>
+
+        <!-- =====================================================
+         3. LA DÉMARCHE (répéteur « etapes »)
+         ===================================================== -->
+        <?php if (have_rows('etapes')) : // seulement s'il y a au moins une étape 
+        ?>
+            <section class="projet__section">
+                <div class="projet__conteneur">
+                    <h2 class="titre-section">La démarche</h2>
+                    <ol class="etapes">
+                        <?php while (have_rows('etapes')) : the_row(); // une ligne du répéteur = une étape 
+                        ?>
+                            <li class="etape">
+                                <h3 class="etape__titre"><?php echo esc_html(get_sub_field('titre_etape')); ?></h3>
+                                <div class="etape__texte"><?php echo wp_kses_post(get_sub_field('description_etape')); ?></div>
+                            </li>
+                        <?php endwhile; ?>
+                    </ol>
+                </div>
+            </section>
+        <?php endif; ?>
+
+        <!-- =====================================================
+         4. EN IMAGES (galerie expliquée)
+         ===================================================== -->
+        <?php $images = get_field('galerie'); // un tableau d'images 
+        ?>
+        <?php if ($images) : ?>
+            <section class="projet__section">
+                <div class="projet__conteneur">
+                    <h2 class="titre-section">En images</h2>
+                    <div class="galerie">
+                        <?php foreach ($images as $image) : ?>
+                            <figure class="galerie__item">
+
+                                <!-- L'image : clic = ouverture en grand dans un nouvel onglet -->
+                                <a class="galerie__image" href="<?php echo esc_url($image['url']); ?>" target="_blank" rel="noopener">
+                                    <img src="<?php echo esc_url($image['sizes']['large']); ?>"
+                                        alt="<?php echo esc_attr($image['alt']); ?>"
+                                        loading="lazy"> <!-- lazy : l'image se charge seulement quand on arrive dessus -->
+                                </a>
+
+                                <?php if ($image['caption'] || $image['description']) : // || veut dire « ou » 
+                                ?>
+                                    <figcaption class="galerie__texte">
+                                        <?php if ($image['caption']) : // la Légende → le titre 
+                                        ?>
+                                            <h3 class="galerie__titre"><?php echo esc_html($image['caption']); ?></h3>
+                                        <?php endif; ?>
+                                        <?php if ($image['description']) : // la Description → l'explication 
+                                        ?>
+                                            <p><?php echo esc_html($image['description']); ?></p>
+                                        <?php endif; ?>
+                                    </figcaption>
+                                <?php endif; ?>
+
+                            </figure>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </section>
+        <?php endif; ?>
+
+        <!-- =====================================================
+         5. CE QUE J'AI APPRIS
+         ===================================================== -->
+        <?php if (get_field('apprentissages')) : ?>
+            <section class="projet__section">
+                <div class="projet__conteneur">
+                    <div class="projet__appris">
+                        <h2 class="projet__appris-titre">Ce que j'ai appris</h2>
+                        <div class="projet__appris-texte"><?php echo wp_kses_post(get_field('apprentissages')); ?></div> <!-- conteneur pour couler le texte sur 2 colonnes -->
+                    </div>
+                </div>
+            </section>
+        <?php endif; ?>
+
+        <!-- =====================================================
+         6. LIENS ET PROJET SUIVANT
+         ===================================================== -->
+        <section class="projet__section">
+            <div class="projet__conteneur projet__liens">
+
+                <div class="projet__actions">
+                    <?php if (get_field('lien_site')) : // bouton affiché SEULEMENT si le lien existe 
+                    ?>
+                        <a class="bouton bouton--primaire" href="<?php echo esc_url(get_field('lien_site')); ?>" target="_blank" rel="noopener">Voir le site en ligne</a>
+                    <?php endif; ?>
+                    <?php if (get_field('lien_figma')) : ?>
+                        <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_field('lien_figma')); ?>" target="_blank" rel="noopener">Voir la maquette Figma</a>
+                    <?php endif; ?>
+                </div>
+
+                <?php $suivant = get_next_post(); // le projet publié juste après celui-ci 
+                ?>
+                <?php if ($suivant) : ?>
+                    <a class="projet__suivant" href="<?php echo esc_url(get_permalink($suivant)); ?>">
+                        <span class="projet__suivant-label">Projet suivant</span>
+                        <?php echo esc_html(get_the_title($suivant)); ?> →
+                    </a>
+                <?php endif; ?>
+
+            </div>
+        </section>
+
+    <?php endwhile; ?>
+
+</main>
+
+<?php get_footer(); // affiche le pied de page de Kadence 
+?>
