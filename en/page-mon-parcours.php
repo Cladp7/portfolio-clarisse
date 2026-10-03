@@ -44,7 +44,7 @@ get_header();
                     </div>
                     <div>
                         <dt>Dates</dt>
-                        <dd>Flexible, to be agreed together</dd>
+                        <dd>From 13 October 2026, on set weekdays · full time during school holidays and from 31 May 2027</dd>
                     </div>
                     <div>
                         <dt>Location</dt>
@@ -141,7 +141,7 @@ get_header();
         <div class="projet__conteneur">
             <div class="parcours__appel">
                 <h2 class="parcours__appel-titre">Shall we work together?</h2>
-                <p>Available for a 200-hour internship, at a time to be agreed.</p>
+                <p>Available from 13 October 2026 for a 200-hour internship.</p>
                 <div class="projet__actions">
                     <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_contact); ?>">Contact me</a>
                     <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">See my projects</a>

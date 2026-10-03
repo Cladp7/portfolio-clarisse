@@ -56,7 +56,7 @@ get_header();
         <div class="projet__conteneur">
             <div class="parcours__appel">
                 <h2 class="parcours__appel-titre">Disponible pour un stage</h2>
-                <p>200 heures minimum, période à convenir, région indifférente (permis B et voiture). Échanges possibles en français ou en anglais.</p>
+                <p>200 heures minimum, dès le 13 octobre 2026, région indifférente (permis B et voiture). Échanges possibles en français ou en anglais.</p>
                 <div class="projet__actions">
                     <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_cv); ?>" target="_blank" rel="noopener">Télécharger mon CV</a>
                     <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">Voir mes projets</a>

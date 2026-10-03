@@ -49,7 +49,7 @@ get_header();
         <div class="projet__conteneur">
             <div class="parcours__appel">
                 <h2 class="parcours__appel-titre">Available for an internship</h2>
-                <p>200 hours minimum, dates to be agreed, any region (driving licence and own car). Happy to work in French or in English.</p>
+                <p>200 hours minimum, from 13 October 2026, any region (driving licence and own car). Happy to work in French or in English.</p>
                 <div class="projet__actions">
                     <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_cv); ?>" target="_blank" rel="noopener">Download my CV (in French)</a>
                     <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">See my projects</a>

@@ -50,7 +50,7 @@ get_header();
                     </div>
                     <div>
                         <dt>Période</dt>
-                        <dd>Flexible, à convenir ensemble</dd>
+                        <dd>Dès le 13 octobre 2026, en jours fixes · temps plein pendant les congés scolaires et dès le 31 mai 2027</dd>
                     </div>
                     <div>
                         <dt>Lieu</dt>
@@ -147,7 +147,7 @@ get_header();
         <div class="projet__conteneur">
             <div class="parcours__appel">
                 <h2 class="parcours__appel-titre">Envie de travailler ensemble ?</h2>
-                <p>Disponible pour un stage de 200 heures, à une période à convenir.</p>
+                <p>Disponible dès le 13 octobre 2026 pour un stage de 200 heures.</p>
                 <div class="projet__actions">
                     <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_contact); ?>">Me contacter</a>
                     <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">Voir mes projets</a>
