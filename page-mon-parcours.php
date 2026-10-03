@@ -50,7 +50,7 @@ get_header();
                     </div>
                     <div>
                         <dt>Période</dt>
-                        <dd>Dès le 13 octobre 2026, en jours fixes · temps plein pendant les congés scolaires et dès le 31 mai 2027</dd>
+                        <dd>Dès le 13 octobre 2026, en jours fixes · temps plein pendant les congés scolaires</dd>
                     </div>
                     <div>
                         <dt>Lieu</dt>

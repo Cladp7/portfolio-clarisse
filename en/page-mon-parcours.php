@@ -44,7 +44,7 @@ get_header();
                     </div>
                     <div>
                         <dt>Dates</dt>
-                        <dd>From 13 October 2026, on set weekdays · full time during school holidays and from 31 May 2027</dd>
+                        <dd>From 13 October 2026, on set weekdays · full time during school holidays</dd>
                     </div>
                     <div>
                         <dt>Location</dt>

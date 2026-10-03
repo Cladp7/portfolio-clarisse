@@ -1821,15 +1821,12 @@ main .projet__entete,
    19. RETOURS D'ELODIE ET DU RAPPORT (03/10)
    ========================================================= */
 
-/* --- 19.1 Hero mobile : plus de grand vide sous les pastilles.
-   La règle 13.3 donnait au hero toute la hauteur de l'écran (100svh) : sur mobile, le contenu
-   commence sous le menu, donc toute la hauteur restante devenait un vide. Le hero prend
-   maintenant la hauteur de son contenu, et finit 48 px sous les pastilles (échelle 4-8…-48). */
+/* --- 19.1 Hero mobile (Clarisse, 03/10, 2e retour) : le hero remplit TOUT l'écran (100svh, règle 13.3 gardée),
+   la section suivante n'apparaît pas avant de défiler.
+   En bas : 80 px de vague + 16 px d'air = 96 px réservés, les pastilles ne touchent jamais la vague.
+   Si le contenu est plus haut que l'écran (petits téléphones), le hero s'allonge au lieu de couper. */
 @media (max-width: 767px) {
-  .entry-content > .hero.alignfull { min-height: 0; }
-}
-@media (max-width: 767px) and (min-height: 761px) {
-  .entry-content > .hero.alignfull { align-content: start; }
+  .entry-content > .hero.alignfull { padding-bottom: 96px; }
 }
 /* Version anglaise : « From the classroom » est plus long que « De la classe » et ne tenait pas
    sur une ligne à 40 px (texte coupé à gauche). Sur mobile, les groupes de mots EN peuvent passer
@@ -2011,4 +2008,46 @@ html.visionneuse-ouverte { overflow: hidden; }
 @media (max-width: 767px) {
   .projet__appel { padding: 48px 24px; }
   .projet__appel .parcours__appel-titre { font-size: 28px; line-height: 35px; }
+}
+
+/* --- 19.6 L'illustration du hero sur mobile : exactement dans le cadre dessiné par Clarisse,
+   du haut du titre jusqu'au bas du bouton « Télécharger mon CV », sur toute la largeur du texte.
+   Les positions sont mesurées par js/entete.js (le titre n'a pas le même nombre de lignes en FR et en EN). */
+@media (max-width: 767px) {
+  .entry-content > .hero.alignfull.hero--mesure::after {
+    inset: var(--illu-haut) var(--global-content-edge-padding, 24px) auto;
+    height: var(--illu-hauteur);
+    background-size: contain;
+    background-position: center;
+  }
+}
+
+/* --- 19.7 Image d'en-tête des projets sur mobile : on garde ses proportions (2:1).
+   Avant, le format 4:3 recadrait les côtés : on perdait l'écran de téléphone (Philippe Noël, etc.). */
+@media (max-width: 767px) {
+  .projet__visuel img { aspect-ratio: 2 / 1; }
+}
+
+/* --- 19.8 Téléphones avec de la place (≥ 700 px de haut) : au lieu de laisser tout le vide sous les pastilles,
+   chaque espace monte d'une marche sur l'échelle (16→24, 24→32, 12→16, 24→48) : le contenu se répartit dans l'écran. */
+@media (max-width: 767px) and (min-height: 700px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 32px); }
+  .hero .hero__surtitre { margin-bottom: 24px; }
+  .hero .hero__titre { margin-bottom: 32px; }
+  .hero .wp-block-buttons { gap: 16px; }
+  .hero .hero__atouts { margin-top: 48px; gap: 12px 8px; }
+}
+
+/* --- 19.9 Mobile : « Projet suivant » toujours aligné à gauche, sous les boutons (alignement sur la même ligne verticale) */
+@media (max-width: 767px) {
+  .projet__liens { flex-direction: column; align-items: flex-start; }
+}
+
+/* --- 19.10 Mobile : les captures de téléphone (images en hauteur) s'affichent en grand.
+   Avant, elles étaient réduites dans un cadre 4:3 et ne remplissaient qu'une étroite colonne au milieu. */
+@media (max-width: 767px) {
+  .galerie__item--portrait .galerie__image img {
+    aspect-ratio: auto;
+    max-height: 560px;
+  }
 }

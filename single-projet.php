@@ -117,7 +117,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                     <h2 class="titre-section"><?php echo cl_t('En images', 'In pictures'); ?></h2>
                     <div class="galerie" data-titre="<?php echo esc_attr(cl_t('Visionneuse des images', 'Image viewer')); ?>" data-fermer="<?php echo esc_attr(cl_t('Fermer', 'Close')); ?>" data-precedent="<?php echo esc_attr(cl_t('Image précédente', 'Previous image')); ?>" data-suivant="<?php echo esc_attr(cl_t('Image suivante', 'Next image')); ?>">
                         <?php foreach ($images as $image) : ?>
-                            <figure class="galerie__item">
+                            <figure class="galerie__item<?php echo (!empty($image['height']) && $image['height'] > $image['width']) ? ' galerie__item--portrait' : ''; // capture en hauteur (téléphone) ?>">
 
                                 <!-- L'image : clic = ouverture en grand dans la visionneuse (js/visionneuse.js) -->
                                 <a class="galerie__image" href="<?php echo esc_url($image['url']); ?>" aria-label="<?php echo esc_attr(cl_t('Agrandir : ', 'Enlarge: ') . $image['alt']); ?>">
