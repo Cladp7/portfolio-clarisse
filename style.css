@@ -1748,3 +1748,79 @@ main .projet__entete,
   color: var(--orange-500);
   margin-right: 4px;
 }
+
+/* --- 18.4 Mobile (retour de Clarisse) : sur téléphone, le hero dépassait l'écran
+   (≈ 810 px de contenu pour ≈ 660 px visibles) : les pastilles étaient coupées par le bas de l'écran
+   et on ne voyait pas où finissait la section. On resserre d'une marche sur l'échelle
+   pour que TOUT le hero tienne dans le premier écran. */
+@media (max-width: 767px) {
+  .entry-content > .hero.alignfull {
+    padding-top: calc(var(--hauteur-entete) + 24px);
+    padding-bottom: 48px;
+  }
+  .hero .hero__surtitre {
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 16px;
+  }
+  .hero .hero__titre {
+    font-size: 34px;
+    line-height: 40px;
+    margin-bottom: 24px;
+  }
+  .hero .wp-block-buttons {
+    gap: 12px;
+  }
+  .hero .wp-block-button__link {
+    font-size: 16px;
+    line-height: 24px;
+    padding-top: 12px;                              /* boutons de 48 px de haut : zone de toucher confortable */
+    padding-bottom: 12px;
+  }
+  .bouton-secondaire .wp-block-button__link {
+    padding-top: 10px;                              /* 2 px de bordure : même hauteur que le primaire */
+    padding-bottom: 10px;
+  }
+  .hero .hero__atouts {
+    gap: 8px;
+    margin-top: 24px;
+  }
+  .hero__atouts span {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 4px 12px;
+  }
+}
+
+/* --- 18.5 Mobile, suite (retour de Clarisse) :
+   1) L'illustration de fond se place derrière le TITRE (avant, elle tombait vers les boutons).
+   2) Le hero tient en entier dans l'écran, quel que soit le téléphone :
+      sur les écrans moins hauts, on descend d'une marche sur l'échelle 4-8-12-16-24
+      (jamais de valeur inventée), et le titre rapetisse un peu. */
+@media (max-width: 767px) {
+  .entry-content > .hero.alignfull::after {
+    inset: calc(var(--hauteur-entete) + 16px) var(--global-content-edge-padding, 24px) auto;
+    height: 320px;                                  /* la hauteur du surtitre + titre */
+    background-size: contain;
+    background-position: center;
+  }
+}
+/* Téléphones moyens (iPhone 12-15 avec les barres du navigateur, ≈ 600-700 px utiles) */
+@media (max-width: 767px) and (max-height: 700px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 16px); padding-bottom: 32px; }
+  .hero .hero__surtitre { margin-bottom: 12px; }
+  .hero .hero__titre { font-size: 32px; line-height: 38px; margin-bottom: 16px; }
+  .hero .hero__atouts { margin-top: 16px; }
+}
+/* Petits téléphones (iPhone SE, anciens Android : ≈ 550-600 px utiles) */
+@media (max-width: 767px) and (max-height: 600px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 12px); padding-bottom: 24px; }
+  .hero .hero__surtitre { font-size: 14px; line-height: 20px; margin-bottom: 8px; }
+  .hero .hero__titre { font-size: 28px; line-height: 32px; margin-bottom: 16px; }
+  .hero .wp-block-buttons { gap: 8px; }
+  .hero .wp-block-button__link { padding-top: 10px; padding-bottom: 10px; }       /* 44 px : minimum WCAG */
+  .bouton-secondaire .wp-block-button__link { padding-top: 8px; padding-bottom: 8px; }
+  .hero .hero__atouts { margin-top: 12px; gap: 4px 8px; }
+  .hero__atouts span { font-size: 13px; line-height: 20px; }
+  .entry-content > .hero.alignfull::after { height: 240px; }
+}
