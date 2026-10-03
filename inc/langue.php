@@ -381,3 +381,25 @@ add_filter('acf/format_value/name=galerie', function ($images) {
     }
     return $images;
 }, 31);
+
+/* ---------------------------------------------------------
+   8. Réparation des liens « accueil » en anglais
+   Le filtre home_url (section 3) transforme l'adresse d'accueil « http://site/ » en
+   « http:/en//en/site/en/ » : WordPress en a besoin tel quel pour reconnaître les adresses /en/…
+   (le corriger dans le filtre casse les pages anglaises), mais le lien du logo et la balise canonical
+   étaient cassés. On répare donc seulement le HTML envoyé au visiteur, juste avant l'affichage.
+   --------------------------------------------------------- */
+add_action('template_redirect', function () {
+    if (clarisse_en()) {
+        ob_start(function ($html) {
+            return preg_replace('#(https?):/en//en/([^/"\'\s]+)/en/#', '$1://$2/en/', $html);
+        });
+    }
+}, 1);
+/* En anglais, la barre d'admin (visible seulement par Clarisse connectée) affichait un avertissement PHP
+   venant du script « Personnaliser » de WordPress, qui lit l'adresse d'accueil : on ne le charge pas en anglais. */
+add_action('wp_before_admin_bar_render', function () {
+    if (clarisse_en()) {
+        remove_action('wp_before_admin_bar_render', 'wp_customize_support_script');
+    }
+}, 0);
