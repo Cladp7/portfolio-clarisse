@@ -178,3 +178,108 @@ function clarisse_tous_les_projets($requete)
         $requete->set('posts_per_page', -1);   // -1 = aucune limite
     }
 }
+
+/* =========================================================
+   COMPÉTENCES (page Mon parcours, FR et EN)
+   Retour de l'évaluateur : une compétence sans projet qui la montre
+   ne vaut qu'une déclaration. Chaque pastille est donc un LIEN vers
+   le projet qui la prouve. Ce qui n'est pas encore prouvé par un projet
+   va dans « En cours d'apprentissage ».
+   ========================================================= */
+function clarisse_competences()
+{
+    // [texte FR, texte EN, slug du projet qui la prouve]
+    $groupes = array(
+        array(cl_t('Design UX/UI', 'UX/UI design'), array(
+            array('Maquettes Figma', 'Figma mock-ups', 'fastfit'),
+            array('Prototypes interactifs', 'Interactive prototypes', 'lingopop'),
+            array('Hiérarchie visuelle', 'Visual hierarchy', 'don-de-sang'),
+            array('États des composants', 'Component states', 'car-wash'),
+            array('Lois UX (Hick, divulgation progressive)', 'UX laws (Hick, progressive disclosure)', 'black-friday'),
+            array('Design fonctionnel et émotionnel', 'Functional and emotional design', 'webinaire-ia'),
+        )),
+        array(cl_t('Développement web', 'Web development'), array(
+            array('HTML/CSS', 'HTML/CSS', 'la-boucle'),
+            array('JavaScript', 'JavaScript', 'cinq-bibliotheques-js'),
+            array('Tailwind', 'Tailwind', 'philippe-noel'),
+            array('Vite', 'Vite', 'memia'),
+            array('Git et GitHub', 'Git and GitHub', 'memia'),
+            array('WordPress', 'WordPress', 'la-vallee-du-savoir'),
+            array('PHP', 'PHP', 'la-boucle'),
+            array('Laravel', 'Laravel', 'y-a-un-truc-qui-blog'),
+            array('MySQL', 'MySQL', 'y-a-un-truc-qui-blog'),
+        )),
+    );
+    $atouts = array(
+        cl_t('Français : langue maternelle', 'French: native'),
+        cl_t('Anglais : C1 (CCALI 2021)', 'English: C1 (CCALI 2021)'),
+        cl_t('Pédagogie', 'Teaching skills'),
+        cl_t('Prise de parole', 'Public speaking'),
+        cl_t('Persévérance', 'Perseverance'),
+        cl_t('Curiosité', 'Curiosity'),
+    );
+    $en_cours = array(
+        cl_t('Recherche utilisateur', 'User research'),
+        cl_t('Personas', 'Personas'),
+        cl_t('Parcours utilisateur', 'User journeys'),
+        cl_t('Accessibilité (WCAG)', 'Accessibility (WCAG)'),
+    );
+    ?>
+    <section class="projet__section">
+        <div class="projet__conteneur">
+            <h2 class="titre-section"><?php echo cl_t('Compétences', 'Skills'); ?></h2>
+            <p class="competences__intro"><?php echo cl_t('Chaque compétence mène au projet qui la montre.', 'Each skill links to the project that shows it.'); ?></p>
+            <div class="competences">
+                <?php foreach ($groupes as $groupe) : ?>
+                    <div class="competences__carte">
+                        <h3 class="competences__titre"><?php echo esc_html($groupe[0]); ?></h3>
+                        <ul class="pastilles">
+                            <?php foreach ($groupe[1] as $c) :
+                                $projet = get_page_by_path($c[2], OBJECT, 'projet');
+                                $texte  = cl_t($c[0], $c[1]);
+                                if (!$projet) {                                   // projet introuvable : simple pastille
+                                    echo '<li class="pastille">' . esc_html($texte) . '</li>';
+                                    continue;
+                                }
+                                $titre = get_the_title($projet);                  // titre traduit en anglais si besoin
+                            ?>
+                                <li>
+                                    <a class="pastille pastille--lien" href="<?php echo esc_url(get_permalink($projet)); ?>"
+                                       aria-label="<?php echo esc_attr($texte . ' : ' . cl_t('voir le projet ', 'see the project ') . $titre); ?>">
+                                        <?php echo esc_html($texte); ?> <span aria-hidden="true">→</span>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endforeach; ?>
+                <div class="competences__carte">
+                    <h3 class="competences__titre"><?php echo cl_t('Langues et atouts', 'Languages and strengths'); ?></h3>
+                    <ul class="pastilles">
+                        <?php foreach ($atouts as $a) : ?><li class="pastille"><?php echo esc_html($a); ?></li><?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="competences__apprentissage">
+                <h3 class="competences__titre"><?php echo cl_t('En cours d’apprentissage (2e année)', 'Currently learning (2nd year)'); ?></h3>
+                <p><?php echo cl_t('Étudiés cette année, notamment lors d’une étude UX menée en groupe : ils rejoindront le portfolio dès qu’un projet les montrera.', 'Studied this year, notably in a group UX study: they will join the portfolio as soon as a project shows them.'); ?></p>
+                <ul class="pastilles">
+                    <?php foreach ($en_cours as $a) : ?><li class="pastille pastille--en-cours"><?php echo esc_html($a); ?></li><?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <?php
+}
+
+/* Le logo est un lien vers l'accueil, mais Kadence l'affiche en image de fond : le lien n'a donc
+   aucun texte. On lui ajoute un nom lisible par les lecteurs d'écran (WCAG 2.4.4).
+   Kadence n'offre pas de filtre pour ce lien : on « relit » le HTML de l'en-tête avant de l'afficher. */
+add_action('kadence_before_header', function () {
+    ob_start();
+}, 1);
+add_action('kadence_after_header', function () {
+    $html = ob_get_clean();
+    $nom  = esc_attr(cl_t('Miss Clarisse – retour à l’accueil', 'Miss Clarisse – back to the home page'));
+    echo str_replace('rel="home">', 'rel="home" aria-label="' . $nom . '">', $html);
+}, 99);

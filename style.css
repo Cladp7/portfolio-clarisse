@@ -1627,3 +1627,124 @@ main .projet__entete,
   letter-spacing: .08em;
   font-size: 14px;
 }
+
+/* =========================================================
+   18. RETOURS DES AMIS (03/10) : menu mobile + compétences
+   Toutes les valeurs restent sur l'échelle 4-8-12-16-24-32-48-64-96-128.
+   ========================================================= */
+
+/* --- 18.1 Le panneau du menu mobile : fini le noir de Kadence, on reprend le dégradé du site
+   (lavande → rose), comme le fond des pages. Texte violet 900 : contraste 15:1. */
+#mobile-drawer .drawer-inner {
+  background: linear-gradient(180deg, #F3EEFF 0%, #FFE3EC 100%);
+  color: var(--violet-900);
+}
+#mobile-drawer .drawer-overlay {
+  background: rgba(30, 26, 74, .4);                 /* voile violet 900 sur la page, au lieu du noir */
+}
+#mobile-drawer .drawer-header .drawer-toggle {      /* la croix de fermeture */
+  color: var(--violet-900);
+  width: 48px;                                      /* zone de toucher ≥ 44px (WCAG 2.5.8) */
+  height: 48px;
+}
+#mobile-drawer .toggle-close-bar {
+  background: currentColor;
+}
+
+/* Les liens : violet 900, gras, une ligne de séparation lavande */
+#mobile-drawer .mobile-navigation ul li > a {
+  color: var(--violet-900);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  padding: 16px 0;
+}
+#mobile-drawer .mobile-navigation ul li {
+  border-bottom: 1px solid #D6CCF7;                 /* violet 200, même filet que les cartes */
+}
+#mobile-drawer .mobile-navigation ul li:not(.menu-bouton) > a:hover {
+  color: var(--global-palette1);
+}
+
+/* Le lien de la page en cours : la couleur ne suffit pas (WCAG 1.4.1), on ajoute
+   un repère de forme : barre magenta à gauche + soulignement, comme sur ordinateur. */
+#mobile-drawer .mobile-navigation ul li.current-menu-item:not(.menu-bouton) > a {
+  color: var(--global-palette1);                    /* violet 500 : contraste 7:1 sur le lavande */
+  text-decoration: underline;
+  text-decoration-color: var(--magenta-500);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  box-shadow: inset 4px 0 0 var(--magenta-500);
+  padding-left: 16px;
+}
+
+/* « Me contacter » reste un bouton à contour, comme dans le menu d'ordinateur */
+#mobile-drawer .mobile-navigation ul li.menu-bouton {
+  border-bottom: 0;
+  padding: 24px 0 8px;
+}
+#mobile-drawer .mobile-navigation ul li.menu-bouton > a {
+  justify-content: center;                          /* bouton pleine largeur, texte centré : grande cible au pouce */
+  border: 2px solid var(--global-palette1);
+  border-radius: var(--rayon-pilule);
+  padding: 10px 24px;
+  color: var(--global-palette1);
+}
+#mobile-drawer .mobile-navigation ul li.menu-bouton > a:hover {
+  background: var(--global-palette1);
+  color: #fff;
+}
+#mobile-drawer .mobile-navigation ul li.menu-langue {
+  border-bottom: 0;
+}
+
+/* --- 18.2 Le bouton « burger » : plus grand pour équilibrer le logo, et violet comme les liens */
+.mobile-toggle-open-container .menu-toggle-open {
+  color: var(--global-palette1);
+  padding: 8px;
+}
+.mobile-toggle-open-container .menu-toggle-open .menu-toggle-icon {
+  font-size: 32px;                                  /* 32px d'icône + 2 × 8px = 48px de zone de toucher */
+}
+.mobile-toggle-open-container .menu-toggle-open:hover,
+.mobile-toggle-open-container .menu-toggle-open:focus-visible {
+  color: var(--global-palette2);
+}
+
+/* --- 18.3 Compétences : chaque pastille est un lien vers le projet qui la prouve */
+.competences__intro {
+  margin: -8px 0 24px;
+  color: var(--global-palette5);
+}
+.pastille--lien {
+  display: inline-block;
+  text-decoration: none;
+  transition: all .2s ease;
+}
+.pastille--lien:hover,
+.pastille--lien:focus-visible {
+  background: var(--global-palette1);               /* au survol, la pastille se remplit (comme les boutons) */
+  border-color: var(--global-palette1);
+  color: #fff;
+}
+/* En cours d'apprentissage : un bloc pleine largeur, plus discret, sous les 3 cartes */
+.competences__apprentissage {
+  margin-top: 24px;
+  background: rgba(255, 255, 255, .55);
+  border-radius: var(--rayon-moyen);
+  padding: 32px;
+}
+.competences__apprentissage p {
+  margin: 0 0 16px;
+  max-width: 64ch;                                  /* 45–75 caractères par ligne */
+}
+.pastille--en-cours {
+  background: transparent;
+  border-color: #D6CCF7;
+  color: var(--global-palette2);
+}
+.pastille--en-cours::before {
+  content: "✦";
+  color: var(--orange-500);
+  margin-right: 4px;
+}

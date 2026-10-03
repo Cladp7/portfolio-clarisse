@@ -103,11 +103,20 @@ function clarisse_liens_en($url, $chemin)
     if (!clarisse_en() || is_admin() || (defined('REST_REQUEST') && REST_REQUEST)) {
         return $url;
     }
-    $p = parse_url($url, PHP_URL_PATH) ?: '/';
+    // On découpe l'adresse : « http://site » + « /chemin » + « ?question »
+    $debut  = preg_match('#^([a-z]+:)?//[^/?\#]*#i', $url, $m) ? $m[0] : '';
+    $reste  = substr($url, strlen($debut));
+    $coupe  = strcspn($reste, '?#');
+    $chemin_url = substr($reste, 0, $coupe);
+    $suite  = substr($reste, $coupe);
+    if ($chemin_url === '') {      // home_url() sans chemin : WordPress s'en sert en interne, on n'y touche pas
+        return $url;
+    }
+    $p = $chemin_url;
     if (preg_match('#^/(en(/|$)|wp-|feed|xmlrpc)#', $p)) {          // déjà anglais, ou fichier WordPress
         return $url;
     }
-    return str_replace($p, clarisse_chemin_en($p), $url);
+    return $debut . clarisse_chemin_en($p) . $suite;               // on ne remplace QUE le chemin
 }
 
 /* ---------------------------------------------------------
@@ -289,6 +298,10 @@ function clarisse_alts_en()
         'Capture-decran-2026-09-26-141715' => 'La Bibliothèque Enchantée page: illustrated story cards',
         'Capture-decran-2026-09-26-141456' => 'La Vallée du Savoir: home page of the website',
         'Capture-decran-2026-09-26-141616' => 'Les Histoires page: two cards, read or listen to a story',
+        'exam-front-graphiques'   => 'Bar chart and doughnut chart made with Chart.js',
+        'exam-front-slider'       => 'Full-screen carousel made with Swiper',
+        'exam-front-scrollreveal' => 'Six cards that appear on scroll with ScrollReveal',
+        'exam-front-alerte'       => 'Delete confirmation dialog made with SweetAlert2',
     );
 }
 

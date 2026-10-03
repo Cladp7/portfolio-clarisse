@@ -177,7 +177,14 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                     <?php endif; ?>
                 </div>
 
-                <?php $suivant = get_next_post(); // le projet publié juste après celui-ci 
+                <?php
+                // « Projet suivant » = le projet affiché juste après dans la liste (du plus récent au plus ancien).
+                // Arrivé au dernier, on repart au premier : la navigation fait une boucle, aucun projet n'est un cul-de-sac.
+                $suivant = get_previous_post();
+                if (!$suivant) {
+                    $premier = get_posts(array('post_type' => 'projet', 'numberposts' => 1, 'orderby' => 'date', 'order' => 'DESC'));
+                    $suivant = ($premier && $premier[0]->ID !== get_the_ID()) ? $premier[0] : null;
+                }
                 ?>
                 <?php if ($suivant) : ?>
                     <a class="projet__suivant" href="<?php echo esc_url(get_permalink($suivant)); ?>">

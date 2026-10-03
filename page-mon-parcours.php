@@ -139,53 +139,8 @@ get_header();
         </div>
     </section>
 
-    <!-- 5. Compétences : 3 familles, en pastilles (même style que la page projet) -->
-    <section class="projet__section">
-        <div class="projet__conteneur">
-            <h2 class="titre-section">Compétences</h2>
-            <div class="competences">
-                <div class="competences__carte">
-                    <h3 class="competences__titre">Design UX/UI</h3>
-                    <ul class="pastilles">
-                        <li class="pastille">Recherche utilisateur</li>
-                        <li class="pastille">Personas</li>
-                        <li class="pastille">Parcours utilisateur</li>
-                        <li class="pastille">Wireframes</li>
-                        <li class="pastille">Maquettes Figma</li>
-                        <li class="pastille">Prototypes</li>
-                        <li class="pastille">Guides de style</li>
-                        <li class="pastille">Accessibilité</li>
-                    </ul>
-                </div>
-                <div class="competences__carte">
-                    <h3 class="competences__titre">Développement web</h3>
-                    <ul class="pastilles">
-                        <li class="pastille">HTML</li>
-                        <li class="pastille">CSS</li>
-                        <li class="pastille">JavaScript (bases)</li>
-                        <li class="pastille">Tailwind</li>
-                        <li class="pastille">Vite</li>
-                        <li class="pastille">WordPress</li>
-                        <li class="pastille">ACF</li>
-                        <li class="pastille">PHP</li>
-                        <li class="pastille">Laravel</li>
-                        <li class="pastille">MySQL</li>
-                    </ul>
-                </div>
-                <div class="competences__carte">
-                    <h3 class="competences__titre">Langues et atouts</h3>
-                    <ul class="pastilles">
-                        <li class="pastille">Français : langue maternelle</li>
-                        <li class="pastille">Anglais : C1 (CCALI 2021)</li>
-                        <li class="pastille">Pédagogie</li>
-                        <li class="pastille">Prise de parole</li>
-                        <li class="pastille">Persévérance</li>
-                        <li class="pastille">Curiosité</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- 5. Compétences : chaque pastille mène au projet qui la prouve (fonction dans functions.php) -->
+    <?php clarisse_competences(); ?>
 
     <!-- 6. Appel à l'action final : on termine la page par une action claire -->
     <section class="projet__section">
