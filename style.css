@@ -1815,3 +1815,200 @@ main .projet__entete,
 @media (max-width: 767px) and (min-height: 761px) {
   .entry-content > .hero.alignfull { align-content: center; }
 }
+
+
+/* =========================================================
+   19. RETOURS D'ELODIE ET DU RAPPORT (03/10)
+   ========================================================= */
+
+/* --- 19.1 Hero mobile : plus de grand vide sous les pastilles.
+   La règle 13.3 donnait au hero toute la hauteur de l'écran (100svh) : sur mobile, le contenu
+   commence sous le menu, donc toute la hauteur restante devenait un vide. Le hero prend
+   maintenant la hauteur de son contenu, et finit 48 px sous les pastilles (échelle 4-8…-48). */
+@media (max-width: 767px) {
+  .entry-content > .hero.alignfull { min-height: 0; }
+}
+@media (max-width: 767px) and (min-height: 761px) {
+  .entry-content > .hero.alignfull { align-content: start; }
+}
+/* Version anglaise : « From the classroom » est plus long que « De la classe » et ne tenait pas
+   sur une ligne à 40 px (texte coupé à gauche). Sur mobile, les groupes de mots EN peuvent passer
+   à la ligne ; en français, rien ne change. */
+@media (max-width: 767px) {
+  html[lang^="en"] .hero__titre .mot { white-space: normal; }
+  .hero .hero__titre { overflow-wrap: break-word; }
+}
+
+/* --- 19.2 Boutons : un seul comportement au survol (Elodie).
+   Avant : le primaire montait et le secondaire se remplissait sans bouger, ce qui n'avait pas l'air
+   d'une même famille. Maintenant, TOUS passent au magenta (la couleur qui souligne les liens) et
+   montent de 2 px. Le primaire reste plein, le secondaire reste vide (hiérarchie conservée).
+   Magenta 600 (#B12D62) et non 500 : le blanc sur magenta 500 n'atteint pas 4,5:1. */
+.bouton-primaire .wp-block-button__link:hover,
+.bouton-primaire .wp-block-button__link:focus-visible,
+.bouton--primaire:hover,
+.bouton--primaire:focus-visible {
+  background: #B12D62;
+  color: #fff;
+  box-shadow: var(--ombre-survol);
+  transform: translateY(-2px);
+}
+.bouton-secondaire .wp-block-button__link:hover,
+.bouton-secondaire .wp-block-button__link:focus-visible,
+.bouton--secondaire:hover,
+.bouton--secondaire:focus-visible,
+.header-navigation .header-menu-container ul li.menu-bouton > a:hover,
+.header-navigation .header-menu-container ul li.menu-bouton > a:focus-visible,
+#mobile-drawer .mobile-navigation ul li.menu-bouton > a:hover {
+  background: transparent;
+  border-color: #B12D62;
+  color: #B12D62;
+  box-shadow: none;
+  transform: translateY(-2px);
+}
+.bouton-secondaire .wp-block-button__link:focus:not(:focus-visible) {
+  background: transparent;                          /* après un clic, il ne reste pas rempli */
+  color: var(--global-palette1);
+}
+.bouton-lien .wp-block-button__link:hover { color: #B12D62; }
+@media (prefers-reduced-motion: reduce) {
+  .bouton-primaire .wp-block-button__link:hover, .bouton--primaire:hover,
+  .bouton-secondaire .wp-block-button__link:hover, .bouton--secondaire:hover,
+  .header-navigation .header-menu-container ul li.menu-bouton > a:hover { transform: none; }
+}
+/* Anglais sur téléphone peu haut : le titre EN fait une ligne de plus que le français ;
+   il descend à la taille « petit téléphone » (34/38) pour que tout le hero reste visible. */
+@media (max-width: 767px) and (max-height: 700px) {
+  html[lang^="en"] .hero .hero__titre { font-size: 34px; line-height: 38px; }
+}
+@media (max-width: 767px) and (max-height: 560px) {
+  html[lang^="en"] .hero .hero__titre { font-size: 30px; line-height: 34px; }
+}
+
+/* --- 19.3 « En images » : des captures plus grandes et une grille sans trou (rapport du 03/10)
+   - 2 colonnes au lieu de 3 : chaque capture est presque deux fois plus large, on lit le détail ;
+   - si le nombre d'images est impair, la dernière prend toute la largeur (plus de colonne vide) ;
+   - une petite loupe signale que l'image s'agrandit au clic. */
+/* 2 ou 4 images : 2 colonnes (plus de colonne vide, images plus grandes) ; 3 images : 3 colonnes */
+@media (min-width: 768px) {
+  .galerie:has(> .galerie__item:nth-child(2):last-child),
+  .galerie:has(> .galerie__item:nth-child(4):last-child) { grid-template-columns: repeat(2, 1fr); }
+}
+/* Tablette (2 colonnes) : une 3e image seule est centrée sous les deux autres */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .galerie > .galerie__item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 12px);
+  }
+}
+.galerie__image { position: relative; display: block; cursor: zoom-in; }
+.galerie__image::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B3FB8' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6'/%3E%3C/svg%3E") center / 20px no-repeat;
+  box-shadow: var(--ombre-carte);
+  transition: transform .2s ease;
+}
+.galerie__image:hover::after { transform: translateY(-4px) scale(1.08); }
+.galerie__image:focus-visible { outline: 3px solid var(--global-palette1); outline-offset: 4px; border-radius: var(--rayon-moyen); }
+@media (max-width: 767px) {
+  .galerie { grid-template-columns: 1fr; }
+}
+
+/* --- 19.4 La visionneuse (js/visionneuse.js) : l'image en grand par-dessus la page */
+html.visionneuse-ouverte { overflow: hidden; }
+.visionneuse {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 64px 96px;
+  border: 0;
+  background: rgba(30, 26, 74, .6);
+  box-sizing: border-box;
+}
+.visionneuse::backdrop { background: rgba(30, 26, 74, .8); }   /* violet 900 : le fond s'efface, l'image ressort */   /* violet 900 presque opaque */
+.visionneuse[open] { display: flex; align-items: center; justify-content: center; }
+.visionneuse__cadre {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.visionneuse__image {
+  max-width: 100%;
+  max-height: calc(100% - 48px);
+  object-fit: contain;
+  background: #fff;
+  border-radius: var(--rayon-moyen);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, .4);
+}
+.visionneuse__legende {
+  color: #fff;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  text-align: center;
+}
+.visionneuse__bouton {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: rgba(255, 255, 255, .12);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition: all .2s ease;
+}
+.visionneuse__bouton:hover,
+.visionneuse__bouton:focus-visible { background: #fff; color: var(--violet-900); }
+.visionneuse__bouton:focus-visible { outline: 3px solid var(--orange-500); outline-offset: 2px; }
+.visionneuse__fermer { top: 16px; right: 16px; font-size: 32px; }
+.visionneuse__precedent { left: 24px; top: 50%; transform: translateY(-50%); }
+.visionneuse__suivant { right: 24px; top: 50%; transform: translateY(-50%); }
+.visionneuse--seule .visionneuse__precedent,
+.visionneuse--seule .visionneuse__suivant { display: none; }
+.visionneuse__compteur {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  margin: 0;
+  color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+}
+@media (max-width: 767px) {
+  .visionneuse { padding: 64px 16px 96px; }
+  .visionneuse__precedent, .visionneuse__suivant { top: auto; bottom: 24px; transform: none; }
+  .visionneuse__precedent { left: calc(50% - 64px); }
+  .visionneuse__suivant { right: calc(50% - 64px); }
+}
+
+/* --- 19.5 Appel au contact en fin de projet : la même carte que sur « Mon parcours » */
+.projet__appel .parcours__appel-titre {
+  font-size: 36px;
+  line-height: 43px;
+  color: var(--violet-900);
+  margin: 0 0 16px;
+}
+@media (max-width: 767px) {
+  .projet__appel { padding: 48px 24px; }
+  .projet__appel .parcours__appel-titre { font-size: 28px; line-height: 35px; }
+}

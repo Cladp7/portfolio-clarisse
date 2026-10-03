@@ -103,20 +103,11 @@ function clarisse_liens_en($url, $chemin)
     if (!clarisse_en() || is_admin() || (defined('REST_REQUEST') && REST_REQUEST)) {
         return $url;
     }
-    // On découpe l'adresse : « http://site » + « /chemin » + « ?question »
-    $debut  = preg_match('#^([a-z]+:)?//[^/?\#]*#i', $url, $m) ? $m[0] : '';
-    $reste  = substr($url, strlen($debut));
-    $coupe  = strcspn($reste, '?#');
-    $chemin_url = substr($reste, 0, $coupe);
-    $suite  = substr($reste, $coupe);
-    if ($chemin_url === '') {      // home_url() sans chemin : WordPress s'en sert en interne, on n'y touche pas
-        return $url;
-    }
-    $p = $chemin_url;
+    $p = parse_url($url, PHP_URL_PATH) ?: '/';
     if (preg_match('#^/(en(/|$)|wp-|feed|xmlrpc)#', $p)) {          // déjà anglais, ou fichier WordPress
         return $url;
     }
-    return $debut . clarisse_chemin_en($p) . $suite;               // on ne remplace QUE le chemin
+    return str_replace($p, clarisse_chemin_en($p), $url);
 }
 
 /* ---------------------------------------------------------
@@ -265,6 +256,7 @@ function clarisse_alts_en()
         'pn-mobile' => 'Philippe Noël website: hero on a smartphone',
         'pn-desktop' => 'Philippe Noël website: hero on desktop',
         'pn-couverture' => 'Philippe Noël website: desktop and smartphone versions',
+        'pn-couverture-cadre' => 'Philippe Noël website: desktop and smartphone versions',
         'memia-editeur' => 'memIA: editor for the top and bottom text',
         'memia-variantes' => 'memIA: the three meme variants (absurd, ironic, relatable)',
         'memia-saisie' => 'memIA: screen for entering the situation',
@@ -332,3 +324,60 @@ add_filter('acf/format_value/name=galerie', function ($images) {
     }
     return $images;
 }, 30);
+
+/* ---------------------------------------------------------
+   7 bis. Légendes de la galerie en anglais (titre + explication sous chaque image)
+   Rangées par nom de fichier, comme les textes alternatifs.
+   --------------------------------------------------------- */
+function clarisse_legendes_en()
+{
+    return array(
+        'bf1' => array('The home screen', 'Search, categories as pills and popular products, with the old price crossed out.'),
+        'bf2' => array('Sorting', 'The “Sort by” menu offers the five options in the brief.'),
+        'bf3' => array('Categories', 'The pills scroll sideways to leave room for the products.'),
+        'cw1' => array('Identifying yourself', 'The car-wash card number, with a button that becomes active once the field is filled in.'),
+        'cw2' => array('Choosing the amount', 'Ready-made amounts to tap, an “other amount” option, and the chosen one outlined in yellow.'),
+        'cw3' => array('Choosing how to pay', 'Six payment methods recognisable by their logo, then confirmation.'),
+        'dds-avant' => array('The original card', 'Lots of information at the same level and a QR code that is awkward on a phone.'),
+        'dds-apres' => array('The improved version', 'A clear hierarchy, consistent icons and two real actions: sign up or call.'),
+        'ff-hero' => array('The hero', 'A strong three-word title, a coral subtitle and a single call to action.'),
+        'ff-programmes' => array('The programmes', 'Three consistent cards: picture, length, level, short description and button.'),
+        'lb-code-index' => array('The WordPress Loop', 'index.php: the Loop shows each item with its image, title, categories and an excerpt.'),
+        'lb-code-functions' => array('The functions.php file', 'Theme settings: featured images and clean loading of the stylesheet.'),
+        'lb-contenus' => array('The content', 'Twenty films, series, books, comics and manga, each with its featured image.'),
+        'Capture-decran-2026-09-26-141616' => array('Two paths, depending on the mood', 'Read alone or listen to a story: each world has its own colour so children find their way easily.'),
+        'Capture-decran-2026-09-26-141715' => array('Stories that appear on their own', 'A query loop shows each new story, with its illustration and an excerpt.'),
+        'Capture-decran-2026-09-26-141645' => array('Same logic for the nursery rhymes', 'The same card pattern, so children keep their bearings from one world to the next.'),
+        'lp1' => array('Choosing a language', 'Six languages, a level shown for each and a clearly visible selected state before moving on.'),
+        'lp2' => array('Tracking progress', 'Day streak, daily goal and badges: simple markers that make you want to come back.'),
+        'lp3' => array('Choosing a lesson', 'Short lessons by topic, with their length, level and progress.'),
+        'web-fonctionnel' => array('Functional version', 'Clear and simple: information in a grid, a short form and an unambiguous button.'),
+        'web-emotionnel' => array('Emotional version', 'Dark background, gradients and an informal tone to spark curiosity, with the same form.'),
+        'exam-front-slider' => array('The Swiper carousel', 'Full screen and looping, with arrows and pagination.'),
+        'exam-front-scrollreveal' => array('The ScrollReveal cards', 'Six cards that come in from the left, the bottom or the right as you scroll.'),
+        'exam-front-alerte' => array('The SweetAlert2 confirmation', 'Before deleting, a dialog asks you to confirm: the action cannot be undone.'),
+        'memia-saisie' => array('Describing the situation', 'One field and one button: you know straight away what to do.'),
+        'memia-variantes' => array('Choosing the tone', 'Three variants, absurd, ironic or relatable, and the one you pick is outlined.'),
+        'memia-editeur' => array('Editing the text', 'The top and bottom text can still be changed before the meme is laid out.'),
+        'pn-desktop' => array('The desktop version', 'The mock-up\'s hero: full-screen photo, title on the left and a horizontal menu.'),
+        'pn-mobile' => array('The smartphone version', 'The same hero rearranged: photo at the top, text and button below.'),
+        'pn-menu' => array('The mobile menu', 'The burger button opens a full-screen menu with well-spaced links.'),
+        'blog-couverture' => array('Routes and model', 'web.php sends the products to the view, and the Product model is linked to its category.'),
+        'blog-vue-blade' => array('The Blade view', 'A @foreach loop shows each product in a card: category, name, excerpt, price and link.'),
+    );
+}
+
+/* Galerie en anglais : légende et explication traduites */
+add_filter('acf/format_value/name=galerie', function ($images) {
+    if (clarisse_en() && is_array($images)) {
+        $legendes = clarisse_legendes_en();
+        foreach ($images as $i => $image) {
+            $nom = preg_replace('/(-scaled|-\d+x\d+)$/', '', pathinfo((string) get_attached_file($image['ID'] ?? 0), PATHINFO_FILENAME));
+            if (isset($legendes[$nom])) {
+                $images[$i]['caption'] = $legendes[$nom][0];
+                $images[$i]['description'] = $legendes[$nom][1];
+            }
+        }
+    }
+    return $images;
+}, 31);

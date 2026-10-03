@@ -33,6 +33,16 @@ function clarisse_charger_scripts()
         filemtime(get_stylesheet_directory() . '/js/entete.js'),
         true
     );
+    // Visionneuse des images : seulement sur les pages projet (là où il y a une galerie)
+    if (is_singular('projet')) {
+        wp_enqueue_script(
+            'clarisse-visionneuse',
+            get_stylesheet_directory_uri() . '/js/visionneuse.js',
+            array(),
+            filemtime(get_stylesheet_directory() . '/js/visionneuse.js'),
+            true
+        );
+    }
 }
 
 /* =========================================================
@@ -245,7 +255,7 @@ function clarisse_competences()
                             ?>
                                 <li>
                                     <a class="pastille pastille--lien" href="<?php echo esc_url(get_permalink($projet)); ?>"
-                                       aria-label="<?php echo esc_attr($texte . ' : ' . cl_t('voir le projet ', 'see the project ') . $titre); ?>">
+                                       aria-label="<?php echo esc_attr($texte . cl_t(' : voir le projet ', ': see the project ') . $titre); ?>">
                                         <?php echo esc_html($texte); ?> <span aria-hidden="true">→</span>
                                     </a>
                                 </li>

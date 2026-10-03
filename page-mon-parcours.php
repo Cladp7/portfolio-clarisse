@@ -17,7 +17,7 @@ if (clarisse_en()) {
 
 // Lien vers le CV en PDF : à coller ici quand le PDF sera dans la médiathèque
 // (Médias → cliquer sur le PDF → « Copier l'URL »). Tant que c'est vide, le bouton ne s'affiche pas.
-$lien_cv = home_url('/wp-content/uploads/2026/09/cv-clarisse-dupont.pdf');
+$lien_cv = get_stylesheet_directory_uri() . '/documents/cv-clarisse-dupont.pdf';
 
 // Lien vers la page Contact (on laisse WordPress trouver l'adresse tout seul)
 $lien_contact = get_permalink(get_page_by_path('contact'));

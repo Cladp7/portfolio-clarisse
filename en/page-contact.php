@@ -6,7 +6,7 @@
  */
 
 // Lien vers le CV (même adresse que sur la page Mon parcours)
-$lien_cv = home_url('/wp-content/uploads/2026/09/cv-clarisse-dupont.pdf');
+$lien_cv = get_stylesheet_directory_uri() . '/documents/cv-clarisse-dupont.pdf';
 
 get_header();
 ?>
@@ -49,7 +49,7 @@ get_header();
         <div class="projet__conteneur">
             <div class="parcours__appel">
                 <h2 class="parcours__appel-titre">Available for an internship</h2>
-                <p>200 hours minimum, from 13 October 2026, any region (driving licence and own car). Happy to work in French or in English.</p>
+                <p>200 hours minimum, from 13 October 2026 on set weekdays, full time during school holidays and from 31 May 2027. Any region (driving licence and own car). Happy to work in French or in English.</p>
                 <div class="projet__actions">
                     <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_cv); ?>" target="_blank" rel="noopener">Download my CV (in French)</a>
                     <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>">See my projects</a>

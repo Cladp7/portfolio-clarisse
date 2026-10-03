@@ -115,12 +115,12 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
             <section class="projet__section">
                 <div class="projet__conteneur">
                     <h2 class="titre-section"><?php echo cl_t('En images', 'In pictures'); ?></h2>
-                    <div class="galerie">
+                    <div class="galerie" data-titre="<?php echo esc_attr(cl_t('Visionneuse des images', 'Image viewer')); ?>" data-fermer="<?php echo esc_attr(cl_t('Fermer', 'Close')); ?>" data-precedent="<?php echo esc_attr(cl_t('Image précédente', 'Previous image')); ?>" data-suivant="<?php echo esc_attr(cl_t('Image suivante', 'Next image')); ?>">
                         <?php foreach ($images as $image) : ?>
                             <figure class="galerie__item">
 
-                                <!-- L'image : clic = ouverture en grand dans un nouvel onglet -->
-                                <a class="galerie__image" href="<?php echo esc_url($image['url']); ?>" target="_blank" rel="noopener">
+                                <!-- L'image : clic = ouverture en grand dans la visionneuse (js/visionneuse.js) -->
+                                <a class="galerie__image" href="<?php echo esc_url($image['url']); ?>" aria-label="<?php echo esc_attr(cl_t('Agrandir : ', 'Enlarge: ') . $image['alt']); ?>">
                                     <img src="<?php echo esc_url($image['sizes']['large']); ?>"
                                         alt="<?php echo esc_attr($image['alt']); ?>"
                                         loading="lazy"> <!-- lazy : l'image se charge seulement quand on arrive dessus -->
@@ -193,6 +193,23 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                     </a>
                 <?php endif; ?>
 
+            </div>
+        </section>
+
+        <!-- =====================================================
+         7. APPEL AU CONTACT (rapport du 03/10 : chaque étude de cas finit sur une action)
+         Même bloc que sur « Mon parcours ».
+         ===================================================== -->
+        <section class="projet__section">
+            <div class="projet__conteneur">
+                <div class="parcours__appel projet__appel">
+                    <h2 class="parcours__appel-titre"><?php echo cl_t('Envie de travailler ensemble ?', 'Shall we work together?'); ?></h2>
+                    <p><?php echo cl_t('Je cherche un stage de 200 heures, dès le 13 octobre 2026, idéalement dans l’éducatif.', 'I am looking for a 200-hour internship from 13 October 2026, ideally in education.'); ?></p>
+                    <div class="projet__actions">
+                        <a class="bouton bouton--primaire" href="<?php echo esc_url(get_permalink(get_page_by_path('contact'))); ?>"><?php echo cl_t('Me contacter', 'Contact me'); ?></a>
+                        <a class="bouton bouton--secondaire" href="<?php echo esc_url(get_post_type_archive_link('projet')); ?>"><?php echo cl_t('Voir tous mes projets', 'See all my projects'); ?></a>
+                    </div>
+                </div>
             </div>
         </section>
 
