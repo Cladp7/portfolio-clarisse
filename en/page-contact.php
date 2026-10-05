@@ -12,7 +12,7 @@ get_header();
 ?>
 
 <!-- On réutilise les classes existantes : même en-tête et mêmes cartes que Mon parcours -->
-<main class="projet projets parcours contact">
+<div id="main" class="projet projets parcours contact"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
 
     <!-- 1. En-tête -->
     <section class="projet__entete">
@@ -47,7 +47,7 @@ get_header();
     <!-- 3. Appel final : même carte que la fin de Mon parcours -->
     <section class="projet__section">
         <div class="projet__conteneur">
-            <div class="parcours__appel">
+            <div class="parcours__appel parcours__appel--gauche">
                 <h2 class="parcours__appel-titre">Available for an internship</h2>
                 <p>200 hours minimum, from 13 October 2026 on set weekdays, and full time during school holidays. Any region (driving licence and own car). Happy to work in French or in English.</p>
                 <div class="projet__actions">
@@ -58,6 +58,6 @@ get_header();
         </div>
     </section>
 
-</main>
+</div>
 
 <?php get_footer(); ?>

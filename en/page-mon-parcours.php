@@ -19,7 +19,7 @@ $lien_contact = get_permalink(get_page_by_path('contact'));
 get_header();
 ?>
 
-<main class="projet projets parcours">
+<div id="main" class="projet projets parcours"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
 
     <!-- 1. En-tête : même style que la page « Mes projets » -->
     <section class="projet__entete">
@@ -150,6 +150,6 @@ get_header();
         </div>
     </section>
 
-</main>
+</div>
 
 <?php get_footer(); ?>

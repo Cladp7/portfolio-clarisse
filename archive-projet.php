@@ -7,7 +7,7 @@
 get_header();
 ?>
 
-<main class="projet projets">
+<div id="main" class="projet projets"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
 
     <!-- En-tête de la page -->
     <section class="projet__entete">
@@ -32,6 +32,6 @@ get_header();
         </div>
     </section>
 
-</main>
+</div>
 
 <?php get_footer(); ?>

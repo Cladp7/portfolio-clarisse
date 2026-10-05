@@ -9,7 +9,7 @@
 get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
 ?>
 
-<main class="projet">
+<div id="main" class="projet"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
 
     <?php while (have_posts()) : the_post(); // la Boucle : ici, elle ne contient qu'un seul projet 
     ?>
@@ -215,7 +215,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
 
     <?php endwhile; ?>
 
-</main>
+</div>
 
 <?php get_footer(); // affiche le pied de page de Kadence 
 ?>

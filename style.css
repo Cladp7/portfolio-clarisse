@@ -1377,7 +1377,8 @@ body:not(.home) {
   background: var(--vague) center bottom / 100% 100% no-repeat;
   pointer-events: none;
 }
-main.projet {
+main.projet,
+#main.projet {
   overflow-x: clip;                                 /* la vague pleine largeur ne crée pas de barre horizontale */
 }
 
@@ -2050,4 +2051,381 @@ html.visionneuse-ouverte { overflow: hidden; }
     aspect-ratio: auto;
     max-height: 560px;
   }
+}
+
+/* =========================================================
+   20. ÉCHELLE TYPOGRAPHIQUE RESPONSIVE DU COURS (« Echelle typographique responsive », Julien)
+   Chaque texte du site suit UN style de l'échelle, avec la valeur exacte de la colonne de l'écran :
+   Mobile (≤ 767) · Tablette (768-1024) · Laptop (1025-1919) · Desktop (≥ 1920). Format : taille / interligne.
+   Caption : fil d'Ariane, étiquettes, libellés · Body S : textes secondaires, pastilles · Body : texte principal
+   Body L : introductions · Title XS : petits titres · Title SM : titres de blocs et de cartes
+   Title MD : titres de sections · Title LG : titre de page · Hero SM : titre d'accueil
+   Button SM : actions standards · Button MD : CTA
+   ========================================================= */
+@media (max-width: 767px) {   /* Mobile */
+  /* Caption 12/17 */
+  html body .projet__ariane.projet__ariane.projet__ariane,
+  html body .projet__ariane a,
+  html body .carte-projet .etiquette.etiquette.etiquette,
+  html body .parcours__infos dt,
+  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
+  html body .etiquette.etiquette.etiquette,
+  html body .menu-item.menu-langue > a,
+  html body .header-navigation .menu-langue > a { font-size: 12px; line-height: 17px; }
+  /* BodyS 14/22 */
+  html body .site-footer .footer-html-inner p,
+  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
+  html body .footer-html-inner a,
+  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
+  html body .galerie__texte p,
+  html body .etape__texte p,
+  html body .frise__lieu.frise__lieu.frise__lieu,
+  html body .frise__design.frise__design.frise__design,
+  html body .frise__reussite.frise__reussite.frise__reussite,
+  html body .footer-html-inner p,
+  html body .pastille.pastille.pastille,
+  html body .hero__atouts span,
+  html body .frise__date.frise__date.frise__date { font-size: 14px; line-height: 22px; }
+  /* Body 16/26 */
+  html body .projet__texte p,
+  html body .frise__contenu p,
+  html body .projet__appris-texte p,
+  html body .demarche__carte p,
+  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
+  html body .parcours__appel p,
+  html body .competences__intro.competences__intro.competences__intro,
+  html body .competences__apprentissage p,
+  html body .parcours__infos dd,
+  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
+  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
+  html body .contact__bloc p,
+  html body .entry-content > p { font-size: 16px; line-height: 26px; }
+  /* BodyL 18/30 */
+  html body .projet__intro.projet__intro.projet__intro,
+  html body .projets__intro.projets__intro.projets__intro,
+  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
+  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
+  html body .contact__lien.contact__lien.contact__lien { font-size: 18px; line-height: 30px; }
+  /* TitleXS 20/27 */
+  html body .demarche__titre.demarche__titre.demarche__titre,
+  html body .competences__titre.competences__titre.competences__titre,
+  html body .etape__titre.etape__titre.etape__titre,
+  html body .frise__titre.frise__titre.frise__titre,
+  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
+  html body .galerie__titre.galerie__titre.galerie__titre,
+  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 20px; line-height: 27px; }
+  /* TitleSM 24/31 */
+  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
+  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
+  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
+  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
+  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 24px; line-height: 31px; }
+  /* TitleMD 30/38 */
+  html body .titre-section.titre-section.titre-section { font-size: 30px; line-height: 38px; }
+  /* TitleLG 36/43 */
+  html body .projet .projet__titre.projet__titre.projet__titre,
+  html body .projet__titre.projet__titre.projet__titre { font-size: 36px; line-height: 43px; }
+  /* HeroSM 42/46 */
+  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 42px; line-height: 46px; }
+  /* BtnSM 14/18 */
+  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
+  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 14px; line-height: 18px; }
+  /* BtnMD 16/20 */
+  html body .bouton.bouton.bouton,
+  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
+  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 16px; line-height: 20px; }
+}
+@media (min-width: 768px) and (max-width: 1024px) {   /* Tablette */
+  /* Caption 13/19 */
+  html body .projet__ariane.projet__ariane.projet__ariane,
+  html body .projet__ariane a,
+  html body .carte-projet .etiquette.etiquette.etiquette,
+  html body .parcours__infos dt,
+  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
+  html body .etiquette.etiquette.etiquette,
+  html body .menu-item.menu-langue > a,
+  html body .header-navigation .menu-langue > a { font-size: 13px; line-height: 19px; }
+  /* BodyS 15/23 */
+  html body .site-footer .footer-html-inner p,
+  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
+  html body .footer-html-inner a,
+  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
+  html body .galerie__texte p,
+  html body .etape__texte p,
+  html body .frise__lieu.frise__lieu.frise__lieu,
+  html body .frise__design.frise__design.frise__design,
+  html body .frise__reussite.frise__reussite.frise__reussite,
+  html body .footer-html-inner p,
+  html body .pastille.pastille.pastille,
+  html body .hero__atouts span,
+  html body .frise__date.frise__date.frise__date { font-size: 15px; line-height: 23px; }
+  /* Body 17/27 */
+  html body .projet__texte p,
+  html body .frise__contenu p,
+  html body .projet__appris-texte p,
+  html body .demarche__carte p,
+  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
+  html body .parcours__appel p,
+  html body .competences__intro.competences__intro.competences__intro,
+  html body .competences__apprentissage p,
+  html body .parcours__infos dd,
+  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
+  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
+  html body .contact__bloc p,
+  html body .entry-content > p { font-size: 17px; line-height: 27px; }
+  /* BodyL 19/31 */
+  html body .projet__intro.projet__intro.projet__intro,
+  html body .projets__intro.projets__intro.projets__intro,
+  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
+  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
+  html body .contact__lien.contact__lien.contact__lien { font-size: 19px; line-height: 31px; }
+  /* TitleXS 22/30 */
+  html body .demarche__titre.demarche__titre.demarche__titre,
+  html body .competences__titre.competences__titre.competences__titre,
+  html body .etape__titre.etape__titre.etape__titre,
+  html body .frise__titre.frise__titre.frise__titre,
+  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
+  html body .galerie__titre.galerie__titre.galerie__titre,
+  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 22px; line-height: 30px; }
+  /* TitleSM 26/34 */
+  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
+  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
+  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
+  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
+  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 26px; line-height: 34px; }
+  /* TitleMD 32/40 */
+  html body .titre-section.titre-section.titre-section { font-size: 32px; line-height: 40px; }
+  /* TitleLG 40/48 */
+  html body .projet .projet__titre.projet__titre.projet__titre,
+  html body .projet__titre.projet__titre.projet__titre { font-size: 40px; line-height: 48px; }
+  /* HeroSM 52/57 */
+  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 52px; line-height: 57px; }
+  /* BtnSM 15/19 */
+  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
+  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 15px; line-height: 19px; }
+  /* BtnMD 17/21 */
+  html body .bouton.bouton.bouton,
+  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
+  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 17px; line-height: 21px; }
+}
+@media (min-width: 1025px) and (max-width: 1919px) {   /* Laptop */
+  /* Caption 14/20 */
+  html body .projet__ariane.projet__ariane.projet__ariane,
+  html body .projet__ariane a,
+  html body .carte-projet .etiquette.etiquette.etiquette,
+  html body .parcours__infos dt,
+  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
+  html body .etiquette.etiquette.etiquette,
+  html body .menu-item.menu-langue > a,
+  html body .header-navigation .menu-langue > a { font-size: 14px; line-height: 20px; }
+  /* BodyS 16/26 */
+  html body .site-footer .footer-html-inner p,
+  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
+  html body .footer-html-inner a,
+  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
+  html body .galerie__texte p,
+  html body .etape__texte p,
+  html body .frise__lieu.frise__lieu.frise__lieu,
+  html body .frise__design.frise__design.frise__design,
+  html body .frise__reussite.frise__reussite.frise__reussite,
+  html body .footer-html-inner p,
+  html body .pastille.pastille.pastille,
+  html body .hero__atouts span,
+  html body .frise__date.frise__date.frise__date { font-size: 16px; line-height: 26px; }
+  /* Body 18/30 */
+  html body .projet__texte p,
+  html body .frise__contenu p,
+  html body .projet__appris-texte p,
+  html body .demarche__carte p,
+  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
+  html body .parcours__appel p,
+  html body .competences__intro.competences__intro.competences__intro,
+  html body .competences__apprentissage p,
+  html body .parcours__infos dd,
+  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
+  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
+  html body .contact__bloc p,
+  html body .entry-content > p { font-size: 18px; line-height: 30px; }
+  /* BodyL 20/34 */
+  html body .projet__intro.projet__intro.projet__intro,
+  html body .projets__intro.projets__intro.projets__intro,
+  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
+  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
+  html body .contact__lien.contact__lien.contact__lien { font-size: 20px; line-height: 34px; }
+  /* TitleXS 24/32 */
+  html body .demarche__titre.demarche__titre.demarche__titre,
+  html body .competences__titre.competences__titre.competences__titre,
+  html body .etape__titre.etape__titre.etape__titre,
+  html body .frise__titre.frise__titre.frise__titre,
+  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
+  html body .galerie__titre.galerie__titre.galerie__titre,
+  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 24px; line-height: 32px; }
+  /* TitleSM 28/35 */
+  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
+  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
+  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
+  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
+  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 28px; line-height: 35px; }
+  /* TitleMD 36/43 */
+  html body .titre-section.titre-section.titre-section { font-size: 36px; line-height: 43px; }
+  /* TitleLG 48/55 */
+  html body .projet .projet__titre.projet__titre.projet__titre,
+  html body .projet__titre.projet__titre.projet__titre { font-size: 48px; line-height: 55px; }
+  /* HeroSM 64/67 */
+  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 64px; line-height: 67px; }
+  /* BtnSM 16/20 */
+  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
+  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 16px; line-height: 20px; }
+  /* BtnMD 18/22 */
+  html body .bouton.bouton.bouton,
+  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
+  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 18px; line-height: 22px; }
+}
+@media (min-width: 1920px) {   /* Desktop 1920 */
+  /* Caption 15/23 */
+  html body .projet__ariane.projet__ariane.projet__ariane,
+  html body .projet__ariane a,
+  html body .carte-projet .etiquette.etiquette.etiquette,
+  html body .parcours__infos dt,
+  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
+  html body .etiquette.etiquette.etiquette,
+  html body .menu-item.menu-langue > a,
+  html body .header-navigation .menu-langue > a { font-size: 15px; line-height: 23px; }
+  /* BodyS 17/27 */
+  html body .site-footer .footer-html-inner p,
+  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
+  html body .footer-html-inner a,
+  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
+  html body .galerie__texte p,
+  html body .etape__texte p,
+  html body .frise__lieu.frise__lieu.frise__lieu,
+  html body .frise__design.frise__design.frise__design,
+  html body .frise__reussite.frise__reussite.frise__reussite,
+  html body .footer-html-inner p,
+  html body .pastille.pastille.pastille,
+  html body .hero__atouts span,
+  html body .frise__date.frise__date.frise__date { font-size: 17px; line-height: 27px; }
+  /* Body 20/33 */
+  html body .projet__texte p,
+  html body .frise__contenu p,
+  html body .projet__appris-texte p,
+  html body .demarche__carte p,
+  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
+  html body .parcours__appel p,
+  html body .competences__intro.competences__intro.competences__intro,
+  html body .competences__apprentissage p,
+  html body .parcours__infos dd,
+  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
+  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
+  html body .contact__bloc p,
+  html body .entry-content > p { font-size: 20px; line-height: 33px; }
+  /* BodyL 22/37 */
+  html body .projet__intro.projet__intro.projet__intro,
+  html body .projets__intro.projets__intro.projets__intro,
+  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
+  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
+  html body .contact__lien.contact__lien.contact__lien { font-size: 22px; line-height: 37px; }
+  /* TitleXS 26/34 */
+  html body .demarche__titre.demarche__titre.demarche__titre,
+  html body .competences__titre.competences__titre.competences__titre,
+  html body .etape__titre.etape__titre.etape__titre,
+  html body .frise__titre.frise__titre.frise__titre,
+  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
+  html body .galerie__titre.galerie__titre.galerie__titre,
+  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 26px; line-height: 34px; }
+  /* TitleSM 32/40 */
+  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
+  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
+  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
+  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
+  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
+  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 32px; line-height: 40px; }
+  /* TitleMD 40/48 */
+  html body .titre-section.titre-section.titre-section { font-size: 40px; line-height: 48px; }
+  /* TitleLG 56/64 */
+  html body .projet .projet__titre.projet__titre.projet__titre,
+  html body .projet__titre.projet__titre.projet__titre { font-size: 56px; line-height: 64px; }
+  /* HeroSM 80/84 */
+  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 80px; line-height: 84px; }
+  /* BtnSM 17/21 */
+  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
+  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 17px; line-height: 21px; }
+  /* BtnMD 20/24 */
+  html body .bouton.bouton.bouton,
+  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
+  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 20px; line-height: 24px; }
+}
+
+/* --- 20.1 Contact : le texte de l'appel final fait plus de 3 lignes → aligné à gauche (cours « Les textes » :
+   on ne centre pas un texte long) et limité à 64 caractères par ligne (45-75). */
+.parcours__appel--gauche { text-align: left; }
+.parcours__appel--gauche p { max-width: 64ch; }
+.parcours__appel--gauche .projet__actions { justify-content: flex-start; }
+
+/* --- 20.2 Deux graisses seulement (cours « La hiérarchie », partie 1) : 400 et 700.
+   La pastille « langue » passait en 800 : elle reste en 700 comme les autres. */
+.hero__atouts .atout--langue { font-weight: 700; }
+
+/* --- 20.3 Longueur des lignes (45-75 caractères) : le texte de la carte « Recherche de stage » faisait ~125 caractères par ligne sur ordinateur */
+.parcours .parcours__stage-texte { max-width: 64ch; }
+
+/* --- 20.4 Espacements : uniquement des valeurs de l'échelle 4-8-12-16-24-32-48-64-96-128
+   (les 14px / 30px / 10px / 22px restants sont des « valeur de l'échelle − 2 px de bordure » : même taille finale) */
+.etape__titre { margin-top: 4px; }                                  /* 6 → 4 */
+html body .pastille.pastille.pastille { padding: 4px 12px; }        /* 6 → 4 (interligne Body S plus haut) */
+html body .projet__entete .etiquette.etiquette[class*="etiquette--"] { padding: 8px 16px; }   /* 10/20 → 8/16 */
+html body .accueil-projets .titre-section.titre-section { margin-bottom: 32px; }                /* 0,5em (15-20 px) → 32 */
+.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a { padding: 8px 16px; }   /* 0,6em/1,2em → 8/16 */
+.site-footer .site-bottom-footer-inner-wrap { padding-top: 32px; padding-bottom: 32px; column-gap: 32px; }  /* 30 (Kadence) → 32 */
+.site-footer .footer-html { margin: 0; }
+
+/* --- 20.5 Hero sur les téléphones peu hauts : le titre passe du style Hero SM (42/46) au style Hero XS (36/41)
+   de l'échelle, pour que tout le hero reste visible (remplace les tailles 34/38 et 30/34 qui n'étaient pas dans l'échelle). */
+@media (max-width: 767px) and (max-height: 640px) {
+  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 36px; line-height: 41px; }
+}
+@media (max-width: 767px) and (max-height: 700px) {
+  html[lang^="en"] body .hero .hero__titre.hero__titre.hero__titre { font-size: 36px; line-height: 41px; }
+}
+/* Très petits écrans (≤ 560 px de haut, iPhone SE avec la barre du navigateur) : style Title MD (30/38) */
+@media (max-width: 767px) and (max-height: 560px) {
+  html body .hero .hero__titre.hero__titre.hero__titre,
+  html[lang^="en"] body .hero .hero__titre.hero__titre.hero__titre { font-size: 30px; line-height: 38px; }
+}
+@media (max-width: 767px) and (max-height: 560px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 8px); }   /* 16 → 8 */
+}
+
+/* --- 20.6 Titre anglais sur grand écran : lignes équilibrées (plus de mot seul sur la dernière ligne, « fun. ») */
+@media (min-width: 768px) {
+  html[lang^="en"] .hero .hero__titre { text-wrap: pretty; }
+}
+/* En anglais, « From the classroom » est plus large que la colonne du titre sur ordinateur (il débordait sur
+   l'illustration) : comme sur mobile, les groupes de mots peuvent passer à la ligne, en lignes équilibrées. */
+html[lang^="en"] .hero__titre .mot { white-space: normal; }
+
+/* --- 20.7 Ordinateurs peu hauts (≤ 800 px utiles, ex. 1366 × 768, ou zoom Windows 125-150 %) :
+   le titre passe du style Hero SM (64/67) au style Hero XS de la même colonne Laptop (52/57) — avant, une taille
+   calculée (7 % de la hauteur) sortait de l'échelle. ≤ 640 px : Title LG Laptop (48/55). */
+@media (min-width: 1025px) and (max-height: 800px) {
+  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 52px; line-height: 57px; }
+}
+@media (min-width: 1025px) and (max-height: 640px) {
+  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 48px; line-height: 55px; }
+}
+/* Grand écran (≥ 1920) en anglais : le titre est plus long qu'en français (« From the classroom ») ;
+   en Hero SM (80/84) il faisait 6 lignes avec « fun. » seul. Il prend le style Hero XS de la même colonne (64/70) : 4 lignes. */
+@media (min-width: 1920px) {
+  html[lang^="en"] body .hero .hero__titre.hero__titre.hero__titre { font-size: 64px; line-height: 70px; }
 }

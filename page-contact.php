@@ -19,7 +19,7 @@ get_header();
 ?>
 
 <!-- On réutilise les classes existantes : même en-tête et mêmes cartes que Mon parcours -->
-<main class="projet projets parcours contact">
+<div id="main" class="projet projets parcours contact"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
 
     <!-- 1. En-tête -->
     <section class="projet__entete">
@@ -54,7 +54,7 @@ get_header();
     <!-- 3. Appel final : même carte que la fin de Mon parcours -->
     <section class="projet__section">
         <div class="projet__conteneur">
-            <div class="parcours__appel">
+            <div class="parcours__appel parcours__appel--gauche">
                 <h2 class="parcours__appel-titre">Disponible pour un stage</h2>
                 <p>200 heures minimum, dès le 13 octobre 2026 en jours fixes, et à temps plein pendant les congés scolaires. Région indifférente (permis B et voiture). Échanges possibles en français ou en anglais.</p>
                 <div class="projet__actions">
@@ -65,6 +65,6 @@ get_header();
         </div>
     </section>
 
-</main>
+</div>
 
 <?php get_footer(); ?>
