@@ -532,19 +532,41 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
   padding: 4px 16px;
 }
 
+/* Colonne de droite = 2 couches posées dans la même case de la grille :
+   l'illustration fondue derrière (::before), la bulle photo devant (::after). */
+.entry-content > .hero.alignfull > .wp-block-group__inner-container { grid-column: 1; grid-row: 1; }
+.entry-content > .hero.alignfull::before,
+.entry-content > .hero.alignfull::after { grid-column: 2; grid-row: 1; }
+
+/* L'illustration fondue (tableau, tablette, téléphone) : centrée sur la bulle et plus large qu'elle,
+   elle remplit l'espace vide tout autour de la photo. --bulle = diamètre de la bulle. */
+.entry-content > .hero.alignfull { --bulle: min(384px, calc(100svh - var(--hauteur-entete) - 192px)); }
+.entry-content > .hero.alignfull::before {
+  content: "";
+  justify-self: end;
+  width: calc(var(--bulle) * 1.75);
+  aspect-ratio: 900 / 720;                        /* proportions du dessin */
+  margin-right: calc(var(--bulle) * -0.375);      /* (1,75 − 1) ÷ 2 : même centre que la bulle */
+  background: url('images/hero-illustration.svg') center / contain no-repeat;
+  opacity: .55;
+  -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);   /* bords estompés */
+  mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+  pointer-events: none;
+}
+
 /* La bulle avec la photo (la même que sur le CV) : on sait tout de suite qui est « Miss Clarisse ».
-   384 px (échelle de dimensionnement), jamais plus haute que la place sous le menu. */
+   Calée à droite, sur le même bord que le menu (alignement). 384 px, jamais plus haute que la place sous le menu. */
 .entry-content > .hero.alignfull::after {
   content: "";
-  justify-self: center;
-  width: min(100%, 384px, calc(100svh - var(--hauteur-entete) - 192px));
+  justify-self: end;
+  width: var(--bulle);
   aspect-ratio: 1;
   background: url('images/bulle-clarisse.webp') center / contain no-repeat;
   filter: drop-shadow(0 24px 48px rgba(109, 79, 216, .25));   /* ombre douce violette : la bulle se détache */
   pointer-events: none;
 }
 @media (min-width: 1920px) {
-  .entry-content > .hero.alignfull::after { width: min(100%, 512px, calc(100svh - var(--hauteur-entete) - 192px)); }
+  .entry-content > .hero.alignfull { --bulle: min(512px, calc(100svh - var(--hauteur-entete) - 192px)); }
 }
 
 /* --- Ordinateurs peu hauts (≤ 800 px, ex. 1366 × 768 ou zoom Windows 125-150 %) : tout tient dans l'écran --- */
@@ -566,6 +588,7 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
 @media (max-width: 1024px) {
   .entry-content > .hero.alignfull { grid-template-columns: 1fr; }
   .hero .wp-block-group__inner-container::before { display: none; }   /* plus de place pour les étincelles */
+  .entry-content > .hero.alignfull::before,
   .entry-content > .hero.alignfull::after { display: none; }
   .hero .hero__surtitre {
     display: flex;
