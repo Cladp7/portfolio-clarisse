@@ -3,533 +3,198 @@ Theme Name:   Kadence Child – Portfolio Clarisse
 Template:     kadence
 Author:       Clarisse Dupont
 Description:  Thème enfant de Kadence pour le portfolio de Clarisse Dupont.
-Version:      1.0.0
+Version:      2.0.0
 Text Domain:  kadence-child
 */
 
-/* Theme Name : le nom qui s'affichera dans Apparence → Thèmes.
-   Template   : LA ligne la plus importante. C'est le nom du DOSSIER du thème parent ("kadence").
-                C'est elle qui dit à WordPress « ce thème est l'enfant de Kadence ».
-   Author, Description, Version : des infos pour toi (et pour un recruteur qui ouvrirait ton code).
-   Text Domain : l'identifiant du thème, utile pour les traductions. */
+/* =====================================================================
+   MODE D'EMPLOI DE CE FICHIER
+   ---------------------------------------------------------------------
+   Il est rangé par PARTIE DU SITE, de haut en bas :
 
-   /* =========================================================
-   1. VARIABLES (design tokens)
-   Les mêmes valeurs que dans Figma.
-   :root = la racine de la page → ces variables sont utilisables partout.
-   ========================================================= */
+    1. Variables (couleurs, ombres, arrondis, échelle typographique)
+    2. Polices
+    3. Bases (fond de page, boutons, liens)
+    4. En-tête (logo, menu, menu mobile)
+    5. Accueil : hero
+    6. Accueil : « Projets phares »
+    7. Haut des pages intérieures (titre, introduction, vague)
+    8. Cartes de projet (page Projets + accueil)
+    9. Page projet
+   10. Visionneuse d'images
+   11. Page « Mon parcours »
+   12. Page Contact
+   13. Pied de page
+
+   Règles suivies partout (cours de Julien et de Pascal) :
+   - espacements : uniquement 4-8-12-16-24-32-48-64-96-128 px
+     (14, 22 ou 30 px = une valeur de l'échelle − 2 px de bordure) ;
+   - tailles de texte : l'« Échelle typographique responsive » (variables --fs / --lh) ;
+   - contrastes ≥ 4,5:1 ; 45 à 75 caractères par ligne ; 2 graisses (400 et 700).
+
+   Écrans :  mobile ≤ 767 px · tablette 768-1024 px · ordinateur ≥ 1025 px · grand écran ≥ 1920 px.
+
+   Pour modifier une couleur, une taille ou un espacement : chercher (Ctrl + F)
+   le nom de la classe vue dans l'inspecteur du navigateur (clic droit → Inspecter).
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. VARIABLES
+   ===================================================================== */
 :root {
-  /* Couleurs d'accent pour les détails (étincelles, filets) */
-  --magenta-500: #D9467E;
-  --orange-500:  #FF9F42;
+  /* Couleurs du site (les violets 500 / 600 viennent de la palette Kadence :
+     --global-palette1 = violet 500, --global-palette2 = violet 600) */
+  --violet-900:  #1E1A4A;          /* texte foncé « saturé » : plus doux que le noir (cours « Les couleurs ») */
+  --violet-200:  #CAC8EA;
+  --violet-100:  #D6CCF7;          /* fin contour des cartes */
+  --magenta-500: #D9467E;          /* soulignements et filets d'accent */
+  --magenta-600: #B12D62;          /* survol des boutons (blanc dessus : 5:1) */
+  --orange-500:  #FF9F42;          /* étincelles */
   --soleil-500:  #FFD08A;
 
-  /* Le dégradé coucher de soleil : lavande en haut → doré en bas */
+  /* Le dégradé « coucher de soleil » du fond : lavande en haut → doré en bas */
   --degrade-page: linear-gradient(180deg, #E9E4FF 0%, #F6E3F7 30%, #FFE3EC 55%, #FFE6DA 80%, #FFEFD6 100%);
+  --bande-claire: rgba(255, 255, 255, .7);   /* bande plus claire sous la vague, derrière le contenu */
+  --vague: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 44 C240 8 480 4 720 30 C960 56 1200 66 1440 28 V80 H0 Z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
 
-  /* Rayons des coins */
-  --rayon-moyen: 16px;
-  --rayon-grand: 24px;
+  /* Arrondis */
+  --rayon-moyen:  16px;
+  --rayon-grand:  24px;
   --rayon-pilule: 999px;
 
-  /* Texte foncé « saturé » : violet 900 plutôt que le quasi-noir neutre 900
-     (cours Couleurs : éviter le noir, saturer ses gris) */
-  --violet-900: #1E1A4A;
+  /* Ombres en 2 parties (cours « La profondeur ») */
+  --ombre-carte:  0 3px 6px rgba(16, 15, 34, .15), 0 2px 4px rgba(16, 15, 34, .12);
+  --ombre-survol: 0 10px 20px rgba(16, 15, 34, .15), 0 3px 6px rgba(16, 15, 34, .10);
 
-  /* Hauteur de l'en-tête (même valeur que dans le Customizer) */
+  /* Hauteur de l'en-tête (logo + marges) : sert à placer le contenu juste en dessous */
   --hauteur-entete: 112px;
 
-  /* Ombres en 2 parties (cours « La profondeur ») */
-  --ombre-carte:  0 3px 6px rgba(16,15,34,.15), 0 2px 4px rgba(16,15,34,.12);
-  --ombre-survol: 0 10px 20px rgba(16,15,34,.15), 0 3px 6px rgba(16,15,34,.10);
+  /* Polices : Fredoka pour les titres, Nunito (réglée dans Kadence) pour le texte */
+  --police-titres: 'Fredoka', 'Nunito', sans-serif;
+
+  /* ÉCHELLE TYPOGRAPHIQUE (cours « Echelle typographique responsive »)
+     --fs = taille, --lh = interligne. Valeurs MOBILE ici, les autres écrans plus bas. */
+  --fs-caption: 12px;  --lh-caption: 17px;   /* fil d'Ariane, étiquettes, libellés */
+  --fs-body-s:  14px;  --lh-body-s:  22px;   /* textes secondaires, pastilles */
+  --fs-body:    16px;  --lh-body:    26px;   /* texte principal */
+  --fs-body-l:  18px;  --lh-body-l:  30px;   /* introductions */
+  --fs-title-xs: 20px; --lh-title-xs: 27px;  /* petits titres (cartes, étapes) */
+  --fs-title-sm: 24px; --lh-title-sm: 31px;  /* titres de blocs et de cartes de projet */
+  --fs-title-md: 30px; --lh-title-md: 38px;  /* titres de sections */
+  --fs-title-lg: 36px; --lh-title-lg: 43px;  /* titre de page */
+  --fs-hero-sm: 42px;  --lh-hero-sm: 46px;   /* titre de l'accueil */
+  --fs-btn-sm:  14px;  --lh-btn-sm:  18px;   /* actions standards */
+  --fs-btn-md:  16px;  --lh-btn-md:  20px;   /* boutons d'appel à l'action */
+}
+@media (min-width: 768px) {    /* Tablette */
+  :root {
+    --fs-caption: 13px;  --lh-caption: 19px;
+    --fs-body-s:  15px;  --lh-body-s:  23px;
+    --fs-body:    17px;  --lh-body:    27px;
+    --fs-body-l:  19px;  --lh-body-l:  31px;
+    --fs-title-xs: 22px; --lh-title-xs: 30px;
+    --fs-title-sm: 26px; --lh-title-sm: 34px;
+    --fs-title-md: 32px; --lh-title-md: 40px;
+    --fs-title-lg: 40px; --lh-title-lg: 48px;
+    --fs-hero-sm: 52px;  --lh-hero-sm: 57px;
+    --fs-btn-sm:  15px;  --lh-btn-sm:  19px;
+    --fs-btn-md:  17px;  --lh-btn-md:  21px;
+  }
+}
+@media (min-width: 1025px) {   /* Ordinateur (« Laptop ») */
+  :root {
+    --fs-caption: 14px;  --lh-caption: 20px;
+    --fs-body-s:  16px;  --lh-body-s:  26px;
+    --fs-body:    18px;  --lh-body:    30px;
+    --fs-body-l:  20px;  --lh-body-l:  34px;
+    --fs-title-xs: 24px; --lh-title-xs: 32px;
+    --fs-title-sm: 28px; --lh-title-sm: 35px;
+    --fs-title-md: 36px; --lh-title-md: 43px;
+    --fs-title-lg: 48px; --lh-title-lg: 55px;
+    --fs-hero-sm: 64px;  --lh-hero-sm: 67px;
+    --fs-btn-sm:  16px;  --lh-btn-sm:  20px;
+    --fs-btn-md:  18px;  --lh-btn-md:  22px;
+  }
+}
+@media (min-width: 1920px) {   /* Grand écran (« Desktop ») */
+  :root {
+    --fs-caption: 15px;  --lh-caption: 23px;
+    --fs-body-s:  17px;  --lh-body-s:  27px;
+    --fs-body:    20px;  --lh-body:    33px;
+    --fs-body-l:  22px;  --lh-body-l:  37px;
+    --fs-title-xs: 26px; --lh-title-xs: 34px;
+    --fs-title-sm: 32px; --lh-title-sm: 40px;
+    --fs-title-md: 40px; --lh-title-md: 48px;
+    --fs-title-lg: 56px; --lh-title-lg: 64px;
+    --fs-hero-sm: 80px;  --lh-hero-sm: 84px;
+    --fs-btn-sm:  17px;  --lh-btn-sm:  21px;
+    --fs-btn-md:  20px;  --lh-btn-md:  24px;
+  }
+}
+@media (max-width: 767px) {
+  :root { --hauteur-entete: 88px; }               /* en-tête moins haut sur mobile */
+}
+@media (min-width: 1025px) and (max-width: 1440px) {
+  body { --global-content-edge-padding: 64px; }   /* ordinateurs moyens : 64 px d'air sur les côtés */
+}
+@media (min-width: 1025px) and (max-height: 800px) {
+  :root { --hauteur-entete: 96px; }               /* écrans peu hauts : en-tête plus bas d'une marche */
 }
 
-/* =========================================================
-   2. FOND DE PAGE : le dégradé coucher de soleil
-   ========================================================= */
+
+/* =====================================================================
+   2. POLICES (hébergées dans le thème, dossier « fonts » : pas d'appel à Google)
+   ===================================================================== */
+@font-face {
+  font-family: 'Fredoka';                         /* titres : ronde, joyeuse, très lisible */
+  src: url('fonts/fredoka-latin-600-normal.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;                             /* le texte s'affiche tout de suite, la police arrive ensuite */
+}
+@font-face {
+  font-family: 'Titan One';                       /* titre de l'accueil uniquement (licence libre OFL) */
+  src: url('fonts/titan-one-latin-400-normal.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Tous les titres en Fredoka */
+.projet__titre,
+.titre-section,
+.carte-projet__titre,
+.parcours__stage-titre,
+.parcours__appel-titre,
+.demarche__titre,
+.competences__titre,
+.frise__titre,
+.projet__encadre-titre,
+.projet__suivant {
+  font-family: var(--police-titres);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+
+/* =====================================================================
+   3. BASES
+   ===================================================================== */
 body {
-  background: var(--degrade-page);   /* var(--nom) = on réutilise la variable du dessus */
+  background: var(--degrade-page);
 }
-/* Sur toutes les pages SAUF l'accueil (qui a déjà le pinceau dans son hero),
-   on pose le coup de pinceau et les étincelles en haut de la page.
-   « body:not(.home) » = le body qui n'a PAS la classe « home »
-   (WordPress ajoute cette classe uniquement sur la page d'accueil). */
-body:not(.home) {
-  background:
-    /* 1re couche (au-dessus) : le pinceau, en haut, centré, sans répétition.
-       Largeur = 100% de l'écran, mais jamais moins de 1200px :
-       sur mobile, on garde un pinceau assez grand (recadré sur les côtés) */
-    url('images/hero-pinceau.svg') center top / max(100%, 1200px) auto no-repeat,
-    /* 2e couche (en dessous) : le dégradé coucher de soleil habituel */
-    var(--degrade-page);
-}
-
-/* =========================================================
-   3. FOND DU CONTENU TRANSPARENT
-   En mode "Sans cadre", Kadence met un fond blanc sur tout le contenu,
-   ce qui cache notre dégradé. On le rend transparent pour laisser voir le body.
-   ========================================================= */
-.content-bg,                          /* le fond blanc des blocs de contenu */
-body.content-style-unboxed .site {    /* le fond du site entier quand le style est "Sans cadre" */
-  background: transparent;            /* transparent = on voit ce qu'il y a derrière (le dégradé) */
-}
-
-/* =========================================================
-   4. HERO (page d'accueil)
-   ========================================================= */
-.hero {
-  /* Le coup de pinceau en arrière-plan (chemin relatif à style.css) */
-  background: url('images/hero-pinceau.svg') center / cover no-repeat;
-  /* haut = hauteur de l'en-tête transparent + 48px d'air : le logo est plus grand que l'ancien texte,
-     il faut que le surtitre reste plus proche de son titre (32px) que du logo (48px).
-     Avec l'espace sous le logo, le surtitre reste visuellement plus loin du menu
-     que de son titre (32px) : il appartient bien au hero (loi de proximité). */
-  padding-top: calc(var(--hauteur-entete) + 48px);
-  padding-bottom: 42px;
-  margin-top: 0;
-}
-
-/* Le surtitre : violet 600, taille Body L */
-.hero__surtitre {
-  color: var(--global-palette2);   /* violet 600, défini dans la palette Kadence */
-  font-size: 20px;
-  line-height: 34px;
-}
-
-/* Le grand titre : style Hero XS de l'échelle du cours (Laptop 52/57) */
-.hero__titre {
-  font-size: 52px;
-  line-height: 62px;               /* ≈ 1,2 : un peu plus aéré, reste serré comme un grand titre doit l'être */
-  max-width: 760px;                /* limite la longueur des lignes (cours « Les textes ») */
-}
-
-/* Bouton principal : fond violet plein, en pilule (action primaire, cours « Hiérarchie 4 ») */
-.bouton-primaire .wp-block-button__link {
-  background: var(--global-palette1);
-  color: #fff;
-  border-radius: var(--rayon-pilule);
-  padding: 16px 32px;
-  font-weight: 700;
-  box-shadow: var(--ombre-carte);
-  transition: all .2s ease;        /* animation douce au survol */
-}
-.bouton-primaire .wp-block-button__link:hover {
-  background: var(--global-palette2);
-  box-shadow: var(--ombre-survol);
-  transform: translateY(-2px);     /* le bouton "monte" légèrement */
-}
-
-/* Bouton secondaire en style lien (action tertiaire) */
-.bouton-lien .wp-block-button__link {
+/* Kadence pose un fond blanc sur le contenu : on le rend transparent pour voir le dégradé */
+.content-bg,
+body.content-style-unboxed .site {
   background: transparent;
-  color: var(--global-palette1);
-  padding: 16px 8px;
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 4px;      /* souligné un peu décollé du texte, plus élégant */
 }
 
-/* Tablette */
-@media (max-width: 1024px) {
-  .hero { padding: calc(var(--hauteur-entete) + 48px) 24px 96px; }
-  .hero__titre { font-size: 44px; line-height: 53px; }   /* Hero XS tablette */
+/* --- Boutons (cours « La hiérarchie » : primaire = plein, secondaire = contour, tertiaire = lien) ---
+   .bouton = boutons écrits dans les modèles PHP · .wp-block-button__link = boutons de l'éditeur (accueil) */
+.bouton,
+.wp-block-button__link.wp-block-button__link {
+  font-size: var(--fs-btn-md);
+  line-height: var(--lh-btn-md);
 }
-
-/* Mobile */
-@media (max-width: 767px) {
-  .hero { padding: 128px 16px 64px; }
-  .hero__surtitre { font-size: 18px; line-height: 30px; }
-  .hero__titre { font-size: 36px; line-height: 43px; }   /* Hero XS mobile */
-}
-
-
-/* 4c. HERO – marges intérieures prioritaires
-   Kadence met « padding: 0 » sur tous les blocs pleine largeur (.alignfull).
-   Notre sélecteur a 3 classes (entry-content + hero + alignfull)
-   contre 2 pour Kadence : le plus précis l'emporte. */
-.entry-content > .hero.alignfull {
-  /* Kadence calcule la pleine largeur avec 100vw, qui INCLUT la barre de défilement :
-     le hero débordait de quelques pixels et le texte se décalait par rapport au logo.
-     On lui donne exactement la largeur de la page. */
-  width: 100%;
-  max-width: 100%;
-  margin-left: 0;
-  margin-right: 0;
-  /* Même calcul que le conteneur du menu Kadence :
-     (largeur de l'écran - largeur du contenu) / 2 + marge intérieure du conteneur.
-     --global-content-width et --global-content-edge-padding sont des variables
-     de Kadence, réglées dans le Customizer. */
-  /* EXACTEMENT le même calcul que le conteneur de l'en-tête, sur toutes les largeurs d'écran :
-     (espace libre de chaque côté du conteneur, jamais négatif) + marge intérieure de Kadence.
-     Plus de « minimum 80px » ni de valeurs tablette/mobile à part : c'est ce qui
-     décalait le texte par rapport au logo sur les écrans de portable. */
-  padding-left: calc(max(0px, (100% - var(--global-content-width)) / 2) + var(--global-content-edge-padding));
-  padding-right: calc(max(0px, (100% - var(--global-content-width)) / 2) + var(--global-content-edge-padding));
-}
-/* 4d. HERO – espacements (loi de proximité)
-   « .hero .hero__titre » (2 classes) est plus fort que la règle
-   de Kadence « .single-content h1 » (1 classe + 1 balise). */
-.hero .hero__surtitre {
-  margin: 0 0 48px;      /* surtitre → titre : 32px. Le surtitre remonte de 8px, le titre ne bouge pas (24 + 34 + 32 = 32 + 34 + 24) */
-}
-.hero .hero__titre {
-  margin: 0 0 32px;      /* titre → boutons : 32px, un peu plus d'air avant l'action */
-  color: var(--violet-900);
-}
-.hero .wp-block-buttons {
-  gap: 24px;             /* 24px entre les boutons au lieu de 9px */
-}
-
-/* 4e. HERO – étincelles à gauche du texte
-   Elles sont accrochées au bloc de texte (et non au fond), pour rester
-   toujours au même endroit par rapport au titre, quelle que soit la largeur d'écran. */
-.hero .wp-block-group__inner-container {
-  position: relative;    /* repère pour placer les étincelles */
-}
-.hero .wp-block-group__inner-container::before {
-  content: "";           /* un pseudo-élément a besoin d'un contenu, même vide */
-  position: absolute;
-  top: -38px;            /* la petite étincelle dorée tombe pile à la hauteur du surtitre */
-  left: -80px;           /* entièrement dans la marge gauche (80px) : ne touche jamais le texte */
-  width: 72px;
-  height: 72px;
-  background: url('images/etincelles-gauche.svg') center / contain no-repeat;
-  pointer-events: none;  /* décoratif : ne gêne pas les clics */
-}
-/* Tablette et mobile : la marge est trop étroite, on les cache */
-@media (max-width: 1024px) {
-  .hero .wp-block-group__inner-container::before { display: none; }
-}
-
-/* =========================================================
-   5. EN-TÊTE
-   ========================================================= */
-/* Le logo « Miss Clarisse » à la place du texte « Clarisse Dupont ».
-   Le texte reste dans le code (pour Google et les lecteurs d'écran),
-   mais il est caché visuellement et remplacé par l'image du logo.
-   .brand = le lien vers l'accueil créé par Kadence (ordinateur ET mobile). */
-.site-branding .brand {
-  display: block;
-  width: 136px;                                     /* 85px de haut : ~14px d'air au-dessus et en dessous (retour de Clarisse : « collé »)*/                                     /* ≈ 95px de haut, dans un en-tête de 112px */
-  aspect-ratio: 354 / 222;                          /* proportions exactes du dessin (recadré au ras des poignées) */
-  background: url('images/logo-miss-clarisse.webp') left center / contain no-repeat;
-}
-/* Texte caché visuellement mais toujours lu par les lecteurs d'écran (technique « visually hidden ») */
-.site-branding .site-title-wrap {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-/* En-tête un peu plus haut pour laisser respirer le logo (même valeur que --hauteur-entete) */
-.site-header .site-main-header-inner-wrap {
-  min-height: var(--hauteur-entete);
-}
-/* Mobile : logo un peu plus petit */
-@media (max-width: 767px) {
-  .site-branding .brand { width: 112px; }
-  :root { --hauteur-entete: 88px; }                 /* en-tête moins haut sur mobile (utilisé partout) */
-}
-
-/* Le lien « Me contacter » transformé en bouton à contour (action secondaire, cours « Hiérarchie »).
-   Il suffit d'ajouter la classe CSS « menu-bouton » à l'élément de menu
-   (Apparence → Menus → Options de l'écran → cocher « Classes CSS »). */
-.header-navigation .header-menu-container ul li.menu-bouton > a {
-  border: 2px solid var(--global-palette1);   /* contour violet 500 */
-  border-radius: var(--rayon-pilule);
-  padding: 10px 22px;                         /* 10 + 20 (interligne) + 10 + 2×2 (bordure) = 44px de haut, comme la maquette */
-  color: var(--global-palette1);
-  font-weight: 700;
-  transition: all .2s ease;
-}
-.header-navigation .header-menu-container ul li.menu-bouton > a:hover {
-  background: var(--global-palette1);         /* au survol : le bouton se remplit */
-  color: #fff;
-}
-/* =========================================================
-   6. PAGE PROJET (single-projet.php)
-   ========================================================= */
-
-/* Le conteneur : même largeur et mêmes marges que le menu de Kadence,
-   pour que tout soit aligné sur la même ligne verticale */
-.projet__conteneur {
-  max-width: var(--global-content-width);
-  margin: 0 auto;                                   /* centré */
-  padding: 0 var(--global-content-edge-padding);
-}
-
-/* --- 6.1 En-tête du projet --- */
-.projet__entete {
-  /* haut = en-tête transparent + 8px d'air : le fil d'Ariane (navigation) reste proche du menu,
-     et l'étiquette + le titre forment un groupe à part, 48px plus bas ; bas = 32px */
-  padding: calc(var(--hauteur-entete) + 24px) 0 32px;   /* 24px sous le logo, 48px avant l'étiquette */
-}
-
-/* Fil d'Ariane : petit texte discret (style Caption de l'échelle) */
-.projet .projet__ariane {   /* « .projet » devant : sinon la règle « .projet p » (plus forte) écrase la marge */
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--global-palette5);                    /* gris secondaire */
-  margin: 0 0 48px;                                 /* 48px : l'étiquette appartient au TITRE (24px), pas au fil d'Ariane */
-}
-.projet__ariane a {
-  color: var(--global-palette1);                    /* lien en violet 500 */
-}
-
-/* Étiquette : le petit badge doré (réutilisé plus tard sur les cartes) */
-.etiquette {
-  display: inline-block;                            /* se comporte comme un bloc, mais reste sur la ligne */
-  background: var(--soleil-500);
-  color: var(--violet-900);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 700;
-  padding: 4px 12px;                                /* 4 + 20 + 4 = 28px de haut, comme la maquette */
-  border-radius: var(--rayon-pilule);
-  margin-bottom: 32px;                              /* 32px sous l'étiquette : elle respire, et reste plus proche du titre (32) que du fil d'Ariane (48) */
-}
-
-/* Titre : style Title LG de l'échelle (Laptop 48/55),
-   plus petit que le titre du hero de l'accueil, qui reste la page la plus importante */
-.projet .projet__titre {
-  font-size: 48px;
-  line-height: 55px;
-  color: var(--violet-900);
-  margin: 0 0 24px;
-}
-
-/* Introduction : Body L (20/34), limitée à 760px pour garder des lignes lisibles */
-.projet .projet__intro {    /* idem : plus fort que « .projet p » */
-  font-size: 20px;
-  line-height: 34px;
-  max-width: 760px;
-  margin: 0 0 48px;
-  text-wrap: pretty;                                /* évite un mot tout seul sur la dernière ligne */
-}
-
-/* Grande capture : format paysage 2:1 comme la maquette (1280 × 640) */
-.projet__visuel img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 2 / 1;                              /* hauteur = la moitié de la largeur */
-  object-fit: cover;                                /* remplit le cadre sans déformer l'image */
-  object-position: top;                             /* on garde le HAUT de la capture */
-  border-radius: var(--rayon-grand);
-  box-shadow: var(--ombre-carte);
-}
-
-/* --- 6.2 Sections communes --- */
-.projet__section {
-  /* 32px en haut + 32px en bas = 64px entre deux sections.
-     64 reste plus grand que le plus grand espace À L'INTÉRIEUR d'une section (48px) :
-     cours « Éviter les espacements ambigus » */
-  padding: 32px 0;
-}
-
-/* Titre de section + filet d'accent magenta en dessous (Title MD Laptop 36/43) */
-.titre-section {
-  font-size: 36px;
-  line-height: 43px;
-  color: var(--violet-900);
-  margin: 0 0 32px;          /* titre → texte : 32px (plus proche de SON texte que du bloc précédent) */
-  position: relative;                               /* repère pour placer le filet */
-}
-.titre-section::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -16px;                                    /* le filet à mi-chemin entre le titre et le texte */
-  width: 48px;
-  height: 4px;
-  border-radius: var(--rayon-pilule);
-  background: var(--magenta-500);
-}
-
-/* --- 6.3 Contexte / objectif + encadré outils --- */
-.projet__colonnes {
-  display: grid;
-  grid-template-columns: minmax(0, 680px) minmax(0, 504px); /* texte à gauche, encadré à droite */
-  justify-content: space-between;
-  gap: 48px;
-  align-items: start;                               /* l'encadré ne s'étire pas en hauteur */
-}
-.projet__texte p {
-  font-size: 18px;
-  line-height: 30px;
-}
-.projet__texte .titre-section:not(:first-child) {
-  margin-top: 48px;                                 /* espace avant « L'objectif » */
-}
-
-/* L'encadré « Outils et techniques » : une carte blanche */
-.projet__encadre {
-  background: rgba(255, 255, 255, .8);              /* blanc légèrement transparent : on devine le fond */
-  border-radius: var(--rayon-grand);
-  padding: 32px;
-  box-shadow: var(--ombre-carte);
-}
-.projet__encadre-titre {
-  font-size: 24px;
-  line-height: 32px;
-  color: var(--violet-900);
-  margin: 0 0 16px;
-}
-
-/* Les pastilles (liste sans puces, en ligne) */
-.pastilles {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;                                  /* passent à la ligne si besoin */
-  gap: 8px;
-}
-.pastille {
-  background: var(--global-palette8);               /* neutre 100 */
-  border: 1px solid #CAC8EA;                         /* violet 200 */
-  color: var(--global-palette2);                    /* violet 600 */
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: var(--rayon-pilule);
-}
-
-/* --- 6.4 La démarche : étapes numérotées sur 2 colonnes ---
-   5 colonnes = ~20 caractères par ligne (trop court) ; 1 colonne = page trop longue
-   et moitié droite vide. 2 colonnes = ~60 caractères par ligne (cours « Les textes »)
-   et une page équilibrée sur toute la largeur de la grille. */
-.etapes {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);            /* 2 colonnes : lignes d'environ 60 caractères (45–75 = confortable) */
-  gap: 24px;                                        /* même gouttière que la grille 12 colonnes (24px) */
-  counter-reset: etape;                             /* on lance un compteur CSS */
-}
-.etape {
-  display: grid;
-  grid-template-columns: 44px 1fr;                  /* le numéro à gauche, le texte à droite */
-  column-gap: 24px;
-  align-items: start;
-  background: rgba(255, 255, 255, .8);
-  border-radius: var(--rayon-moyen);
-  padding: 24px;
-  box-shadow: var(--ombre-carte);
-  counter-increment: etape;                         /* +1 à chaque étape */
-}
-.etape::before {
-  content: counter(etape);                          /* affiche 1, 2, 3… automatiquement */
-  grid-row: 1 / span 2;                             /* le numéro occupe la hauteur du titre + du texte */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--global-palette1);               /* violet 500 */
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-}
-.etape__titre {
-  font-size: 24px;
-  line-height: 32px;
-  color: var(--violet-900);
-  margin: 6px 0 8px;                                /* 6px : centré sur le rond ; 8px : collé à son texte */
-}
-.etape__texte,
-.etape__texte p {
-  font-size: 16px;
-  line-height: 26px;
-  margin: 0;
-}
-
-/* --- 6.5 Galerie : 3 captures côte à côte, chacune avec son titre et son explication ---
-   Image au-dessus, texte en dessous (proximité : chaque texte est collé à SON image). */
-.galerie {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);            /* 3 colonnes = 4 colonnes chacune sur la grille de 12 */
-  gap: 24px;
-  align-items: start;
-}
-.galerie__item {
-  margin: 0;
-}
-.galerie__image img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;                            /* toutes les captures ont la même forme : grille régulière */
-  object-fit: cover;
-  object-position: top;                             /* on garde le haut de la capture (titre de la page) */
-  border-radius: var(--rayon-moyen);
-  box-shadow: var(--ombre-carte);
-  transition: all .2s ease;
-}
-.galerie__image:hover img {
-  box-shadow: var(--ombre-survol);                  /* au survol : l'image « monte », elle est cliquable */
-  transform: translateY(-4px);
-}
-.galerie__texte {
-  margin-top: 16px;
-}
-.galerie__titre {
-  font-size: 20px;                                  /* Title XS mobile / Body L : sous-titre de carte */
-  line-height: 28px;
-  color: var(--violet-900);
-  margin: 0 0 8px;                                  /* collé à sa description */
-}
-.galerie__texte p {
-  font-size: 16px;                                  /* Body S : ~50 caractères par ligne dans une colonne */
-  line-height: 26px;
-}
-
-/* --- 6.6 Ce que j'ai appris : encadré avec bordure d'accent (cours « Hiérarchie ») --- */
-.projet__appris {
-  background: rgba(255, 255, 255, .8);
-  border-left: 6px solid var(--magenta-500);        /* la bordure d'accent à gauche */
-  border-radius: var(--rayon-grand);
-  padding: 48px;
-  box-shadow: var(--ombre-carte);
-}
-.projet__appris-titre {
-  font-size: 28px;
-  line-height: 35px;
-  color: var(--violet-900);
-  margin: 0 0 16px;
-}
-.projet__appris-texte {
-  max-width: 760px;                                 /* un seul paragraphe : lignes de longueur lisible */
-  column-gap: 48px;
-}
-/* S'il y a PLUSIEURS paragraphes (p + p), on les répartit sur 3 colonnes, une idée par colonne */
-.projet__appris-texte:has(p + p) {
-  max-width: none;
-  columns: 3;
-}
-.projet__appris p {
-  font-size: 18px;
-  line-height: 30px;
-  break-inside: avoid;                              /* un paragraphe n'est jamais coupé entre 2 colonnes */
-}
-
-/* --- 6.7 Liens et projet suivant --- */
-.projet__liens {
-  display: flex;
-  justify-content: space-between;                   /* boutons à gauche, projet suivant à droite */
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.projet__actions {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-/* Boutons réutilisables partout (mêmes styles que ceux du hero) */
 .bouton {
   display: inline-block;
   padding: 16px 32px;
@@ -538,251 +203,479 @@ body.content-style-unboxed .site {    /* le fond du site entier quand le style e
   text-decoration: none;
   transition: all .2s ease;
 }
-.bouton--primaire {
+.bouton--primaire,
+.bouton-primaire .wp-block-button__link {
   background: var(--global-palette1);
   color: #fff;
+  border-radius: var(--rayon-pilule);
+  padding: 16px 32px;
+  font-weight: 700;
   box-shadow: var(--ombre-carte);
+  transition: all .2s ease;
 }
-.bouton--primaire:hover {
-  background: var(--global-palette2);
+.bouton--secondaire,
+.bouton-secondaire .wp-block-button__link {
+  background: transparent;
+  color: var(--global-palette1);
+  border: 2px solid var(--global-palette1);
+  padding: 14px 30px;                             /* 16/32 − 2 px de bordure : même taille que le primaire */
+  font-weight: 700;
+  box-shadow: none;
+  transition: all .2s ease;
+}
+/* Survol : tous les boutons passent au magenta et montent de 2 px.
+   Le primaire reste plein, le secondaire reste vide (la hiérarchie ne change pas). */
+.bouton--primaire:hover,
+.bouton--primaire:focus-visible,
+.bouton-primaire .wp-block-button__link:hover,
+.bouton-primaire .wp-block-button__link:focus-visible {
+  background: var(--magenta-600);
   color: #fff;
   box-shadow: var(--ombre-survol);
   transform: translateY(-2px);
 }
-.bouton--secondaire {
-  border: 2px solid var(--global-palette1);
-  color: var(--global-palette1);
-  padding: 14px 30px;                               /* 2px de moins pour compenser la bordure */
+.bouton--secondaire:hover,
+.bouton--secondaire:focus-visible,
+.bouton-secondaire .wp-block-button__link:hover,
+.bouton-secondaire .wp-block-button__link:focus-visible {
+  background: transparent;
+  border-color: var(--magenta-600);
+  color: var(--magenta-600);
+  box-shadow: none;
+  transform: translateY(-2px);
 }
-.bouton--secondaire:hover {
-  background: var(--global-palette1);
-  color: #fff;
-}
-.projet__suivant {
-  text-align: right;
-  font-size: 28px;
-  line-height: 35px;
-  font-weight: 700;
-  color: var(--global-palette1);
-  text-decoration: none;
-}
-.projet__suivant-label {
-  display: block;                                   /* « Projet suivant » sur sa propre ligne */
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  color: var(--global-palette5);
-}
-/* --- 6.8 Corrections d'espacement --- */
-
-/* Kadence met 18px au-dessus ET en dessous de chaque paragraphe.
-   Sur la page projet, on garde seulement 16px ENTRE deux paragraphes. */
-.projet p {
-  margin: 0 0 16px;
-}
-.projet p:last-child {
-  margin-bottom: 0;          /* le dernier paragraphe d'un bloc ne pousse plus rien en dessous */
-}
-/* Tablette */
-@media (max-width: 1024px) {
-  .projet .projet__titre { font-size: 40px; line-height: 48px; }
-  .projet__colonnes { grid-template-columns: 1fr; }        /* encadré sous le texte */
-  .galerie { grid-template-columns: repeat(2, 1fr); }      /* 2 captures par ligne */
-  .projet__appris-texte:has(p + p) { columns: 1; }         /* 1 seule colonne de texte */
+@media (prefers-reduced-motion: reduce) {          /* pas de mouvement si la personne l'a désactivé */
+  .bouton:hover,
+  .wp-block-button__link:hover,
+  .menu-bouton > a:hover { transform: none; }
 }
 
-/* Mobile */
-@media (max-width: 767px) {
-  .projet .projet__titre { font-size: 36px; line-height: 43px; }
-  .projet__intro { font-size: 18px; line-height: 30px; }
-  .projet__visuel img { aspect-ratio: 4 / 3; }      /* un peu plus haute sur petit écran */
-  .projet__appris { padding: 32px 24px; }
-  .etapes, .galerie { grid-template-columns: 1fr; }       /* tout en 1 colonne */
-  .projet__suivant { text-align: left; }
-}
-/* Liens du menu : violet 600 au lieu du gris (le gris donnait l'impression de liens désactivés).
-   :not(.menu-bouton) = tous les liens SAUF le bouton « Me contacter », qui garde son propre style. */
-.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a {
-  color: var(--global-palette2);                    /* violet 600 : contraste ~8:1 sur le fond clair */
-  font-weight: 700;
-  text-decoration: underline;
-  text-decoration-color: transparent;               /* soulignement invisible au repos… */
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
-  transition: all .2s ease;
-}
-/* …qui apparaît au survol et sur la page où l'on se trouve (repère de navigation) */
-.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a:hover,
-.header-navigation .header-menu-container ul li.current-menu-item:not(.menu-bouton) > a {
-  color: var(--global-palette1);                    /* violet 500 */
-  text-decoration-color: var(--magenta-500);        /* soulignement magenta, comme les filets d'accent */
-}
 
-/* En-tête : Kadence emboîte DEUX conteneurs qui ajoutent chacun 24px de marge intérieure.
-   Sur les écrans de portable, le logo se retrouvait donc 24px plus à droite que le texte du hero.
-   On retire la marge du conteneur intérieur : le logo s'aligne pile sur le contenu de la page. */
-.site-header .site-main-header-wrap .site-container {   /* ordinateur ET mobile */
+/* =====================================================================
+   4. EN-TÊTE
+   ===================================================================== */
+/* Barre fixe en haut ; « est-defile » est ajoutée par js/entete.js dès qu'on descend */
+#masthead,
+.transparent-header #masthead,
+.mobile-transparent-header #masthead {
+  position: fixed;
+  top: var(--wp-admin--admin-bar--height, 0px);   /* sous la barre noire de WordPress quand on est connectée */
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+#masthead .site-header-upper-inner-wrap {
+  background: rgba(255, 255, 255, .35);           /* voile léger tout en haut… */
+  box-shadow: 0 4px 16px rgba(30, 26, 74, .05);
+  border-bottom: 0;
+  transition: background .3s ease, box-shadow .3s ease;
+}
+#masthead:hover .site-header-upper-inner-wrap,
+#masthead.est-defile .site-header-upper-inner-wrap {
+  background: rgba(255, 255, 255, .92);           /* …blanc et flouté au survol et quand on descend */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(30, 26, 74, .08);
+}
+#masthead .site-main-header-wrap,
+#masthead .site-main-header-wrap .site-header-row-container-inner {
+  background: transparent;
+}
+.site-header .site-main-header-inner-wrap {
+  min-height: var(--hauteur-entete);
+  align-items: center;
+}
+/* Kadence ajoute 24 px de marge dans un 2e conteneur : on la retire pour aligner le logo sur le contenu */
+.site-header .site-main-header-wrap .site-container {
   padding-left: 0;
   padding-right: 0;
 }
 
-/* =========================================================
-   7. PAGE PROJETS + CARTES DE PROJET (comme la maquette « Projets phares »)
-   ========================================================= */
-/* Titre « Mes projets » : il reprend le style .projet__titre (48px, violet 900, comme le titre du hero) */
-/* Phrase d'intro : en couleur et en italique */
-.projets .projets__intro {
-  font-size: 20px;
-  line-height: 34px;
-  font-style: italic;
-  color: var(--global-palette1);                    /* violet 500 : contraste ~6:1 sur le fond clair */
-  margin: 0;                                        /* pas de largeur max : la phrase tient sur une ligne */
-  text-wrap: pretty;
-}
-/* Pas de fil d'Ariane ni de surtitre ici : le titre est le premier élément sous le logo,
-   on lui laisse 48px d'air, comme le hero de l'accueil */
-.projets .projet__entete {
-  padding-top: calc(var(--hauteur-entete) + 48px);
-}
-
-/* Grille : 3 cartes par ligne (3 × 4 colonnes de la grille 12), gouttière 24px */
-.grille-projets {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-/* La carte */
-.carte-projet {
-  position: relative;                               /* repère pour le lien qui couvre toute la carte */
+/* --- Logo « Miss Clarisse » : le nom du site reste dans le code (Google, lecteurs d'écran)
+   mais il est caché visuellement et remplacé par l'image --- */
+.site-header .site-branding {
+  padding: 0;
   display: flex;
-  flex-direction: column;                           /* image en haut, contenu en dessous */
-  border-radius: var(--rayon-grand);
-  overflow: hidden;                                 /* l'image suit les coins arrondis */
-  box-shadow: var(--ombre-carte);
-  transition: all .2s ease;
+  align-items: center;
 }
-.carte-projet:hover {
-  box-shadow: var(--ombre-survol);                  /* au survol, la carte « monte » */
-  transform: translateY(-4px);
-}
-
-/* Image : même hauteur pour toutes les cartes (maquette : 240px) */
-.carte-projet__image {
-  aspect-ratio: 16 / 9;
-  background: var(--global-palette8);
-}
-.carte-projet__image img {
+.site-branding .brand {
   display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
+  width: 128px;                                   /* 128 × 222/354 ≈ 80 px de haut : 16 + 80 + 16 = 112 */
+  aspect-ratio: 354 / 222;
+  background: url('images/logo-miss-clarisse.webp') left center / contain no-repeat;
 }
-
-/* Contenu coloré */
-.carte-projet__contenu {
-  flex: 1;                                          /* toutes les cartes d'une ligne ont la même hauteur */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 24px;
-}
-.carte-projet .etiquette {
-  margin-bottom: 12px;
-}
-.carte-projet .carte-projet__titre {
-  font-size: 28px;                                  /* Title SM */
-  line-height: 35px;
-  margin: 0 0 12px;
-}
-.carte-projet__lien {
-  color: inherit;
-  text-decoration: none;
-}
-/* Astuce accessible : un pseudo-élément étend la zone cliquable du lien à toute la carte */
-.carte-projet__lien::after {
-  content: "";
+.site-branding .site-title-wrap {                 /* texte caché visuellement, toujours lu à voix haute */
   position: absolute;
-  inset: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
-.carte-projet .carte-projet__texte {
-  font-size: 16px;                                  /* Body S */
-  line-height: 26px;
-  margin: 0 0 16px;
-  flex: 1;                                          /* pousse « Voir le projet » tout en bas */
-}
-.carte-projet__voir {
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 700;
+@media (min-width: 1025px) and (max-height: 800px) {
+  .site-branding .brand { width: 102px; }         /* ≈ 64 px de haut */
 }
 
-/* Les 3 couleurs (champ ACF « couleur_carte ») — contrastes vérifiés ≥ 4,5:1 */
-.carte-projet--violet .carte-projet__contenu  { background: var(--global-palette1); color: #fff; }   /* violet 500 */
-.carte-projet--magenta .carte-projet__contenu { background: #B12D62; color: #fff; }                   /* magenta 600 */
-.carte-projet--orange .carte-projet__contenu  { background: var(--orange-500); color: var(--violet-900); }
-.carte-projet--violet .carte-projet__titre,
-.carte-projet--magenta .carte-projet__titre { color: #fff; }
-.carte-projet--orange .carte-projet__titre { color: var(--violet-900); }
-
-/* Tablette : 2 cartes par ligne ; mobile : 1 */
-@media (max-width: 1024px) {
-  .grille-projets { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 767px) {
-  .grille-projets { grid-template-columns: 1fr; }
-}
-
-
-/* =========================================================
-   8. PIED DE PAGE
-   ========================================================= */
-.site-footer .footer-html-inner p {
-  color: var(--violet-900);
-  font-size: 16px;
-  line-height: 26px;
-  margin: 0;
-}
-.site-footer .footer-html-inner a {
-  color: var(--global-palette2);                    /* violet 600, comme les liens du menu */
+/* --- Liens du menu : violet 600, soulignement magenta au survol et sur la page en cours --- */
+.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  padding: 8px 16px;
+  color: var(--global-palette2);
   font-weight: 700;
   text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: 4px;
+  text-decoration-color: transparent;             /* soulignement invisible au repos */
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
   transition: all .2s ease;
 }
-.site-footer .footer-html-inner a:hover {
-  text-decoration-color: var(--magenta-500);        /* même soulignement magenta que le menu */
+.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a:hover,
+.header-navigation .header-menu-container ul li.current-menu-item:not(.menu-bouton) > a {
+  color: var(--global-palette1);
+  text-decoration-color: var(--magenta-500);
+}
+.menu-langue > a {                                /* bouton FR / EN */
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+/* --- « Me contacter » : bouton à contour (action secondaire)
+   (classe CSS « menu-bouton » ajoutée dans Apparence → Menus) --- */
+.header-navigation .header-menu-container ul li.menu-bouton > a {
+  font-size: var(--fs-btn-sm);
+  line-height: var(--lh-btn-sm);
+  border: 2px solid var(--global-palette1);
+  border-radius: var(--rayon-pilule);
+  padding: 10px 22px;                             /* 12/24 − 2 px de bordure */
+  color: var(--global-palette1);
+  font-weight: 700;
+  transition: all .2s ease;
+}
+.header-navigation .header-menu-container ul li.menu-bouton > a:hover,
+.header-navigation .header-menu-container ul li.menu-bouton > a:focus-visible {
+  background: transparent;
+  border-color: var(--magenta-600);
+  color: var(--magenta-600);
+  transform: translateY(-2px);
+}
+
+/* --- Bouton « burger » (mobile) : 32 px d'icône + 2 × 8 px = 48 px de zone de toucher --- */
+.mobile-toggle-open-container .menu-toggle-open {
+  color: var(--global-palette1);
+  padding: 8px;
+}
+.mobile-toggle-open-container .menu-toggle-open .menu-toggle-icon {
+  font-size: 32px;
+}
+.mobile-toggle-open-container .menu-toggle-open:hover,
+.mobile-toggle-open-container .menu-toggle-open:focus-visible {
+  color: var(--global-palette2);
+}
+
+/* --- Panneau du menu mobile : le dégradé du site au lieu du noir de Kadence --- */
+#mobile-drawer .drawer-inner {
+  background: linear-gradient(180deg, #F3EEFF 0%, #FFE3EC 100%);
+  color: var(--violet-900);
+}
+#mobile-drawer .drawer-overlay {
+  background: rgba(30, 26, 74, .4);
+}
+#mobile-drawer .drawer-header .drawer-toggle {    /* la croix de fermeture : 48 × 48 px */
+  color: var(--violet-900);
+  width: 48px;
+  height: 48px;
+}
+#mobile-drawer .toggle-close-bar {
+  background: currentColor;
+}
+#mobile-drawer .mobile-navigation ul li {
+  border-bottom: 1px solid var(--violet-100);
+}
+#mobile-drawer .mobile-navigation ul li > a {
+  color: var(--violet-900);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  padding: 16px 0;
+}
+#mobile-drawer .mobile-navigation ul li:not(.menu-bouton) > a:hover {
+  color: var(--global-palette1);
+}
+/* Page en cours : la couleur ne suffit pas (WCAG 1.4.1) → barre magenta à gauche + soulignement */
+#mobile-drawer .mobile-navigation ul li.current-menu-item:not(.menu-bouton) > a {
+  color: var(--global-palette1);
+  text-decoration: underline;
+  text-decoration-color: var(--magenta-500);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  box-shadow: inset 4px 0 0 var(--magenta-500);
+  padding-left: 16px;
+}
+#mobile-drawer .mobile-navigation ul li.menu-bouton,
+#mobile-drawer .mobile-navigation ul li.menu-langue {
+  border-bottom: 0;
+}
+#mobile-drawer .mobile-navigation ul li.menu-bouton {
+  padding: 24px 0 8px;
+}
+#mobile-drawer .mobile-navigation ul li.menu-bouton > a {
+  justify-content: center;                        /* bouton pleine largeur : grande cible pour le pouce */
+  border: 2px solid var(--global-palette1);
+  border-radius: var(--rayon-pilule);
+  padding: 10px 24px;
+  color: var(--global-palette1);
+}
+#mobile-drawer .mobile-navigation ul li.menu-bouton > a:hover {
+  background: transparent;
+  border-color: var(--magenta-600);
+  color: var(--magenta-600);
+  box-shadow: none;
+  transform: translateY(-2px);
 }
 
 
-/* =========================================================
-   9. ACCUEIL – SECTION « PROJETS PHARES »
-   ========================================================= */
-/* Même correction que le hero : pleine largeur exacte (sans la barre de défilement) */
+/* =====================================================================
+   5. ACCUEIL : HERO
+   Texte à gauche, bulle avec la photo de Clarisse à droite (ordinateur) ;
+   sur tablette et mobile, la bulle devient un petit avatar devant le surtitre.
+   Le hero remplit toute la hauteur de l'écran (100svh).
+   ===================================================================== */
+.entry-content > .hero.alignfull {
+  /* Kadence calcule la pleine largeur avec 100vw (barre de défilement comprise) : on prend 100 % */
+  width: 100%;
+  max-width: 100%;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+  /* Même alignement que le logo : espace libre de chaque côté + marge intérieure de Kadence */
+  padding: calc(var(--hauteur-entete) + 48px) calc(max(0px, (100% - var(--global-content-width)) / 2) + var(--global-content-edge-padding)) 96px;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);   /* ≈ 6 colonnes / 6 colonnes */
+  column-gap: 48px;
+  align-items: center;
+  overflow-x: clip;
+  background: none;
+}
+.hero .wp-block-group__inner-container {
+  position: relative;                             /* repère pour les étincelles */
+}
+/* Étincelles dans la marge gauche, à hauteur du surtitre (ordinateur seulement) */
+.hero .wp-block-group__inner-container::before {
+  content: "";
+  position: absolute;
+  top: -38px;
+  left: -80px;
+  width: 72px;
+  height: 72px;
+  background: url('images/etincelles-gauche.svg') center / contain no-repeat;
+  pointer-events: none;
+}
+
+/* Surtitre « Ancienne institutrice bilingue… » */
+.hero .hero__surtitre {
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-body-l);
+  color: var(--global-palette2);
+  margin: 0 0 48px;
+}
+
+/* Titre : Titan One, un groupe de mots = une couleur du site */
+.hero .hero__titre {
+  font-family: 'Titan One', var(--police-titres);
+  font-weight: 400;                               /* Titan One n'existe qu'en une graisse, déjà très épaisse */
+  font-size: var(--fs-hero-sm);
+  line-height: var(--lh-hero-sm);
+  letter-spacing: 0;
+  color: var(--violet-900);
+  max-width: none;
+  margin: 0 0 32px;
+}
+.hero__titre .mot          { white-space: nowrap; }   /* « à l'écran » ne se coupe jamais */
+.hero__titre .mot--violet  { color: #6D4FD8; }        /* contrastes ≥ 4,5:1 sur le fond du hero */
+.hero__titre .mot--magenta { color: #B12D62; }
+.hero__titre .mot--orange  { color: #A84E00; }
+/* « apprendre en s'amusant. » souligné d'un trait de pinceau (une ligne = un trait) */
+.hero__surligne {
+  background: url('images/trait-pinceau.svg') left bottom 0.06em / 100% 0.38em no-repeat;
+  padding: 0 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* En anglais, « From the classroom » est trop large pour la colonne : les mots peuvent passer à la ligne */
+html[lang^="en"] .hero__titre .mot { white-space: normal; }
+@media (min-width: 768px) {
+  html[lang^="en"] .hero .hero__titre { text-wrap: pretty; }   /* pas de mot seul sur la dernière ligne */
+}
+
+/* Boutons du hero */
+.hero .wp-block-buttons {
+  gap: 24px;
+}
+.hero .wp-block-button__link {
+  border-radius: var(--rayon-pilule);
+}
+
+/* Pastilles d'atouts : du texte posé sur un trait de pinceau */
+.hero .hero__atouts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 32px 0 0;
+}
+.hero__atouts span {
+  background: url('images/trait-pinceau.svg') center / 100% 100% no-repeat;
+  color: var(--violet-900);
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  font-weight: 700;
+  padding: 4px 16px;
+}
+
+/* La bulle avec la photo (la même que sur le CV) : on sait tout de suite qui est « Miss Clarisse ».
+   384 px (échelle de dimensionnement), jamais plus haute que la place sous le menu. */
+.entry-content > .hero.alignfull::after {
+  content: "";
+  justify-self: center;
+  width: min(100%, 384px, calc(100svh - var(--hauteur-entete) - 192px));
+  aspect-ratio: 1;
+  background: url('images/bulle-clarisse.webp') center / contain no-repeat;
+  filter: drop-shadow(0 24px 48px rgba(109, 79, 216, .25));   /* ombre douce violette : la bulle se détache */
+  pointer-events: none;
+}
+@media (min-width: 1920px) {
+  .entry-content > .hero.alignfull::after { width: min(100%, 512px, calc(100svh - var(--hauteur-entete) - 192px)); }
+}
+
+/* --- Ordinateurs peu hauts (≤ 800 px, ex. 1366 × 768 ou zoom Windows 125-150 %) : tout tient dans l'écran --- */
+@media (min-width: 1025px) and (max-height: 800px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 32px); padding-bottom: 64px; }
+  .hero .hero__surtitre { margin-bottom: 32px; }
+  .hero .hero__titre { font-size: 52px; line-height: 57px; }    /* Hero XS */
+  .hero .hero__atouts { margin-top: 24px; }
+}
+@media (min-width: 1025px) and (max-height: 640px) {
+  .hero .hero__titre { font-size: 48px; line-height: 55px; }    /* Title LG */
+}
+/* Grand écran en anglais : le titre, plus long, prend le style Hero XS (64/70) → 4 lignes au lieu de 6 */
+@media (min-width: 1920px) {
+  html[lang^="en"] .hero .hero__titre { font-size: 64px; line-height: 70px; }
+}
+
+/* --- Tablette et mobile : une seule colonne ; la photo devient un avatar de 64 px devant le surtitre --- */
+@media (max-width: 1024px) {
+  .entry-content > .hero.alignfull { grid-template-columns: 1fr; }
+  .hero .wp-block-group__inner-container::before { display: none; }   /* plus de place pour les étincelles */
+  .entry-content > .hero.alignfull::after { display: none; }
+  .hero .hero__surtitre {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero .hero__surtitre::before {
+    content: "";
+    flex: 0 0 64px;
+    height: 64px;
+    background: url('images/bulle-clarisse.webp') center / contain no-repeat;
+  }
+}
+@media (max-width: 399px) {                       /* petits téléphones : avatar de 48 px, le surtitre tient sur 2 lignes */
+  .hero .hero__surtitre::before { flex-basis: 48px; height: 48px; }
+}
+
+/* --- Mobile : le contenu commence sous le menu ; 96 px en bas = 80 px de vague + 16 px d'air --- */
+@media (max-width: 767px) {
+  .entry-content > .hero.alignfull {
+    align-content: start;
+    padding-top: calc(var(--hauteur-entete) + 24px);
+    padding-bottom: 96px;
+  }
+  .hero .hero__surtitre { margin-bottom: 16px; }
+  .hero .hero__titre { margin-bottom: 24px; overflow-wrap: break-word; }
+  .hero .wp-block-buttons { gap: 12px; }
+  .hero .bouton-primaire .wp-block-button__link { padding-top: 12px; padding-bottom: 12px; }    /* 44 px de haut */
+  .hero .bouton-secondaire .wp-block-button__link { padding-top: 10px; padding-bottom: 10px; }
+  .hero .hero__atouts { gap: 8px; margin-top: 24px; }
+  .hero__atouts span { padding: 4px 12px; }
+}
+/* Téléphones qui ont de la place (≥ 700 px de haut) : chaque espace monte d'une marche */
+@media (max-width: 767px) and (min-height: 700px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 32px); }
+  .hero .hero__surtitre { margin-bottom: 24px; }
+  .hero .hero__titre { margin-bottom: 32px; }
+  .hero .wp-block-buttons { gap: 16px; }
+  .hero .hero__atouts { margin-top: 48px; gap: 12px 8px; }
+}
+/* Grands téléphones (> 760 px de haut) : le contenu est centré verticalement */
+@media (max-width: 767px) and (min-height: 761px) {
+  .entry-content > .hero.alignfull { align-content: center; }
+}
+/* Anglais sur téléphone peu haut (≤ 700 px) : le titre, plus long, passe en Hero XS */
+@media (max-width: 767px) and (max-height: 700px) {
+  html[lang^="en"] .hero .hero__titre { font-size: 36px; line-height: 41px; }
+}
+/* Téléphones peu hauts (≤ 640 px) : espaces d'une marche plus bas, titre en Hero XS */
+@media (max-width: 767px) and (max-height: 640px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 16px); }
+  .hero .hero__surtitre { margin-bottom: 12px; }
+  .hero .hero__titre { font-size: 36px; line-height: 41px; margin-bottom: 16px; }
+  .hero .wp-block-buttons { gap: 8px; }
+  .hero .hero__atouts { margin-top: 16px; }
+}
+/* Très petits écrans (≤ 560 px, iPhone SE) : titre en Title MD, boutons de 44 px */
+@media (max-width: 767px) and (max-height: 560px) {
+  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 8px); }
+  .hero .hero__titre,
+  html[lang^="en"] .hero .hero__titre { font-size: 30px; line-height: 38px; }
+  .hero .bouton-primaire .wp-block-button__link { padding-top: 10px; padding-bottom: 10px; }
+  .hero .bouton-secondaire .wp-block-button__link { padding-top: 8px; padding-bottom: 8px; }
+  .hero .hero__atouts { margin-top: 8px; gap: 4px 8px; }
+}
+
+
+/* =====================================================================
+   6. ACCUEIL : « PROJETS PHARES »
+   Une bande plus claire, au bord supérieur ondulé (la vague), sous le hero.
+   ===================================================================== */
 .entry-content > .accueil-projets.alignfull {
+  position: relative;
   width: 100%;
   max-width: 100%;
   margin: 0;
-  padding: 0 0 96px;                                /* 96px avant le pied de page */
+  padding: 64px 0 96px;
+  background: var(--bande-claire);
 }
-/* Titre + phrase à gauche, lien à droite, alignés sur la même ligne de base en bas */
+.entry-content > .accueil-projets.alignfull::before {   /* la vague, posée au-dessus de la bande */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 80px;
+  background: var(--vague) center bottom / 100% 100% no-repeat;
+  pointer-events: none;
+}
+/* Titre + phrase à gauche, lien « Tous les projets » à droite, alignés en bas */
 .accueil-projets__entete {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: 24px;
-  margin-bottom: 48px;                              /* 48px avant les cartes */
+  margin-bottom: 48px;
+}
+.accueil-projets .titre-section.titre-section {
+  margin-bottom: 32px;
 }
 .accueil-projets .accueil-projets__intro {
-  font-size: 20px;
-  line-height: 34px;
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-body-l);
   font-style: italic;
-  color: var(--global-palette1);                    /* même style que l'intro de la page Projets */
+  color: var(--global-palette1);
   margin: 0;
 }
 .accueil-projets__tous {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   font-weight: 700;
   color: var(--global-palette1);
   text-decoration: underline;
@@ -800,566 +693,69 @@ body.content-style-unboxed .site {    /* le fond du site entier quand le style e
 }
 
 
-/* =========================================================
-   10. PAGE « MON PARCOURS » (page-mon-parcours.php)
-   Même en-tête et mêmes sections que la page « Mes projets »
-   (64px entre deux sections), mêmes cartes blanches que la page projet.
-   ========================================================= */
+/* =====================================================================
+   7. HAUT DES PAGES INTÉRIEURES (projet, Projets, Mon parcours, Contact)
+   ===================================================================== */
+/* Même largeur et mêmes marges que le menu : tout s'aligne sur la même ligne verticale */
+.projet__conteneur {
+  max-width: var(--global-content-width);
+  margin: 0 auto;
+  padding: 0 var(--global-content-edge-padding);
+}
+#main.projet {
+  overflow-x: clip;                               /* la vague pleine largeur ne crée pas de barre de défilement */
+}
+/* 128 px en bas = 48 px d'air + 80 px réservés à la vague */
+.projet__entete {
+  position: relative;
+  padding: calc(var(--hauteur-entete) + 48px) 0 128px;
+}
+.projets .projet__entete {                        /* pages sans fil d'Ariane : plus d'air au-dessus du titre */
+  padding-top: calc(var(--hauteur-entete) + 96px);
+}
 
-/* Intro : ici la phrase est plus longue → on la limite à 760px (45–75 caractères par ligne) */
+/* Fil d'Ariane */
+.projet .projet__ariane {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--global-palette5);
+  margin: 0 0 48px;
+}
+.projet__ariane a {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  color: var(--global-palette1);
+}
+
+/* Titre de page (Title LG) */
+.projet .projet__titre {
+  font-size: var(--fs-title-lg);
+  line-height: var(--lh-title-lg);
+  color: var(--violet-900);
+  margin: 0 0 24px;
+}
+
+/* Introduction (Body L), limitée à 760 px pour garder 45-75 caractères par ligne */
+.projet .projet__intro {
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-body-l);
+  max-width: 760px;
+  margin: 0 0 48px;
+  text-wrap: pretty;                              /* évite un mot seul sur la dernière ligne */
+}
+.projets .projets__intro {                        /* introduction en italique violet (Projets, Parcours, Contact) */
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-body-l);
+  font-style: italic;
+  color: var(--global-palette1);
+  margin: 0;
+  text-wrap: pretty;
+}
 .parcours .parcours__intro {
   max-width: 760px;
 }
 
-/* Fin de page : 32px (section) + 64px = 96px avant le pied de page, comme l'accueil */
-main.parcours {
-  padding-bottom: 64px;
-}
-
-/* --- 10.1 Recherche de stage : une grande carte blanche --- */
-.parcours__stage {
-  background: rgba(255, 255, 255, .8);
-  border-radius: var(--rayon-grand);
-  padding: 48px;
-  box-shadow: var(--ombre-carte);
-}
-.parcours .parcours__stage-titre {
-  font-size: 28px;
-  line-height: 35px;
-  color: var(--violet-900);
-  margin: 0 0 8px;                                  /* titre collé à SA phrase (proximité) */
-}
-.parcours .parcours__stage-texte {
-  font-size: 18px;
-  line-height: 30px;
-  margin: 0;
-}
-/* Les 4 infos côte à côte (4 × 3 colonnes de la grille 12) */
-.parcours__infos {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin: 32px 0;                                   /* 32px : plus d'air entre les groupes qu'à l'intérieur (8px) */
-}
-.parcours__infos dt {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .08em;                            /* petites capitales espacées = plus lisibles */
-  color: var(--global-palette1);                    /* violet 500 */
-  margin: 0 0 4px;
-}
-.parcours__infos dd {
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 700;
-  color: var(--violet-900);
-  margin: 0;
-}
-
-/* --- 10.2 Ma démarche : 3 cartes (3 × 4 colonnes) --- */
-.demarche,
-.competences {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-.demarche__carte,
-.competences__carte {
-  background: rgba(255, 255, 255, .8);
-  border-radius: var(--rayon-moyen);
-  padding: 32px;
-  box-shadow: var(--ombre-carte);
-}
-/* Petite étincelle dorée devant chaque mot : rappel du décor du site */
-.demarche__titre::before {
-  content: "✦";
-  color: var(--orange-500);
-  margin-right: 8px;
-}
-.parcours .demarche__titre,
-.parcours .competences__titre {
-  font-size: 24px;
-  line-height: 32px;
-  color: var(--violet-900);
-  margin: 0 0 16px;
-}
-.demarche__carte p {
-  font-size: 18px;
-  line-height: 30px;
-}
-
-/* --- 10.3 La frise : date à gauche, contenu à droite relié par une ligne verticale --- */
-.frise {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-width: 920px;                                 /* texte ≈ 680px : lignes de 60–70 caractères */
-}
-.frise__etape {
-  display: grid;
-  grid-template-columns: 160px 1fr;                 /* colonne des dates / colonne du contenu */
-  column-gap: 24px;
-}
-.parcours .frise__date {
-  font-size: 16px;
-  line-height: 32px;                                /* même hauteur de ligne que le titre : alignés */
-  font-weight: 700;
-  color: var(--global-palette1);
-  margin: 0;
-  text-align: right;
-}
-.frise__contenu {
-  position: relative;                               /* repère pour la pastille */
-  border-left: 2px solid #CAC8EA;                   /* la ligne verticale (violet 200) */
-  padding: 0 0 48px 32px;                           /* 48px entre deux étapes */
-}
-.frise__etape:last-child .frise__contenu {
-  padding-bottom: 0;
-}
-/* La pastille magenta sur la ligne, à hauteur du titre */
-.frise__contenu::before {
-  content: "";
-  position: absolute;
-  left: -9px;                                       /* (16px de pastille + 2px de ligne) / 2 */
-  top: 8px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--magenta-500);
-  box-shadow: 0 0 0 4px #F6E3F7;                    /* petit halo couleur du fond */
-}
-.parcours .frise__titre {
-  font-size: 24px;
-  line-height: 32px;
-  color: var(--violet-900);
-  margin: 0 0 4px;
-}
-.parcours .frise__lieu {
-  font-size: 16px;
-  line-height: 26px;
-  color: var(--global-palette5);
-  margin: 0 0 12px;
-}
-.frise__contenu p {
-  font-size: 18px;
-  line-height: 30px;
-}
-.parcours .frise__design {
-  font-size: 16px;
-  line-height: 26px;
-  font-style: italic;
-  color: var(--global-palette2);                    /* violet 600 */
-  margin-top: 12px;
-}
-
-/* --- 10.4 Appel final : carte centrée --- */
-.parcours__appel {
-  text-align: center;
-  background: rgba(255, 255, 255, .8);
-  border-radius: var(--rayon-grand);
-  padding: 64px 48px;
-  box-shadow: var(--ombre-carte);
-}
-.parcours .parcours__appel-titre {
-  font-size: 36px;
-  line-height: 43px;
-  color: var(--violet-900);
-  margin: 0 0 16px;
-}
-.parcours__appel p {
-  font-size: 18px;
-  line-height: 30px;
-  margin: 0 0 32px;
-}
-.parcours__appel .projet__actions {
-  justify-content: center;
-}
-
-/* Tablette */
-@media (max-width: 1024px) {
-  .parcours__infos { grid-template-columns: repeat(2, 1fr); }
-  .demarche, .competences { grid-template-columns: 1fr; }
-}
-
-/* Mobile */
-@media (max-width: 767px) {
-  .parcours__stage { padding: 32px 24px; }
-  .parcours__infos { grid-template-columns: 1fr; gap: 16px; }
-  .frise__etape { grid-template-columns: 1fr; }     /* la date passe au-dessus */
-  .parcours .frise__date { text-align: left; padding-left: 34px; line-height: 26px; }
-  .parcours__appel { padding: 48px 24px; }
-  .parcours .parcours__appel-titre { font-size: 28px; line-height: 35px; }
-}
-
-/* 10.5 Réussite de la 1re année : petit encadré doré pour la mettre en valeur */
-.parcours .frise__reussite {
-  display: inline-block;
-  font-size: 16px;
-  line-height: 26px;
-  color: var(--violet-900);
-  background: rgba(255, 208, 138, .45);             /* soleil 500 adouci */
-  border-left: 4px solid var(--orange-500);
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-top: 12px;
-}
-
-/* =========================================================
-   11. PAGE CONTACT
-   ========================================================= */
-/* Les liens des cartes : violet 500, gras, soulignement magenta au survol (comme le menu) */
-.contact__lien {
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 700;
-  color: var(--global-palette1);
-  word-break: break-word;             /* la longue adresse e-mail passe à la ligne sur mobile */
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
-  transition: all .2s ease;
-}
-.contact__lien:hover {
-  text-decoration-color: var(--magenta-500);
-}
-
-/* =========================================================
-   13. REFONTE (conseils de Julien et d'Elodie, 30/09)
-   Tout est regroupé ici et écrase les règles plus haut.
-   ========================================================= */
-
-/* --- 13.1 Police des titres : Fredoka (ronde, joyeuse, très lisible)
-   Julien : « police du hero pas assez impactante ».
-   2 polices maximum (cours « Les textes ») : Fredoka pour les titres, Nunito pour le texte.
-   Hébergée dans le thème (dossier fonts) : pas d'appel à Google = plus rapide et RGPD. */
-@font-face {
-  font-family: 'Fredoka';
-  src: url('fonts/fredoka-latin-600-normal.woff2') format('woff2');
-  font-weight: 600;
-  font-display: swap;          /* le texte s'affiche tout de suite, la police arrive ensuite */
-}
-@font-face {
-  font-family: 'Fredoka';
-  src: url('fonts/fredoka-latin-700-normal.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
-:root {
-  --police-titres: 'Fredoka', 'Nunito', sans-serif;
-}
-.hero__titre,
-.projet__titre,
-.titre-section,
-.carte-projet__titre,
-.parcours__stage-titre,
-.parcours__appel-titre,
-.demarche__titre,
-.competences__titre,
-.frise__titre,
-.projet__encadre-titre,
-.projet__suivant {
-  font-family: var(--police-titres);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-/* --- 13.2 Moins de décor (Julien + Elodie : les deux grandes vagues surchargent)
-   Plus de vagues nulle part : juste le dégradé coucher de soleil. */
-body:not(.home) {
-  background: var(--degrade-page);
-}
-
-/* --- 13.3 HERO plein écran (Elodie : « la section ne prend pas toute la hauteur »)
-   min-height 100svh = toute la hauteur visible de l'écran (svh = aussi correct sur mobile).
-   Le contenu est centré verticalement : il respire, et « Projets phares » arrive au défilement. */
-.entry-content > .hero.alignfull {
-  background: none;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-top: calc(var(--hauteur-entete) + 48px);
-  padding-bottom: 96px;
-}
-/* Le titre : plus grand et plus gras (marche suivante de l'échelle) */
-.hero .hero__titre {
-  font-size: clamp(44px, 4.4vw, 68px);  /* 44px (mobile) → 68px (grand écran) */
-  line-height: 1.1;
-  font-weight: 700;
-  max-width: min(760px, 52%);           /* laisse la moitié droite au visuel */
-}
-/* « apprendre en s'amusant. » souligné d'UN trait de pinceau droit (préférence d'Elodie) */
-.hero__surligne {
-  background: url('images/trait-pinceau.svg') left bottom 0.06em / 100% 0.38em no-repeat;
-  padding: 0 0.06em;
-  -webkit-box-decoration-break: clone;  /* si le texte passe à la ligne, chaque ligne a son trait */
-  box-decoration-break: clone;
-}
-@media (max-width: 1199px) {
-  .hero .hero__titre { max-width: 760px; }
-}
-
-/* --- 13.4 Hiérarchie des boutons (Elodie, cours « Hiérarchie 4 »)
-   Primaire = fond plein · Secondaire = contour · Tertiaire = lien.
-   « Télécharger mon CV » devient un vrai SECONDAIRE (contour arrondi), en 18px (plus lisible). */
-.hero .wp-block-button__link {
-  font-size: 18px;
-  line-height: 24px;
-  border-radius: var(--rayon-pilule);   /* arrondi dans TOUS les états : plus de coins carrés sous l'ombre */
-}
-.bouton-secondaire .wp-block-button__link {
-  background: transparent;
-  color: var(--global-palette1);
-  border: 2px solid var(--global-palette1);
-  padding: 14px 30px;                   /* 2px de moins que le primaire : même hauteur totale */
-  font-weight: 700;
-  box-shadow: none;
-  transition: all .2s ease;
-}
-.bouton-secondaire .wp-block-button__link:hover,
-.bouton-secondaire .wp-block-button__link:focus {
-  background: var(--global-palette1);   /* se remplit au survol, comme « Me contacter » */
-  color: #fff;
-  box-shadow: none;
-}
-.bouton {
-  font-size: 18px;
-  line-height: 24px;
-}
-
-/* --- 13.5 En-tête : une barre légèrement blanche et floutée (effet verre)
-   Elodie : le logo et le menu n'avaient pas l'air d'aller ensemble.
-   Un fond commun les réunit en un seul groupe (loi de région commune). */
-#masthead .site-header-upper-inner-wrap {        /* toute la largeur de l'écran (la rangée Kadence, elle, est « contenue ») */
-  background: rgba(255, 255, 255, .55);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  backdrop-filter: blur(14px) saturate(1.2);
-  border-bottom: 1px solid rgba(255, 255, 255, .8);
-  box-shadow: 0 1px 0 rgba(30, 26, 74, .06);
-}
-#masthead .site-main-header-wrap,
-#masthead .site-main-header-wrap .site-header-row-container-inner {
-  background: transparent;                         /* le fond est porté par la barre entière */
-}
-
-/* --- 13.6 Haut des autres pages : un peu plus de hauteur (Elodie) */
-.projets .projet__entete {
-  padding-top: calc(var(--hauteur-entete) + 96px);
-  padding-bottom: 48px;
-}
-.projet__entete {
-  padding-top: calc(var(--hauteur-entete) + 48px);
-}
-
-/* --- 13.7 Une couleur = une catégorie (Elodie)
-   violet = site WordPress · magenta = application mobile · orange = page web.
-   Teintes foncées sur fond clair : contrastes ≥ 5,9:1 (WCAG AA). */
-.carte-projet--violet, .etiquette--violet   { --cat-texte: #4B35A8; --cat-fond: #ECE7FF; --cat-ombre: rgba(109, 79, 216, .38); }
-.carte-projet--magenta, .etiquette--magenta { --cat-texte: #A3244F; --cat-fond: #FFE3EC; --cat-ombre: rgba(217, 70, 126, .38); }
-.carte-projet--orange, .etiquette--orange   { --cat-texte: #9A4A00; --cat-fond: #FFEBD2; --cat-ombre: rgba(255, 159, 66, .48); }
-
-.etiquette[class*="etiquette--"] {
-  background: var(--cat-fond);
-  color: var(--cat-texte);
-}
-
-/* --- 13.8 Cartes projets : fond BLANC + ombre colorée (Elodie + Julien)
-   Le texte reste foncé sur blanc, même au survol : plus de titre qui disparaît dans le fond. */
-.grille-projets .carte-projet {
-  background: #fff;
-  box-shadow: 0 16px 32px -14px var(--cat-ombre), 0 2px 6px rgba(30, 26, 74, .06);
-}
-.grille-projets .carte-projet:hover {
-  box-shadow: 0 24px 44px -14px var(--cat-ombre), 0 4px 10px rgba(30, 26, 74, .08);
-  transform: translateY(-4px);
-}
-.grille-projets .carte-projet .carte-projet__contenu {
-  background: #fff;
-  color: var(--violet-900);
-}
-.grille-projets .carte-projet .carte-projet__titre,
-.grille-projets .carte-projet:hover .carte-projet__titre {
-  color: var(--violet-900);
-}
-.grille-projets .carte-projet .carte-projet__voir {
-  color: var(--cat-texte);
-}
-.grille-projets .carte-projet:hover .carte-projet__voir {
-  text-decoration: underline;
-  text-decoration-color: var(--magenta-500);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
-}
-
-/* --- 13.9 Page projet : l'étiquette de catégorie bien visible (Julien : « la première chose à savoir ») */
-.projet__entete .etiquette {
-  font-size: 16px;
-  line-height: 24px;
-  padding: 8px 18px;
-  margin-bottom: 24px;
-}
-
-/* =========================================================
-   14. RETOURS DE CLARISSE (30/09)
-   ========================================================= */
-
-/* --- 14.1 Hero en 2 colonnes : texte à gauche, visuel à droite
-   (inspiré des portfolios de la classe : un visuel fort en face du titre).
-   L'illustration = un tableau interactif, une tablette scolaire et un téléphone avec des applis pour enfants,
-   en couleurs très pâles et fondue vers le bas : elle habille sans attirer l'œil avant le titre. */
-.entry-content > .hero.alignfull {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);  /* ≈ 6 colonnes / 6 colonnes de la grille 12 */
-  align-items: center;
-  column-gap: 48px;
-  background: none;
-}
-.entry-content > .hero.alignfull::after {
-  content: "";
-  width: 100%;
-  height: min(580px, calc(100svh - var(--hauteur-entete) - 160px));  /* ne passe jamais sous le menu */
-  background: url('images/hero-illustration.svg') center / contain no-repeat;   /* illustration douce : tableau interactif, tablette, téléphone */
-}
-.hero .hero__titre {
-  font-size: clamp(40px, 4.2vw, 64px);
-  max-width: none;                                  /* la colonne limite déjà la longueur des lignes */
-}
-/* Petites pastilles d'atouts sous les boutons : infos secondaires, donc plus petites et discrètes */
-.hero .hero__atouts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin: 32px 0 0;
-}
-.hero__atouts span {
-  background: rgba(255, 255, 255, .7);
-  border: 1px solid #CAC8EA;                        /* violet 200 */
-  color: var(--global-palette2);                    /* violet 600 : contraste > 7:1 */
-  font-size: 15px;
-  line-height: 20px;
-  font-weight: 700;
-  padding: 8px 14px;
-  border-radius: var(--rayon-pilule);
-}
-/* Tablette et mobile : le visuel passe SOUS le texte */
-@media (max-width: 1024px) {
-  .entry-content > .hero.alignfull { grid-template-columns: 1fr; }
-  .entry-content > .hero.alignfull::after {
-    width: min(100%, 520px);
-    height: auto;
-    aspect-ratio: 900 / 720;                        /* proportions de l'illustration */
-    margin: 48px auto 0;
-  }
-}
-
-/* --- 14.2 En-tête « fondu » : plus de trait net, un voile blanc qui s'efface vers le bas */
-#masthead .site-header-upper-inner-wrap {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, .8) 0%, rgba(255, 255, 255, .5) 55%, rgba(255, 255, 255, 0) 100%);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  border-bottom: 0;
-  box-shadow: none;
-}
-
-/* --- 14.3 Page projet : étiquette PLEINE dans la couleur de sa catégorie (texte blanc, contraste ≥ 6:1)
-   Julien : c'est la première chose à savoir en arrivant sur le projet. */
-.projet__entete .etiquette[class*="etiquette--"] {
-  background: var(--cat-texte);
-  color: #fff;
-  font-size: 18px;
-  line-height: 24px;
-  padding: 10px 20px;
-  box-shadow: 0 10px 24px -10px var(--cat-ombre);
-}
-
-/* --- 14.4 Galerie : on voit TOUT l'écran (contain) au lieu d'un morceau recadré */
-.galerie__image img {
-  aspect-ratio: 4 / 3;
-  object-fit: contain;
-  object-position: center;
-  background: #F3EEFF;                              /* lavande très clair derrière les écrans */
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-/* --- 14.5 Cartes : l'image de couverture entière (format 2:1, comme les couvertures) */
-.carte-projet__image {
-  aspect-ratio: 2 / 1;
-}
-
-/* =========================================================
-   15. RETOURS DE CLARISSE (01/10)
-   ========================================================= */
-
-/* --- 15.1 En-tête : logo et menu centrés sur la même ligne
-   Kadence ajoutait 26px au-dessus du logo : il était décalé vers le bas.
-   Échelle : 16px + logo 80px + 16px = 112px = --hauteur-entete. */
-.site-header .site-branding {
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
-.site-branding .brand {
-  width: 128px;                                     /* 128 × 222/354 ≈ 80px de haut */
-}
-.site-header .site-main-header-inner-wrap {
-  align-items: center;
-}
-
-/* --- 15.2 En-tête « à la TF1 » : fondu en haut, visible au survol, puis fixe et blanc quand on descend
-   (la classe .est-defile est ajoutée par js/entete.js) */
-#masthead,
-.transparent-header #masthead,
-.mobile-transparent-header #masthead {            /* même force que la règle de Kadence, sinon elle gagne */
-  position: fixed;
-  top: var(--wp-admin--admin-bar--height, 0px);    /* sous la barre noire de WordPress quand on est connectée */
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
-#masthead .site-header-upper-inner-wrap {
-  transition: background .3s ease, box-shadow .3s ease;
-}
-#masthead:hover .site-header-upper-inner-wrap,
-#masthead.est-defile .site-header-upper-inner-wrap {
-  background: rgba(255, 255, 255, .92);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 24px rgba(30, 26, 74, .08);    /* ombre douce : la barre se détache du contenu */
-}
-
-/* --- 15.3 Vagues douces entre les sections (comme la capture de Clarisse)
-   Une bande plus claire, au bord supérieur ondulé. */
-:root {
-  --vague: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 44 C240 8 480 4 720 30 C960 56 1200 66 1440 28 V80 H0 Z' fill='rgba(255,255,255,0.5)'/%3E%3C/svg%3E");
-  --bande-claire: rgba(255, 255, 255, .5);
-}
-/* Accueil : entre le hero et « Projets phares » */
-.entry-content > .accueil-projets.alignfull {
-  position: relative;
-  background: var(--bande-claire);
-  padding-top: 64px;
-}
-.entry-content > .accueil-projets.alignfull::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100%;                                     /* collée au-dessus de la bande */
-  height: 80px;
-  background: var(--vague) center bottom / 100% 100% no-repeat;
-  pointer-events: none;
-}
-/* Autres pages : entre l'en-tête de page et le contenu */
-.projet__entete {
-  position: relative;
-}
+/* La bande claire sous l'en-tête, avec sa vague */
 .projet__entete ~ .projet__section {
   background: var(--bande-claire);
 }
@@ -1377,12 +773,174 @@ body:not(.home) {
   background: var(--vague) center bottom / 100% 100% no-repeat;
   pointer-events: none;
 }
-main.projet,
-#main.projet {
-  overflow-x: clip;                                 /* la vague pleine largeur ne crée pas de barre horizontale */
+
+/* Sections : 32 + 32 = 64 px entre deux sections (plus que le plus grand espace intérieur, 48 px) */
+.projet__section {
+  padding: 32px 0;
+}
+/* Titre de section (Title MD) + petit filet magenta en dessous */
+.titre-section {
+  font-size: var(--fs-title-md);
+  line-height: var(--lh-title-md);
+  color: var(--violet-900);
+  margin: 0 0 32px;
+  position: relative;
+}
+.titre-section::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -16px;                                  /* à mi-chemin entre le titre et le texte */
+  width: 48px;
+  height: 4px;
+  border-radius: var(--rayon-pilule);
+  background: var(--magenta-500);
+}
+/* Kadence met 18 px au-dessus et en dessous de chaque paragraphe : on garde 16 px entre deux paragraphes */
+.projet p {
+  margin: 0 0 16px;
+}
+.projet p:last-child {
+  margin-bottom: 0;
 }
 
-/* --- 15.4 Les cartes se détachent bien du fond (fond blanc plein + fin contour violet 100) */
+/* --- Étiquettes de catégorie : une couleur = une catégorie (contrastes ≥ 5,9:1) ---
+   violet = site WordPress · magenta = application mobile · orange = page web · nuit = back-end */
+.carte-projet--violet,  .etiquette--violet  { --cat-texte: #4B35A8; --cat-fond: #ECE7FF; --cat-ombre: rgba(109, 79, 216, .38); }
+.carte-projet--magenta, .etiquette--magenta { --cat-texte: #A3244F; --cat-fond: #FFE3EC; --cat-ombre: rgba(217, 70, 126, .38); }
+.carte-projet--orange,  .etiquette--orange  { --cat-texte: #9A4A00; --cat-fond: #FFEBD2; --cat-ombre: rgba(255, 159, 66, .48); }
+.carte-projet--nuit,    .etiquette--nuit    { --cat-texte: #2A3577; --cat-fond: #E4E7FA; --cat-ombre: rgba(42, 53, 119, .38); }
+
+.etiquette {
+  display: inline-block;
+  background: var(--cat-fond, var(--soleil-500));
+  color: var(--cat-texte, var(--violet-900));
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--rayon-pilule);
+  margin-bottom: 32px;
+}
+/* En haut d'une page projet, l'étiquette est PLEINE : c'est la première chose à savoir (Julien) */
+.projet__entete .etiquette.etiquette {
+  background: var(--cat-texte);
+  color: #fff;
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  padding: 8px 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 24px -10px var(--cat-ombre);
+}
+
+
+/* =====================================================================
+   8. CARTES DE PROJET (page « Mes projets » et accueil)
+   Fond blanc, ombre colorée de la catégorie, toute la carte est cliquable.
+   ===================================================================== */
+.grille-projets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);          /* 3 cartes = 3 × 4 colonnes de la grille 12 */
+  gap: 24px;
+}
+.grille-projets .carte-projet {
+  position: relative;                             /* repère pour le lien qui couvre toute la carte */
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--violet-100);
+  border-radius: var(--rayon-grand);
+  overflow: hidden;
+  box-shadow: 0 16px 32px -14px var(--cat-ombre), 0 2px 6px rgba(30, 26, 74, .06);
+  transition: all .2s ease;
+}
+.grille-projets .carte-projet:hover {
+  box-shadow: 0 24px 44px -14px var(--cat-ombre), 0 4px 10px rgba(30, 26, 74, .08);
+  transform: translateY(-4px);
+}
+.carte-projet__image {
+  aspect-ratio: 2 / 1;                            /* le format des images de couverture */
+  background: var(--global-palette8);
+}
+.carte-projet__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-bottom: 1px solid var(--violet-100);
+}
+.grille-projets .carte-projet .carte-projet__contenu {
+  flex: 1;                                        /* toutes les cartes d'une ligne ont la même hauteur */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px;
+  background: #fff;
+  color: var(--violet-900);
+}
+.carte-projet .etiquette {
+  margin-bottom: 12px;
+}
+.grille-projets .carte-projet .carte-projet__titre {
+  font-size: var(--fs-title-sm);
+  line-height: var(--lh-title-sm);
+  color: var(--violet-900);
+  margin: 0 0 12px;
+}
+.carte-projet__lien {
+  font-size: var(--fs-title-sm);
+  line-height: var(--lh-title-sm);
+  color: inherit;
+  text-decoration: none;
+}
+.carte-projet__lien::after {                      /* étend la zone cliquable du lien à toute la carte */
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.carte-projet .carte-projet__texte {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  margin: 0 0 16px;
+  flex: 1;                                        /* pousse « Voir le projet » tout en bas */
+}
+.grille-projets .carte-projet .carte-projet__voir {
+  font-size: var(--fs-btn-sm);
+  line-height: var(--lh-btn-sm);
+  font-weight: 700;
+  color: var(--cat-texte);
+}
+.grille-projets .carte-projet:hover .carte-projet__voir {
+  text-decoration: underline;
+  text-decoration-color: var(--magenta-500);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+@media (max-width: 1024px) {
+  .grille-projets { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .grille-projets { grid-template-columns: 1fr; }
+}
+
+
+/* =====================================================================
+   9. PAGE PROJET (single-projet.php)
+   ===================================================================== */
+/* Grande image de couverture, au format 2:1 */
+.projet__visuel img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  object-position: top;
+  border: 1px solid var(--violet-100);
+  border-radius: var(--rayon-grand);
+  box-shadow: 0 4px 12px rgba(30, 26, 74, .08);
+}
+
+/* Cartes blanches de la page projet et de « Mon parcours » : fond blanc + fin contour violet */
 .etape,
 .projet__encadre,
 .projet__appris,
@@ -1391,517 +949,140 @@ main.projet,
 .parcours__stage,
 .parcours__appel {
   background: #fff;
-  border: 1px solid #E6E0FB;
-}
-.galerie__image img {
-  background: #fff;
-  border: 1px solid #E6E0FB;
+  border: 1px solid var(--violet-100);
+  box-shadow: var(--ombre-carte);
 }
 
-/* --- 15.5 Pastilles du hero : plus des boutons, mais du texte posé sur un trait de pinceau
-   (mêmes couleurs que le soulignement de « apprendre en s'amusant ») */
-.hero .hero__atouts {
-  gap: 16px;
+/* --- Contexte et objectif (à gauche) + encadré « Outils et techniques » (à droite) --- */
+.projet__colonnes {
+  display: grid;
+  grid-template-columns: minmax(0, 680px) minmax(0, 504px);
+  justify-content: space-between;
+  gap: 48px;
+  align-items: start;
 }
-.hero__atouts span {
-  background: url('images/trait-pinceau.svg') center / 100% 100% no-repeat;
-  border: 0;
-  border-radius: 0;
-  color: var(--violet-900);
-  font-size: 16px;
-  line-height: 24px;
-  padding: 4px 16px;
+.projet__texte p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
 }
-
-/* --- 15.6 Illustration : plus grande, plus pâle et fondue sur les bords : elle devient un décor de fond
-   (toujours dans la colonne de droite, jamais sous le texte) */
-.entry-content > .hero.alignfull {
-  overflow-x: clip;
+.projet__texte .titre-section:not(:first-child) {
+  margin-top: 48px;
 }
-@media (min-width: 1025px) {
-  .entry-content > .hero.alignfull::after {
-    height: min(720px, calc(100svh - var(--hauteur-entete) - 96px));
-    transform: translateX(12%) scale(1.25);          /* agrandie vers la droite, pas vers le texte */
-    opacity: .55;
-    -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
-    mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);  /* bords qui s'effacent */
-    pointer-events: none;
-  }
-}
-@media (max-width: 1024px) {
-  .entry-content > .hero.alignfull::after { opacity: .6; }
-}
-
-/* --- 15.7 Bilingue : la pastille « langue » ressort un peu plus que les autres */
-.hero__atouts .atout--langue {
-  font-weight: 800;
-}
-
-/* 15.8 La carte « Recherche de stage » a maintenant 5 infos (Langues ajoutée) : la grille s'adapte toute seule */
-.parcours__infos {
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-}
-
-/* --- 15.9 Cartes projets : même bord fin violet 100 que les autres cartes blanches (15.4)
-   → le haut de la carte (image claire) ne se fond plus dans la bande claire de fond */
-.carte-projet {
-  border: 1px solid #E6E0FB;
-}
-.carte-projet img {
-  border-bottom: 1px solid #E6E0FB;                 /* sépare l'image du texte */
-}
-
-
-/* =========================================================
-   16. RETOURS DE CLARISSE (01/10, 2e passage)
-   ========================================================= */
-
-/* --- 16.1 Police du titre du hero : Titan One (gratuite, licence OFL), plus ronde et plus « école »
-   Uniquement le H1 du hero : les autres titres gardent Fredoka (une seule police d'accroche, sinon trop chargé) */
-@font-face {
-  font-family: 'Titan One';
-  src: url('fonts/titan-one-latin-400-normal.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;
-}
-.hero .hero__titre {
-  font-family: 'Titan One', var(--police-titres);
-  font-weight: 400;                                 /* Titan One n'existe qu'en une graisse, déjà très épaisse */
-  letter-spacing: 0;
-  line-height: 1.15;
-  color: var(--violet-900);
-}
-/* Un groupe de mots = une couleur du site (comme l'alphabet coloré du modèle).
-   Couleurs foncées vérifiées : contraste ≥ 4,5:1 sur le fond du hero */
-.hero__titre .mot--violet  { color: #6D4FD8; }      /* violet 500 : 4,5:1 */
-.hero__titre .mot--magenta { color: #B12D62; }      /* magenta 600 : 5:1 */
-.hero__titre .mot--orange  { color: #A84E00; }      /* orange foncé : 4,5:1 (l'orange 500 clair ne passe pas) */
-
-/* --- 16.2 Navbar : une ombre très légère, même tout en haut, pour qu'on sache qu'elle est là */
-#masthead .site-header-upper-inner-wrap {
-  background: rgba(255, 255, 255, .35);
-  box-shadow: 0 4px 16px rgba(30, 26, 74, .05);
-}
-
-/* --- 16.3 Illustration encore plus grande : elle grandit vers la DROITE (point d'ancrage à gauche),
-   donc elle ne s'approche jamais du texte */
-@media (min-width: 1025px) {
-  .entry-content > .hero.alignfull::after {
-    transform-origin: left center;
-    transform: scale(1.4);
-  }
-}
-
-/* --- 16.4 Les vagues ne coupent plus les phrases :
-   la vague (80px) se dessine dans le bas de l'en-tête de page → on lui réserve sa place :
-   48px d'air sous le texte + 80px de vague = 128px (échelle) */
-main .projet__entete,
-.projets .projet__entete {
-  padding-bottom: 128px;
-}
-
-/* --- 16.5 Cartes : une limite nette (Gestalt : région commune)
-   bord violet un peu plus foncé + ombre neutre tout autour, et bande de fond plus blanche */
-:root {
-  --bande-claire: rgba(255, 255, 255, .7);
-}
-.carte-projet {
-  border: 1px solid #D6CCF7;
-  box-shadow: 0 16px 32px -14px var(--cat-ombre, rgba(109, 79, 216, .38)), 0 4px 12px rgba(30, 26, 74, .08);
-}
-.carte-projet img {
-  border-bottom-color: #D6CCF7;
-}
-.etape,
-.projet__encadre,
-.projet__appris,
-.demarche__carte,
-.competences__carte,
-.parcours__stage,
-.parcours__appel,
-.galerie__image img {
-  border-color: #D6CCF7;
-}
-.hero__titre .mot {
-  white-space: nowrap;                              /* « à l'écran » ne se coupe jamais en deux lignes */
-}
-/* Grande image de couverture de la page projet : même bord net que les cartes (elle aussi se fondait dans le fond) */
-.projet__visuel img {
-  border: 1px solid #D6CCF7;
-  box-shadow: 0 4px 12px rgba(30, 26, 74, .08);
-}
-
-
-/* =========================================================
-   17. ÉCRANS D'ORDINATEUR PORTABLE (zoom Windows 125–150 %)
-   Sur ces écrans, Chrome à 100 % n'a qu'environ 1 330 × 640 px « web » :
-   le hero ne tenait pas en hauteur et le contenu touchait presque les bords.
-   Ces règles ne s'activent QUE sur ces écrans ; les grands écrans ne changent pas.
-   Toutes les valeurs restent sur l'échelle 4-8-12-16-24-32-48-64-96-128.
-   ========================================================= */
-
-/* --- 17.1 Largeur moyenne (1 025 → 1 440 px) : plus d'air sur les côtés (64px au lieu de ~38px) */
-@media (min-width: 1025px) and (max-width: 1440px) {
-  body {
-    --global-content-edge-padding: 64px;
-  }
-  /* L'illustration grandit moins : elle ne se fait plus couper à droite */
-  .entry-content > .hero.alignfull::after {
-    transform: scale(1.15);
-  }
-}
-
-/* --- 17.2 Écrans peu hauts (≤ 800 px) : tout le hero tient dans l'écran */
-@media (min-width: 1025px) and (max-height: 800px) {
-  /* En-tête : 16 + logo 64 + 16 = 96px (marche inférieure de l'échelle) */
-  :root {
-    --hauteur-entete: 96px;
-  }
-  .site-branding .brand {
-    width: 102px;                                   /* 102 × 222/354 ≈ 64px de haut */
-  }
-  /* Hero : marges resserrées d'une marche (48 → 32, 96 → 64) */
-  .entry-content > .hero.alignfull {
-    padding-top: calc(var(--hauteur-entete) + 32px);
-    padding-bottom: 64px;
-  }
-  .hero .hero__surtitre {
-    margin-bottom: 32px;
-  }
-  /* Titre : sa taille suit aussi la HAUTEUR de l'écran (7 % de la hauteur), entre 36 et 64px */
-  .hero .hero__titre {
-    font-size: clamp(36px, min(4.2vw, 7vh), 64px);
-    margin-bottom: 32px;
-  }
-  .hero .hero__atouts {
-    margin-top: 24px;
-  }
-}
-
-/* --- 17.3 Tablette et mobile : l'illustration ne passe plus SOUS le texte (inutile, elle allongeait la page).
-   Elle devient un décor de fond DERRIÈRE le texte, très transparent (12 %) : le texte reste parfaitement lisible. */
-@media (max-width: 1024px) {
-  .entry-content > .hero.alignfull {
-    position: relative;
-    isolation: isolate;                             /* le décor reste derrière le contenu du hero */
-  }
-  .entry-content > .hero.alignfull::after {
-    position: absolute;
-    inset: var(--hauteur-entete) 0 0 0;             /* toute la surface du hero, sous le menu */
-    width: auto;
-    height: auto;
-    aspect-ratio: auto;
-    margin: 0;
-    transform: none;
-    background-size: min(100%, 640px) auto;
-    background-position: center;
-    opacity: .12;
-    z-index: -1;
-    pointer-events: none;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-}
-
-/* --- 17.4 Mobile (retour de Clarisse) : l'illustration un peu plus visible (12 % → 22 %)
-   et centrée sur le bloc de texte du hero (avant, elle partait vers le bas et la droite) */
-@media (max-width: 1024px) {
-  .entry-content > .hero.alignfull::after {
-    inset: var(--hauteur-entete) var(--global-content-edge-padding, 24px) 0;   /* mêmes marges que le texte */
-    background-size: min(100%, 560px) auto;
-    background-position: center 40%;                /* à hauteur du titre et des boutons */
-    opacity: .22;
-  }
-}
-
-/* --- 17.5 4e catégorie : bleu nuit = back-end (la couleur la plus sombre du coucher de soleil)
-   Texte #2A3577 sur fond #E4E7FA : contraste 9:1 */
-.carte-projet--nuit, .etiquette--nuit {
-  --cat-texte: #2A3577;
-  --cat-fond:  #E4E7FA;
-  --cat-ombre: rgba(42, 53, 119, .38);
-}
-
-/* --- 17.6 Bouton de langue FR / EN dans le menu : petit, discret, à droite de « Me contacter » */
-.menu-langue > a {
-  font-weight: 700;
-  letter-spacing: .08em;
-  font-size: 14px;
-}
-
-/* =========================================================
-   18. RETOURS DES AMIS (03/10) : menu mobile + compétences
-   Toutes les valeurs restent sur l'échelle 4-8-12-16-24-32-48-64-96-128.
-   ========================================================= */
-
-/* --- 18.1 Le panneau du menu mobile : fini le noir de Kadence, on reprend le dégradé du site
-   (lavande → rose), comme le fond des pages. Texte violet 900 : contraste 15:1. */
-#mobile-drawer .drawer-inner {
-  background: linear-gradient(180deg, #F3EEFF 0%, #FFE3EC 100%);
-  color: var(--violet-900);
-}
-#mobile-drawer .drawer-overlay {
-  background: rgba(30, 26, 74, .4);                 /* voile violet 900 sur la page, au lieu du noir */
-}
-#mobile-drawer .drawer-header .drawer-toggle {      /* la croix de fermeture */
-  color: var(--violet-900);
-  width: 48px;                                      /* zone de toucher ≥ 44px (WCAG 2.5.8) */
-  height: 48px;
-}
-#mobile-drawer .toggle-close-bar {
-  background: currentColor;
-}
-
-/* Les liens : violet 900, gras, une ligne de séparation lavande */
-#mobile-drawer .mobile-navigation ul li > a {
-  color: var(--violet-900);
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 24px;
-  padding: 16px 0;
-}
-#mobile-drawer .mobile-navigation ul li {
-  border-bottom: 1px solid #D6CCF7;                 /* violet 200, même filet que les cartes */
-}
-#mobile-drawer .mobile-navigation ul li:not(.menu-bouton) > a:hover {
-  color: var(--global-palette1);
-}
-
-/* Le lien de la page en cours : la couleur ne suffit pas (WCAG 1.4.1), on ajoute
-   un repère de forme : barre magenta à gauche + soulignement, comme sur ordinateur. */
-#mobile-drawer .mobile-navigation ul li.current-menu-item:not(.menu-bouton) > a {
-  color: var(--global-palette1);                    /* violet 500 : contraste 7:1 sur le lavande */
-  text-decoration: underline;
-  text-decoration-color: var(--magenta-500);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
-  box-shadow: inset 4px 0 0 var(--magenta-500);
-  padding-left: 16px;
-}
-
-/* « Me contacter » reste un bouton à contour, comme dans le menu d'ordinateur */
-#mobile-drawer .mobile-navigation ul li.menu-bouton {
-  border-bottom: 0;
-  padding: 24px 0 8px;
-}
-#mobile-drawer .mobile-navigation ul li.menu-bouton > a {
-  justify-content: center;                          /* bouton pleine largeur, texte centré : grande cible au pouce */
-  border: 2px solid var(--global-palette1);
-  border-radius: var(--rayon-pilule);
-  padding: 10px 24px;
-  color: var(--global-palette1);
-}
-#mobile-drawer .mobile-navigation ul li.menu-bouton > a:hover {
-  background: var(--global-palette1);
-  color: #fff;
-}
-#mobile-drawer .mobile-navigation ul li.menu-langue {
-  border-bottom: 0;
-}
-
-/* --- 18.2 Le bouton « burger » : plus grand pour équilibrer le logo, et violet comme les liens */
-.mobile-toggle-open-container .menu-toggle-open {
-  color: var(--global-palette1);
-  padding: 8px;
-}
-.mobile-toggle-open-container .menu-toggle-open .menu-toggle-icon {
-  font-size: 32px;                                  /* 32px d'icône + 2 × 8px = 48px de zone de toucher */
-}
-.mobile-toggle-open-container .menu-toggle-open:hover,
-.mobile-toggle-open-container .menu-toggle-open:focus-visible {
-  color: var(--global-palette2);
-}
-
-/* --- 18.3 Compétences : chaque pastille est un lien vers le projet qui la prouve */
-.competences__intro {
-  margin: -8px 0 24px;
-  color: var(--global-palette5);
-}
-.pastille--lien {
-  display: inline-block;
-  text-decoration: none;
-  transition: all .2s ease;
-}
-.pastille--lien:hover,
-.pastille--lien:focus-visible {
-  background: var(--global-palette1);               /* au survol, la pastille se remplit (comme les boutons) */
-  border-color: var(--global-palette1);
-  color: #fff;
-}
-/* En cours d'apprentissage : un bloc pleine largeur, plus discret, sous les 3 cartes */
-.competences__apprentissage {
-  margin-top: 24px;
-  background: rgba(255, 255, 255, .55);
-  border-radius: var(--rayon-moyen);
+.projet__encadre {
+  border-radius: var(--rayon-grand);
   padding: 32px;
 }
-.competences__apprentissage p {
+.projet__encadre-titre {
+  font-size: var(--fs-title-xs);
+  line-height: var(--lh-title-xs);
+  color: var(--violet-900);
   margin: 0 0 16px;
-  max-width: 64ch;                                  /* 45–75 caractères par ligne */
 }
-.pastille--en-cours {
-  background: transparent;
-  border-color: #D6CCF7;
+
+/* --- Pastilles (outils, compétences) --- */
+.pastilles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pastille.pastille {
+  background: var(--global-palette8);
+  border: 1px solid var(--violet-200);
   color: var(--global-palette2);
-}
-.pastille--en-cours::before {
-  content: "✦";
-  color: var(--orange-500);
-  margin-right: 4px;
-}
-
-/* --- 18.4 Mobile (retours de Clarisse, 03/10) :
-   - le contenu du hero commence juste sous le menu (pas centré verticalement : plus de grand vide en haut) ;
-   - surtitre et titre gardent leur grande taille (18px et 40px) ;
-   - pastilles compactes au pinceau, à deux par ligne ;
-   - l'illustration se place derrière le titre et le premier bouton (zone montrée par Clarisse) ;
-   - le hero tient dans l'écran : sur les écrans peu hauts, seuls les ESPACES descendent d'une marche
-     sur l'échelle 4-8-12-16-24 (jamais de valeur inventée). */
-@media (max-width: 767px) {
-  .entry-content > .hero.alignfull {
-    align-content: start;
-    padding-top: calc(var(--hauteur-entete) + 24px);
-    padding-bottom: 48px;
-  }
-  .hero .hero__surtitre {
-    font-size: 18px;
-    line-height: 28px;
-    margin-bottom: 16px;
-  }
-  .hero .hero__titre {
-    font-size: 40px;
-    line-height: 44px;
-    margin-bottom: 24px;
-  }
-  .hero .wp-block-buttons { gap: 12px; }
-  .hero .wp-block-button__link {
-    font-size: 16px;
-    line-height: 24px;
-    padding-top: 12px;                              /* boutons de 48 px : zone de toucher confortable */
-    padding-bottom: 12px;
-  }
-  .bouton-secondaire .wp-block-button__link {
-    padding-top: 10px;                              /* 2 px de bordure : même hauteur que le primaire */
-    padding-bottom: 10px;
-  }
-  .hero .hero__atouts { gap: 8px; margin-top: 24px; }
-  .hero__atouts span { font-size: 14px; line-height: 20px; padding: 4px 12px; }
-  /* L'illustration : du haut du titre jusqu'au bouton « Voir mes projets », sur toute la largeur */
-  .entry-content > .hero.alignfull::after {
-    inset: calc(var(--hauteur-entete) + 96px) 0 auto;
-    height: 288px;
-    background-size: contain;
-    background-position: center;
-  }
-}
-/* Téléphones moins hauts (≤ 640 px utiles) : les espaces descendent d'une marche */
-@media (max-width: 767px) and (max-height: 640px) {
-  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 16px); padding-bottom: 32px; }
-  .hero .hero__surtitre { margin-bottom: 12px; }
-  .hero .hero__titre { margin-bottom: 16px; }
-  .hero .wp-block-buttons { gap: 8px; }
-  .hero .hero__atouts { margin-top: 16px; }
-  .entry-content > .hero.alignfull::after { inset: calc(var(--hauteur-entete) + 80px) 0 auto; }
-}
-/* Petits téléphones (≤ 560 px utiles, iPhone SE) : le titre rapetisse un peu en plus */
-@media (max-width: 767px) and (max-height: 560px) {
-  .hero .hero__surtitre { font-size: 16px; line-height: 24px; }
-  .hero .hero__titre { font-size: 34px; line-height: 38px; }
-  .hero .wp-block-button__link { padding-top: 10px; padding-bottom: 10px; }       /* 44 px : minimum WCAG */
-  .bouton-secondaire .wp-block-button__link { padding-top: 8px; padding-bottom: 8px; }
-  .hero .hero__atouts { margin-top: 8px; gap: 4px 8px; }
-  .entry-content > .hero.alignfull::after { height: 240px; }
-}
-/* Grands téléphones (plus de 760 px utiles) : le hero a de la place, on recentre le contenu verticalement */
-@media (max-width: 767px) and (min-height: 761px) {
-  .entry-content > .hero.alignfull { align-content: center; }
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--rayon-pilule);
 }
 
-
-/* =========================================================
-   19. RETOURS D'ELODIE ET DU RAPPORT (03/10)
-   ========================================================= */
-
-/* --- 19.1 Hero mobile (Clarisse, 03/10, 2e retour) : le hero remplit TOUT l'écran (100svh, règle 13.3 gardée),
-   la section suivante n'apparaît pas avant de défiler.
-   En bas : 80 px de vague + 16 px d'air = 96 px réservés, les pastilles ne touchent jamais la vague.
-   Si le contenu est plus haut que l'écran (petits téléphones), le hero s'allonge au lieu de couper. */
-@media (max-width: 767px) {
-  .entry-content > .hero.alignfull { padding-bottom: 96px; }
+/* --- La démarche : étapes numérotées sur 2 colonnes (≈ 60 caractères par ligne) --- */
+.etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  counter-reset: etape;                           /* compteur CSS : 1, 2, 3… */
 }
-/* Version anglaise : « From the classroom » est plus long que « De la classe » et ne tenait pas
-   sur une ligne à 40 px (texte coupé à gauche). Sur mobile, les groupes de mots EN peuvent passer
-   à la ligne ; en français, rien ne change. */
-@media (max-width: 767px) {
-  html[lang^="en"] .hero__titre .mot { white-space: normal; }
-  .hero .hero__titre { overflow-wrap: break-word; }
+.etape {
+  display: grid;
+  grid-template-columns: 44px 1fr;                /* le numéro à gauche, le texte à droite */
+  column-gap: 24px;
+  align-items: start;
+  border-radius: var(--rayon-moyen);
+  padding: 24px;
+  counter-increment: etape;
 }
-
-/* --- 19.2 Boutons : un seul comportement au survol (Elodie).
-   Avant : le primaire montait et le secondaire se remplissait sans bouger, ce qui n'avait pas l'air
-   d'une même famille. Maintenant, TOUS passent au magenta (la couleur qui souligne les liens) et
-   montent de 2 px. Le primaire reste plein, le secondaire reste vide (hiérarchie conservée).
-   Magenta 600 (#B12D62) et non 500 : le blanc sur magenta 500 n'atteint pas 4,5:1. */
-.bouton-primaire .wp-block-button__link:hover,
-.bouton-primaire .wp-block-button__link:focus-visible,
-.bouton--primaire:hover,
-.bouton--primaire:focus-visible {
-  background: #B12D62;
+.etape::before {
+  content: counter(etape);
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--global-palette1);
   color: #fff;
-  box-shadow: var(--ombre-survol);
-  transform: translateY(-2px);
+  font-size: 24px;
+  font-weight: 700;
 }
-.bouton-secondaire .wp-block-button__link:hover,
-.bouton-secondaire .wp-block-button__link:focus-visible,
-.bouton--secondaire:hover,
-.bouton--secondaire:focus-visible,
-.header-navigation .header-menu-container ul li.menu-bouton > a:hover,
-.header-navigation .header-menu-container ul li.menu-bouton > a:focus-visible,
-#mobile-drawer .mobile-navigation ul li.menu-bouton > a:hover {
-  background: transparent;
-  border-color: #B12D62;
-  color: #B12D62;
-  box-shadow: none;
-  transform: translateY(-2px);
+.etape__titre.etape__titre {
+  font-size: var(--fs-title-xs);
+  line-height: var(--lh-title-xs);
+  color: var(--violet-900);
+  margin: 4px 0 8px;                              /* 4 px : centré sur le rond ; 8 px : collé à son texte */
 }
-.bouton-secondaire .wp-block-button__link:focus:not(:focus-visible) {
-  background: transparent;                          /* après un clic, il ne reste pas rempli */
-  color: var(--global-palette1);
-}
-.bouton-lien .wp-block-button__link:hover { color: #B12D62; }
-@media (prefers-reduced-motion: reduce) {
-  .bouton-primaire .wp-block-button__link:hover, .bouton--primaire:hover,
-  .bouton-secondaire .wp-block-button__link:hover, .bouton--secondaire:hover,
-  .header-navigation .header-menu-container ul li.menu-bouton > a:hover { transform: none; }
-}
-/* Anglais sur téléphone peu haut : le titre EN fait une ligne de plus que le français ;
-   il descend à la taille « petit téléphone » (34/38) pour que tout le hero reste visible. */
-@media (max-width: 767px) and (max-height: 700px) {
-  html[lang^="en"] .hero .hero__titre { font-size: 34px; line-height: 38px; }
-}
-@media (max-width: 767px) and (max-height: 560px) {
-  html[lang^="en"] .hero .hero__titre { font-size: 30px; line-height: 34px; }
+.etape__texte,
+.etape__texte p {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  margin: 0;
 }
 
-/* --- 19.3 « En images » : des captures plus grandes et une grille sans trou (rapport du 03/10)
-   - 2 colonnes au lieu de 3 : chaque capture est presque deux fois plus large, on lit le détail ;
-   - si le nombre d'images est impair, la dernière prend toute la largeur (plus de colonne vide) ;
-   - une petite loupe signale que l'image s'agrandit au clic. */
-/* 2 ou 4 images : 2 colonnes (plus de colonne vide, images plus grandes) ; 3 images : 3 colonnes */
-@media (min-width: 768px) {
+/* --- En images : la galerie --- */
+.galerie {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);          /* 3 images */
+  gap: 24px;
+  align-items: start;
+}
+@media (min-width: 768px) {                       /* 2 ou 4 images : 2 colonnes, plus de colonne vide */
   .galerie:has(> .galerie__item:nth-child(2):last-child),
   .galerie:has(> .galerie__item:nth-child(4):last-child) { grid-template-columns: repeat(2, 1fr); }
 }
-/* Tablette (2 colonnes) : une 3e image seule est centrée sous les deux autres */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .galerie > .galerie__item:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: calc(50% - 12px);
-  }
+.galerie__item {
+  margin: 0;
 }
-.galerie__image { position: relative; display: block; cursor: zoom-in; }
-.galerie__image::after {
+.galerie__image {
+  position: relative;
+  display: block;
+  cursor: zoom-in;                                /* l'image s'agrandit au clic (js/visionneuse.js) */
+}
+.galerie__image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;                            /* on voit TOUT l'écran, rien n'est recadré */
+  object-position: center;
+  background: #fff;
+  border: 1px solid var(--violet-100);
+  border-radius: var(--rayon-moyen);
+  padding: 16px;
+  box-sizing: border-box;
+  box-shadow: var(--ombre-carte);
+  transition: all .2s ease;
+}
+.galerie__image:hover img {
+  box-shadow: var(--ombre-survol);
+  transform: translateY(-4px);
+}
+.galerie__image::after {                          /* la petite loupe en bas à droite */
   content: "";
   position: absolute;
   right: 16px;
@@ -1913,14 +1094,113 @@ main .projet__entete,
   box-shadow: var(--ombre-carte);
   transition: transform .2s ease;
 }
-.galerie__image:hover::after { transform: translateY(-4px) scale(1.08); }
-.galerie__image:focus-visible { outline: 3px solid var(--global-palette1); outline-offset: 4px; border-radius: var(--rayon-moyen); }
-@media (max-width: 767px) {
-  .galerie { grid-template-columns: 1fr; }
+.galerie__image:hover::after {
+  transform: translateY(-4px) scale(1.08);
+}
+.galerie__image:focus-visible {
+  outline: 3px solid var(--global-palette1);
+  outline-offset: 4px;
+  border-radius: var(--rayon-moyen);
+}
+.galerie__texte {
+  margin-top: 16px;
+}
+.galerie__titre.galerie__titre {
+  font-size: var(--fs-title-xs);
+  line-height: var(--lh-title-xs);
+  color: var(--violet-900);
+  margin: 0 0 8px;
+}
+.galerie__texte p {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
 }
 
-/* --- 19.4 La visionneuse (js/visionneuse.js) : l'image en grand par-dessus la page */
-html.visionneuse-ouverte { overflow: hidden; }
+/* --- Ce que j'ai appris --- */
+.projet__appris {
+  border-radius: var(--rayon-grand);
+  padding: 48px;
+}
+.projet__appris-titre.projet__appris-titre {
+  font-size: var(--fs-title-sm);
+  line-height: var(--lh-title-sm);
+  color: var(--violet-900);
+  margin: 0 0 16px;
+}
+.projet__appris-texte {
+  max-width: 760px;
+  column-gap: 48px;
+}
+.projet__appris-texte:has(p + p) {                /* plusieurs paragraphes : 3 colonnes, une idée par colonne */
+  max-width: none;
+  columns: 3;
+}
+.projet__appris-texte p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  break-inside: avoid;
+}
+
+/* --- Liens (GitHub, Figma) et « Projet suivant » --- */
+.projet__liens {
+  display: flex;
+  justify-content: space-between;                 /* boutons à gauche, projet suivant à droite */
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.projet__actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.projet__suivant.projet__suivant {
+  font-size: var(--fs-title-sm);
+  line-height: var(--lh-title-sm);
+  text-align: right;
+  color: var(--global-palette1);
+  text-decoration: none;
+}
+.projet__suivant-label.projet__suivant-label {
+  display: block;
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  font-weight: 400;
+  color: var(--global-palette5);
+}
+
+/* --- Appel au contact en fin de projet : même carte que sur « Mon parcours » (partie 11) --- */
+
+/* --- Tablette --- */
+@media (max-width: 1024px) {
+  .projet__colonnes { grid-template-columns: 1fr; }          /* l'encadré passe sous le texte */
+  .galerie { grid-template-columns: repeat(2, 1fr); }
+  .galerie > .galerie__item:last-child:nth-child(odd) {     /* une 3e image seule est centrée */
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 12px);
+  }
+  .projet__appris-texte:has(p + p) { columns: 1; }
+}
+/* --- Mobile --- */
+@media (max-width: 767px) {
+  .projet__appris { padding: 32px 24px; }
+  .etapes,
+  .galerie { grid-template-columns: 1fr; }
+  .galerie > .galerie__item:last-child:nth-child(odd) { grid-column: auto; justify-self: auto; width: auto; }
+  .galerie__item--portrait .galerie__image img {   /* captures de téléphone : en grand */
+    aspect-ratio: auto;
+    max-height: 560px;
+  }
+  .projet__liens { flex-direction: column; align-items: flex-start; }
+  .projet__suivant.projet__suivant { text-align: left; }
+}
+
+
+/* =====================================================================
+   10. VISIONNEUSE D'IMAGES (js/visionneuse.js)
+   ===================================================================== */
+html.visionneuse-ouverte { overflow: hidden; }    /* la page ne défile plus derrière */
 .visionneuse {
   width: 100vw;
   height: 100dvh;
@@ -1932,8 +1212,12 @@ html.visionneuse-ouverte { overflow: hidden; }
   background: rgba(30, 26, 74, .6);
   box-sizing: border-box;
 }
-.visionneuse::backdrop { background: rgba(30, 26, 74, .8); }   /* violet 900 : le fond s'efface, l'image ressort */   /* violet 900 presque opaque */
-.visionneuse[open] { display: flex; align-items: center; justify-content: center; }
+.visionneuse::backdrop { background: rgba(30, 26, 74, .8); }
+.visionneuse[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .visionneuse__cadre {
   margin: 0;
   width: 100%;
@@ -1959,7 +1243,7 @@ html.visionneuse-ouverte { overflow: hidden; }
   font-weight: 700;
   text-align: center;
 }
-.visionneuse__bouton {
+.visionneuse__bouton {                            /* ×, ←, → : 48 × 48 px */
   position: absolute;
   width: 48px;
   height: 48px;
@@ -1978,9 +1262,9 @@ html.visionneuse-ouverte { overflow: hidden; }
 .visionneuse__bouton:hover,
 .visionneuse__bouton:focus-visible { background: #fff; color: var(--violet-900); }
 .visionneuse__bouton:focus-visible { outline: 3px solid var(--orange-500); outline-offset: 2px; }
-.visionneuse__fermer { top: 16px; right: 16px; font-size: 32px; }
+.visionneuse__fermer    { top: 16px; right: 16px; font-size: 32px; }
 .visionneuse__precedent { left: 24px; top: 50%; transform: translateY(-50%); }
-.visionneuse__suivant { right: 24px; top: 50%; transform: translateY(-50%); }
+.visionneuse__suivant   { right: 24px; top: 50%; transform: translateY(-50%); }
 .visionneuse--seule .visionneuse__precedent,
 .visionneuse--seule .visionneuse__suivant { display: none; }
 .visionneuse__compteur {
@@ -1992,440 +1276,290 @@ html.visionneuse-ouverte { overflow: hidden; }
   font-size: 16px;
   line-height: 24px;
 }
-@media (max-width: 767px) {
+@media (max-width: 767px) {                       /* mobile : flèches en bas, au centre */
   .visionneuse { padding: 64px 16px 96px; }
-  .visionneuse__precedent, .visionneuse__suivant { top: auto; bottom: 24px; transform: none; }
+  .visionneuse__precedent,
+  .visionneuse__suivant { top: auto; bottom: 24px; transform: none; }
   .visionneuse__precedent { left: calc(50% - 64px); }
   .visionneuse__suivant { right: calc(50% - 64px); }
 }
 
-/* --- 19.5 Appel au contact en fin de projet : la même carte que sur « Mon parcours » */
-.projet__appel .parcours__appel-titre {
-  font-size: 36px;
-  line-height: 43px;
+
+/* =====================================================================
+   11. PAGE « MON PARCOURS » (et cartes réutilisées sur Contact et la page projet)
+   ===================================================================== */
+/* --- Recherche de stage : une grande carte blanche --- */
+.parcours__stage {
+  border-radius: var(--rayon-grand);
+  padding: 48px;
+}
+.parcours .parcours__stage-titre {
+  font-size: var(--fs-title-sm);
+  line-height: var(--lh-title-sm);
+  color: var(--violet-900);
+  margin: 0 0 8px;                                /* collé à sa phrase (proximité) */
+}
+.parcours .parcours__stage-texte {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  max-width: 64ch;
+  margin: 0;
+}
+.parcours__infos {                                /* Durée, Période, Lieu… : la grille s'adapte au nombre d'infos */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 24px;
+  margin: 32px 0;
+}
+.parcours__infos dt {
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;                          /* majuscules espacées = plus lisibles (cours « Les textes ») */
+  color: var(--global-palette1);
+  margin: 0 0 4px;
+}
+.parcours__infos dd {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 700;
+  color: var(--violet-900);
+  margin: 0;
+}
+
+/* --- Ma démarche (3 cartes) et Compétences (3 cartes) --- */
+.demarche,
+.competences {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.demarche__carte,
+.competences__carte {
+  border-radius: var(--rayon-moyen);
+  padding: 32px;
+}
+.demarche__titre::before {                        /* petite étincelle dorée, rappel du décor */
+  content: "✦";
+  color: var(--orange-500);
+  margin-right: 8px;
+}
+.demarche__titre.demarche__titre,
+.competences__titre.competences__titre {
+  font-size: var(--fs-title-xs);
+  line-height: var(--lh-title-xs);
   color: var(--violet-900);
   margin: 0 0 16px;
 }
-@media (max-width: 767px) {
-  .projet__appel { padding: 48px 24px; }
-  .projet__appel .parcours__appel-titre { font-size: 28px; line-height: 35px; }
+.demarche__carte p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.parcours .competences__intro {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--global-palette5);
+}
+/* Chaque pastille de compétence est un lien vers le projet qui la prouve */
+.pastille--lien {
+  display: inline-block;
+  text-decoration: none;
+  transition: all .2s ease;
+}
+.pastille--lien:hover,
+.pastille--lien:focus-visible {
+  background: var(--global-palette1);
+  border-color: var(--global-palette1);
+  color: #fff;
+}
+/* En cours d'apprentissage : bloc pleine largeur, plus discret */
+.competences__apprentissage {
+  margin-top: 24px;
+  background: rgba(255, 255, 255, .55);
+  border-radius: var(--rayon-moyen);
+  padding: 32px;
+}
+.competences__apprentissage p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin: 0 0 16px;
+  max-width: 64ch;
+}
+.pastille--en-cours.pastille--en-cours {
+  background: transparent;
+  border-color: var(--violet-100);
+  color: var(--global-palette2);
+}
+.pastille--en-cours::before {
+  content: "✦";
+  color: var(--orange-500);
+  margin-right: 4px;
 }
 
-/* --- 19.6 L'illustration du hero sur mobile : exactement dans le cadre dessiné par Clarisse,
-   du haut du titre jusqu'au bas du bouton « Télécharger mon CV », sur toute la largeur du texte.
-   Les positions sont mesurées par js/entete.js (le titre n'a pas le même nombre de lignes en FR et en EN). */
-@media (max-width: 767px) {
-  .entry-content > .hero.alignfull.hero--mesure::after {
-    inset: var(--illu-haut) var(--global-content-edge-padding, 24px) auto;
-    height: var(--illu-hauteur);
-    background-size: contain;
-    background-position: center;
-  }
+/* --- La frise : date à gauche, contenu à droite, reliés par une ligne verticale --- */
+.frise {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 920px;
+}
+.frise__etape {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  column-gap: 24px;
+}
+.parcours .frise__date {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  font-weight: 700;
+  color: var(--global-palette1);
+  margin: 0;
+  text-align: right;
+}
+.frise__contenu {
+  position: relative;
+  border-left: 2px solid var(--violet-200);
+  padding: 0 0 48px 32px;
+}
+.frise__etape:last-child .frise__contenu {
+  padding-bottom: 0;
+}
+.frise__contenu::before {                         /* la pastille magenta sur la ligne */
+  content: "";
+  position: absolute;
+  left: -9px;                                     /* (16 px de pastille + 2 px de ligne) / 2 */
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--magenta-500);
+  box-shadow: 0 0 0 4px #F6E3F7;                  /* petit halo couleur du fond */
+}
+.parcours .frise__titre {
+  font-size: var(--fs-title-xs);
+  line-height: var(--lh-title-xs);
+  color: var(--violet-900);
+  margin: 0 0 4px;
+}
+.parcours .frise__lieu {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  color: var(--global-palette5);
+  margin: 0 0 12px;
+}
+.frise__contenu p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.parcours .frise__design {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  font-style: italic;
+  color: var(--global-palette2);
+  margin-top: 12px;
+}
+.parcours .frise__reussite {                      /* « 1re année réussie avec brio » */
+  display: inline-block;
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  color: var(--violet-900);
+  background: rgba(255, 208, 138, .45);
+  border-left: 4px solid var(--orange-500);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
 }
 
-/* --- 19.7 Image d'en-tête des projets sur mobile : on garde ses proportions (2:1).
-   Avant, le format 4:3 recadrait les côtés : on perdait l'écran de téléphone (Philippe Noël, etc.). */
-@media (max-width: 767px) {
-  .projet__visuel img { aspect-ratio: 2 / 1; }
+/* --- Appel final « Envie de travailler ensemble ? » : carte centrée --- */
+.parcours__appel {
+  text-align: center;
+  border-radius: var(--rayon-grand);
+  padding: 64px 48px;
 }
-
-/* --- 19.8 Téléphones avec de la place (≥ 700 px de haut) : au lieu de laisser tout le vide sous les pastilles,
-   chaque espace monte d'une marche sur l'échelle (16→24, 24→32, 12→16, 24→48) : le contenu se répartit dans l'écran. */
-@media (max-width: 767px) and (min-height: 700px) {
-  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 32px); }
-  .hero .hero__surtitre { margin-bottom: 24px; }
-  .hero .hero__titre { margin-bottom: 32px; }
-  .hero .wp-block-buttons { gap: 16px; }
-  .hero .hero__atouts { margin-top: 48px; gap: 12px 8px; }
+.parcours__appel-titre.parcours__appel-titre {
+  font-size: var(--fs-title-sm);
+  line-height: var(--lh-title-sm);
+  color: var(--violet-900);
+  margin: 0 0 16px;
 }
-
-/* --- 19.9 Mobile : « Projet suivant » toujours aligné à gauche, sous les boutons (alignement sur la même ligne verticale) */
-@media (max-width: 767px) {
-  .projet__liens { flex-direction: column; align-items: flex-start; }
+.parcours__appel p {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin: 0 0 32px;
 }
-
-/* --- 19.10 Mobile : les captures de téléphone (images en hauteur) s'affichent en grand.
-   Avant, elles étaient réduites dans un cadre 4:3 et ne remplissaient qu'une étroite colonne au milieu. */
-@media (max-width: 767px) {
-  .galerie__item--portrait .galerie__image img {
-    aspect-ratio: auto;
-    max-height: 560px;
-  }
+.parcours__appel .projet__actions {
+  justify-content: center;
 }
-
-/* =========================================================
-   20. ÉCHELLE TYPOGRAPHIQUE RESPONSIVE DU COURS (« Echelle typographique responsive », Julien)
-   Chaque texte du site suit UN style de l'échelle, avec la valeur exacte de la colonne de l'écran :
-   Mobile (≤ 767) · Tablette (768-1024) · Laptop (1025-1919) · Desktop (≥ 1920). Format : taille / interligne.
-   Caption : fil d'Ariane, étiquettes, libellés · Body S : textes secondaires, pastilles · Body : texte principal
-   Body L : introductions · Title XS : petits titres · Title SM : titres de blocs et de cartes
-   Title MD : titres de sections · Title LG : titre de page · Hero SM : titre d'accueil
-   Button SM : actions standards · Button MD : CTA
-   ========================================================= */
-@media (max-width: 767px) {   /* Mobile */
-  /* Caption 12/17 */
-  html body .projet__ariane.projet__ariane.projet__ariane,
-  html body .projet__ariane a,
-  html body .carte-projet .etiquette.etiquette.etiquette,
-  html body .parcours__infos dt,
-  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
-  html body .etiquette.etiquette.etiquette,
-  html body .menu-item.menu-langue > a,
-  html body .header-navigation .menu-langue > a { font-size: 12px; line-height: 17px; }
-  /* BodyS 14/22 */
-  html body .site-footer .footer-html-inner p,
-  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
-  html body .footer-html-inner a,
-  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
-  html body .galerie__texte p,
-  html body .etape__texte p,
-  html body .frise__lieu.frise__lieu.frise__lieu,
-  html body .frise__design.frise__design.frise__design,
-  html body .frise__reussite.frise__reussite.frise__reussite,
-  html body .footer-html-inner p,
-  html body .pastille.pastille.pastille,
-  html body .hero__atouts span,
-  html body .frise__date.frise__date.frise__date { font-size: 14px; line-height: 22px; }
-  /* Body 16/26 */
-  html body .projet__texte p,
-  html body .frise__contenu p,
-  html body .projet__appris-texte p,
-  html body .demarche__carte p,
-  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
-  html body .parcours__appel p,
-  html body .competences__intro.competences__intro.competences__intro,
-  html body .competences__apprentissage p,
-  html body .parcours__infos dd,
-  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
-  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
-  html body .contact__bloc p,
-  html body .entry-content > p { font-size: 16px; line-height: 26px; }
-  /* BodyL 18/30 */
-  html body .projet__intro.projet__intro.projet__intro,
-  html body .projets__intro.projets__intro.projets__intro,
-  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
-  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
-  html body .contact__lien.contact__lien.contact__lien { font-size: 18px; line-height: 30px; }
-  /* TitleXS 20/27 */
-  html body .demarche__titre.demarche__titre.demarche__titre,
-  html body .competences__titre.competences__titre.competences__titre,
-  html body .etape__titre.etape__titre.etape__titre,
-  html body .frise__titre.frise__titre.frise__titre,
-  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
-  html body .galerie__titre.galerie__titre.galerie__titre,
-  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 20px; line-height: 27px; }
-  /* TitleSM 24/31 */
-  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
-  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
-  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
-  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
-  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 24px; line-height: 31px; }
-  /* TitleMD 30/38 */
-  html body .titre-section.titre-section.titre-section { font-size: 30px; line-height: 38px; }
-  /* TitleLG 36/43 */
-  html body .projet .projet__titre.projet__titre.projet__titre,
-  html body .projet__titre.projet__titre.projet__titre { font-size: 36px; line-height: 43px; }
-  /* HeroSM 42/46 */
-  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 42px; line-height: 46px; }
-  /* BtnSM 14/18 */
-  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
-  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 14px; line-height: 18px; }
-  /* BtnMD 16/20 */
-  html body .bouton.bouton.bouton,
-  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
-  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 16px; line-height: 20px; }
-}
-@media (min-width: 768px) and (max-width: 1024px) {   /* Tablette */
-  /* Caption 13/19 */
-  html body .projet__ariane.projet__ariane.projet__ariane,
-  html body .projet__ariane a,
-  html body .carte-projet .etiquette.etiquette.etiquette,
-  html body .parcours__infos dt,
-  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
-  html body .etiquette.etiquette.etiquette,
-  html body .menu-item.menu-langue > a,
-  html body .header-navigation .menu-langue > a { font-size: 13px; line-height: 19px; }
-  /* BodyS 15/23 */
-  html body .site-footer .footer-html-inner p,
-  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
-  html body .footer-html-inner a,
-  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
-  html body .galerie__texte p,
-  html body .etape__texte p,
-  html body .frise__lieu.frise__lieu.frise__lieu,
-  html body .frise__design.frise__design.frise__design,
-  html body .frise__reussite.frise__reussite.frise__reussite,
-  html body .footer-html-inner p,
-  html body .pastille.pastille.pastille,
-  html body .hero__atouts span,
-  html body .frise__date.frise__date.frise__date { font-size: 15px; line-height: 23px; }
-  /* Body 17/27 */
-  html body .projet__texte p,
-  html body .frise__contenu p,
-  html body .projet__appris-texte p,
-  html body .demarche__carte p,
-  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
-  html body .parcours__appel p,
-  html body .competences__intro.competences__intro.competences__intro,
-  html body .competences__apprentissage p,
-  html body .parcours__infos dd,
-  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
-  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
-  html body .contact__bloc p,
-  html body .entry-content > p { font-size: 17px; line-height: 27px; }
-  /* BodyL 19/31 */
-  html body .projet__intro.projet__intro.projet__intro,
-  html body .projets__intro.projets__intro.projets__intro,
-  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
-  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
-  html body .contact__lien.contact__lien.contact__lien { font-size: 19px; line-height: 31px; }
-  /* TitleXS 22/30 */
-  html body .demarche__titre.demarche__titre.demarche__titre,
-  html body .competences__titre.competences__titre.competences__titre,
-  html body .etape__titre.etape__titre.etape__titre,
-  html body .frise__titre.frise__titre.frise__titre,
-  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
-  html body .galerie__titre.galerie__titre.galerie__titre,
-  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 22px; line-height: 30px; }
-  /* TitleSM 26/34 */
-  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
-  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
-  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
-  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
-  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 26px; line-height: 34px; }
-  /* TitleMD 32/40 */
-  html body .titre-section.titre-section.titre-section { font-size: 32px; line-height: 40px; }
-  /* TitleLG 40/48 */
-  html body .projet .projet__titre.projet__titre.projet__titre,
-  html body .projet__titre.projet__titre.projet__titre { font-size: 40px; line-height: 48px; }
-  /* HeroSM 52/57 */
-  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 52px; line-height: 57px; }
-  /* BtnSM 15/19 */
-  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
-  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 15px; line-height: 19px; }
-  /* BtnMD 17/21 */
-  html body .bouton.bouton.bouton,
-  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
-  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 17px; line-height: 21px; }
-}
-@media (min-width: 1025px) and (max-width: 1919px) {   /* Laptop */
-  /* Caption 14/20 */
-  html body .projet__ariane.projet__ariane.projet__ariane,
-  html body .projet__ariane a,
-  html body .carte-projet .etiquette.etiquette.etiquette,
-  html body .parcours__infos dt,
-  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
-  html body .etiquette.etiquette.etiquette,
-  html body .menu-item.menu-langue > a,
-  html body .header-navigation .menu-langue > a { font-size: 14px; line-height: 20px; }
-  /* BodyS 16/26 */
-  html body .site-footer .footer-html-inner p,
-  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
-  html body .footer-html-inner a,
-  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
-  html body .galerie__texte p,
-  html body .etape__texte p,
-  html body .frise__lieu.frise__lieu.frise__lieu,
-  html body .frise__design.frise__design.frise__design,
-  html body .frise__reussite.frise__reussite.frise__reussite,
-  html body .footer-html-inner p,
-  html body .pastille.pastille.pastille,
-  html body .hero__atouts span,
-  html body .frise__date.frise__date.frise__date { font-size: 16px; line-height: 26px; }
-  /* Body 18/30 */
-  html body .projet__texte p,
-  html body .frise__contenu p,
-  html body .projet__appris-texte p,
-  html body .demarche__carte p,
-  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
-  html body .parcours__appel p,
-  html body .competences__intro.competences__intro.competences__intro,
-  html body .competences__apprentissage p,
-  html body .parcours__infos dd,
-  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
-  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
-  html body .contact__bloc p,
-  html body .entry-content > p { font-size: 18px; line-height: 30px; }
-  /* BodyL 20/34 */
-  html body .projet__intro.projet__intro.projet__intro,
-  html body .projets__intro.projets__intro.projets__intro,
-  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
-  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
-  html body .contact__lien.contact__lien.contact__lien { font-size: 20px; line-height: 34px; }
-  /* TitleXS 24/32 */
-  html body .demarche__titre.demarche__titre.demarche__titre,
-  html body .competences__titre.competences__titre.competences__titre,
-  html body .etape__titre.etape__titre.etape__titre,
-  html body .frise__titre.frise__titre.frise__titre,
-  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
-  html body .galerie__titre.galerie__titre.galerie__titre,
-  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 24px; line-height: 32px; }
-  /* TitleSM 28/35 */
-  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
-  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
-  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
-  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
-  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 28px; line-height: 35px; }
-  /* TitleMD 36/43 */
-  html body .titre-section.titre-section.titre-section { font-size: 36px; line-height: 43px; }
-  /* TitleLG 48/55 */
-  html body .projet .projet__titre.projet__titre.projet__titre,
-  html body .projet__titre.projet__titre.projet__titre { font-size: 48px; line-height: 55px; }
-  /* HeroSM 64/67 */
-  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 64px; line-height: 67px; }
-  /* BtnSM 16/20 */
-  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
-  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 16px; line-height: 20px; }
-  /* BtnMD 18/22 */
-  html body .bouton.bouton.bouton,
-  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
-  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 18px; line-height: 22px; }
-}
-@media (min-width: 1920px) {   /* Desktop 1920 */
-  /* Caption 15/23 */
-  html body .projet__ariane.projet__ariane.projet__ariane,
-  html body .projet__ariane a,
-  html body .carte-projet .etiquette.etiquette.etiquette,
-  html body .parcours__infos dt,
-  html body .projet__suivant-label.projet__suivant-label.projet__suivant-label,
-  html body .etiquette.etiquette.etiquette,
-  html body .menu-item.menu-langue > a,
-  html body .header-navigation .menu-langue > a { font-size: 15px; line-height: 23px; }
-  /* BodyS 17/27 */
-  html body .site-footer .footer-html-inner p,
-  html body .projet__entete .etiquette.etiquette.etiquette[class*="etiquette--"],
-  html body .footer-html-inner a,
-  html body .carte-projet__texte.carte-projet__texte.carte-projet__texte,
-  html body .galerie__texte p,
-  html body .etape__texte p,
-  html body .frise__lieu.frise__lieu.frise__lieu,
-  html body .frise__design.frise__design.frise__design,
-  html body .frise__reussite.frise__reussite.frise__reussite,
-  html body .footer-html-inner p,
-  html body .pastille.pastille.pastille,
-  html body .hero__atouts span,
-  html body .frise__date.frise__date.frise__date { font-size: 17px; line-height: 27px; }
-  /* Body 20/33 */
-  html body .projet__texte p,
-  html body .frise__contenu p,
-  html body .projet__appris-texte p,
-  html body .demarche__carte p,
-  html body .parcours__stage-texte.parcours__stage-texte.parcours__stage-texte,
-  html body .parcours__appel p,
-  html body .competences__intro.competences__intro.competences__intro,
-  html body .competences__apprentissage p,
-  html body .parcours__infos dd,
-  html body .accueil-projets__tous.accueil-projets__tous.accueil-projets__tous,
-  html body .header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a,
-  html body .contact__bloc p,
-  html body .entry-content > p { font-size: 20px; line-height: 33px; }
-  /* BodyL 22/37 */
-  html body .projet__intro.projet__intro.projet__intro,
-  html body .projets__intro.projets__intro.projets__intro,
-  html body .accueil-projets__intro.accueil-projets__intro.accueil-projets__intro,
-  html body .hero .hero__surtitre.hero__surtitre.hero__surtitre,
-  html body .contact__lien.contact__lien.contact__lien { font-size: 22px; line-height: 37px; }
-  /* TitleXS 26/34 */
-  html body .demarche__titre.demarche__titre.demarche__titre,
-  html body .competences__titre.competences__titre.competences__titre,
-  html body .etape__titre.etape__titre.etape__titre,
-  html body .frise__titre.frise__titre.frise__titre,
-  html body .projet__encadre-titre.projet__encadre-titre.projet__encadre-titre,
-  html body .galerie__titre.galerie__titre.galerie__titre,
-  html body .parcours .demarche__titre.demarche__titre.demarche__titre { font-size: 26px; line-height: 34px; }
-  /* TitleSM 32/40 */
-  html body .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .projet__appel .parcours__appel-titre.parcours__appel-titre.parcours__appel-titre,
-  html body .parcours__stage-titre.parcours__stage-titre.parcours__stage-titre,
-  html body .projet__appris-titre.projet__appris-titre.projet__appris-titre,
-  html body .carte-projet__lien.carte-projet__lien.carte-projet__lien,
-  html body .carte-projet__titre.carte-projet__titre.carte-projet__titre,
-  html body .projet__suivant.projet__suivant.projet__suivant { font-size: 32px; line-height: 40px; }
-  /* TitleMD 40/48 */
-  html body .titre-section.titre-section.titre-section { font-size: 40px; line-height: 48px; }
-  /* TitleLG 56/64 */
-  html body .projet .projet__titre.projet__titre.projet__titre,
-  html body .projet__titre.projet__titre.projet__titre { font-size: 56px; line-height: 64px; }
-  /* HeroSM 80/84 */
-  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 80px; line-height: 84px; }
-  /* BtnSM 17/21 */
-  html body .carte-projet__voir.carte-projet__voir.carte-projet__voir,
-  html body .header-navigation .header-menu-container ul li.menu-bouton > a { font-size: 17px; line-height: 21px; }
-  /* BtnMD 20/24 */
-  html body .bouton.bouton.bouton,
-  html body .hero .wp-block-button__link.wp-block-button__link.wp-block-button__link,
-  html body .wp-block-button__link.wp-block-button__link.wp-block-button__link { font-size: 20px; line-height: 24px; }
-}
-
-/* --- 20.1 Contact : le texte de l'appel final fait plus de 3 lignes → aligné à gauche (cours « Les textes » :
-   on ne centre pas un texte long) et limité à 64 caractères par ligne (45-75). */
+/* Contact : le texte fait plus de 3 lignes → aligné à gauche (on ne centre pas un texte long) */
 .parcours__appel--gauche { text-align: left; }
 .parcours__appel--gauche p { max-width: 64ch; }
 .parcours__appel--gauche .projet__actions { justify-content: flex-start; }
 
-/* --- 20.2 Deux graisses seulement (cours « La hiérarchie », partie 1) : 400 et 700.
-   La pastille « langue » passait en 800 : elle reste en 700 comme les autres. */
-.hero__atouts .atout--langue { font-weight: 700; }
-
-/* --- 20.3 Longueur des lignes (45-75 caractères) : le texte de la carte « Recherche de stage » faisait ~125 caractères par ligne sur ordinateur */
-.parcours .parcours__stage-texte { max-width: 64ch; }
-
-/* --- 20.4 Espacements : uniquement des valeurs de l'échelle 4-8-12-16-24-32-48-64-96-128
-   (les 14px / 30px / 10px / 22px restants sont des « valeur de l'échelle − 2 px de bordure » : même taille finale) */
-.etape__titre { margin-top: 4px; }                                  /* 6 → 4 */
-html body .pastille.pastille.pastille { padding: 4px 12px; }        /* 6 → 4 (interligne Body S plus haut) */
-html body .projet__entete .etiquette.etiquette[class*="etiquette--"] { padding: 8px 16px; }   /* 10/20 → 8/16 */
-html body .accueil-projets .titre-section.titre-section { margin-bottom: 32px; }                /* 0,5em (15-20 px) → 32 */
-.header-navigation .header-menu-container ul li.menu-item:not(.menu-bouton) > a { padding: 8px 16px; }   /* 0,6em/1,2em → 8/16 */
-.site-footer .site-bottom-footer-inner-wrap { padding-top: 32px; padding-bottom: 32px; column-gap: 32px; }  /* 30 (Kadence) → 32 */
-.site-footer .footer-html { margin: 0; }
-
-/* --- 20.5 Hero sur les téléphones peu hauts : le titre passe du style Hero SM (42/46) au style Hero XS (36/41)
-   de l'échelle, pour que tout le hero reste visible (remplace les tailles 34/38 et 30/34 qui n'étaient pas dans l'échelle). */
-@media (max-width: 767px) and (max-height: 640px) {
-  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 36px; line-height: 41px; }
+@media (max-width: 1024px) {
+  .demarche,
+  .competences { grid-template-columns: 1fr; }
 }
-@media (max-width: 767px) and (max-height: 700px) {
-  html[lang^="en"] body .hero .hero__titre.hero__titre.hero__titre { font-size: 36px; line-height: 41px; }
-}
-/* Très petits écrans (≤ 560 px de haut, iPhone SE avec la barre du navigateur) : style Title MD (30/38) */
-@media (max-width: 767px) and (max-height: 560px) {
-  html body .hero .hero__titre.hero__titre.hero__titre,
-  html[lang^="en"] body .hero .hero__titre.hero__titre.hero__titre { font-size: 30px; line-height: 38px; }
-}
-@media (max-width: 767px) and (max-height: 560px) {
-  .entry-content > .hero.alignfull { padding-top: calc(var(--hauteur-entete) + 8px); }   /* 16 → 8 */
+@media (max-width: 767px) {
+  .parcours__stage { padding: 32px 24px; }
+  .parcours__infos { grid-template-columns: 1fr; gap: 16px; }
+  .frise__etape { grid-template-columns: 1fr; }   /* la date passe au-dessus */
+  .parcours .frise__date { text-align: left; padding-left: 34px; }   /* 34 = ligne de 2 px + 32 */
+  .parcours__appel { padding: 48px 24px; }
 }
 
-/* --- 20.6 Titre anglais sur grand écran : lignes équilibrées (plus de mot seul sur la dernière ligne, « fun. ») */
-@media (min-width: 768px) {
-  html[lang^="en"] .hero .hero__titre { text-wrap: pretty; }
-}
-/* En anglais, « From the classroom » est plus large que la colonne du titre sur ordinateur (il débordait sur
-   l'illustration) : comme sur mobile, les groupes de mots peuvent passer à la ligne, en lignes équilibrées. */
-html[lang^="en"] .hero__titre .mot { white-space: normal; }
 
-/* --- 20.7 Ordinateurs peu hauts (≤ 800 px utiles, ex. 1366 × 768, ou zoom Windows 125-150 %) :
-   le titre passe du style Hero SM (64/67) au style Hero XS de la même colonne Laptop (52/57) — avant, une taille
-   calculée (7 % de la hauteur) sortait de l'échelle. ≤ 640 px : Title LG Laptop (48/55). */
-@media (min-width: 1025px) and (max-height: 800px) {
-  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 52px; line-height: 57px; }
+/* =====================================================================
+   12. PAGE CONTACT
+   ===================================================================== */
+.contact__lien.contact__lien {
+  font-size: var(--fs-body-l);
+  line-height: var(--lh-body-l);
+  font-weight: 700;
+  color: var(--global-palette1);
+  word-break: break-word;                         /* la longue adresse e-mail passe à la ligne sur mobile */
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  transition: all .2s ease;
 }
-@media (min-width: 1025px) and (max-height: 640px) {
-  html body .hero .hero__titre.hero__titre.hero__titre { font-size: 48px; line-height: 55px; }
+.contact__lien.contact__lien:hover {
+  color: var(--global-palette2);
+  text-decoration-color: var(--magenta-500);
 }
-/* Grand écran (≥ 1920) en anglais : le titre est plus long qu'en français (« From the classroom ») ;
-   en Hero SM (80/84) il faisait 6 lignes avec « fun. » seul. Il prend le style Hero XS de la même colonne (64/70) : 4 lignes. */
-@media (min-width: 1920px) {
-  html[lang^="en"] body .hero .hero__titre.hero__titre.hero__titre { font-size: 64px; line-height: 70px; }
+
+
+/* =====================================================================
+   13. PIED DE PAGE
+   ===================================================================== */
+.site-footer .site-bottom-footer-inner-wrap {
+  padding-top: 32px;
+  padding-bottom: 32px;
+  column-gap: 32px;
+}
+.site-footer .footer-html {
+  margin: 0;
+}
+.site-footer .footer-html-inner p {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  color: var(--violet-900);
+  margin: 0;
+}
+.site-footer .footer-html-inner a {
+  font-size: var(--fs-body-s);
+  line-height: var(--lh-body-s);
+  color: var(--global-palette2);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition: all .2s ease;
+}
+.site-footer .footer-html-inner a:hover {
+  text-decoration-color: var(--magenta-500);
 }

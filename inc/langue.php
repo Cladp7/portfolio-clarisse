@@ -325,10 +325,8 @@ add_filter('acf/format_value/name=galerie', function ($images) {
     return $images;
 }, 30);
 
-/* ---------------------------------------------------------
-   7 bis. Légendes de la galerie en anglais (titre + explication sous chaque image)
-   Rangées par nom de fichier, comme les textes alternatifs.
-   --------------------------------------------------------- */
+/* Légendes de la galerie en anglais (titre + explication sous chaque image),
+   rangées par nom de fichier, comme les textes alternatifs */
 function clarisse_legendes_en()
 {
     return array(
@@ -383,11 +381,10 @@ add_filter('acf/format_value/name=galerie', function ($images) {
 }, 31);
 
 /* ---------------------------------------------------------
-   8. Réparation des liens « accueil » en anglais
-   Le filtre home_url (section 3) transforme l'adresse d'accueil « http://site/ » en
-   « http:/en//en/site/en/ » : WordPress en a besoin tel quel pour reconnaître les adresses /en/…
-   (le corriger dans le filtre casse les pages anglaises), mais le lien du logo et la balise canonical
-   étaient cassés. On répare donc seulement le HTML envoyé au visiteur, juste avant l'affichage.
+   8. Lien de l'accueil en anglais
+   Pour l'adresse d'accueil, le filtre home_url (partie 3) produit « http:/en//en/site/en/ ».
+   WordPress en a besoin tel quel pour reconnaître les adresses /en/… : on ne touche donc pas
+   au filtre, on corrige seulement le HTML envoyé au visiteur (lien du logo, balise canonical).
    --------------------------------------------------------- */
 add_action('template_redirect', function () {
     if (clarisse_en()) {
@@ -396,8 +393,9 @@ add_action('template_redirect', function () {
         });
     }
 }, 1);
-/* En anglais, la barre d'admin (visible seulement par Clarisse connectée) affichait un avertissement PHP
-   venant du script « Personnaliser » de WordPress, qui lit l'adresse d'accueil : on ne le charge pas en anglais. */
+
+/* La barre d'admin (visible seulement quand Clarisse est connectée) charge le script « Personnaliser »,
+   qui lit l'adresse d'accueil et affichait un avertissement PHP en anglais : on ne le charge pas en anglais. */
 add_action('wp_before_admin_bar_render', function () {
     if (clarisse_en()) {
         remove_action('wp_before_admin_bar_render', 'wp_customize_support_script');

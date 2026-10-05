@@ -6,10 +6,10 @@
  * single-{clé du type de contenu}.php → single-projet.php
  */
 
-get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
+get_header(); // l'en-tête de Kadence (logo et menu)
 ?>
 
-<div id="main" class="projet"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
+<div id="main" class="projet"> <!-- id="main" : cible du lien « Aller au contenu » (accessibilité) -->
 
     <?php while (have_posts()) : the_post(); // la Boucle : ici, elle ne contient qu'un seul projet 
     ?>
@@ -155,7 +155,7 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
                 <div class="projet__conteneur">
                     <div class="projet__appris">
                         <h2 class="projet__appris-titre"><?php echo cl_t('Ce que j’ai appris', 'What I learned'); ?></h2>
-                        <div class="projet__appris-texte"><?php echo wp_kses_post(get_field('apprentissages')); ?></div> <!-- conteneur pour couler le texte sur 2 colonnes -->
+                        <div class="projet__appris-texte"><?php echo wp_kses_post(get_field('apprentissages')); ?></div> <!-- plusieurs paragraphes : 3 colonnes sur ordinateur -->
                     </div>
                 </div>
             </section>
@@ -197,8 +197,8 @@ get_header(); // affiche l'en-tête de Kadence (ton nom + le menu)
         </section>
 
         <!-- =====================================================
-         7. APPEL AU CONTACT (rapport du 03/10 : chaque étude de cas finit sur une action)
-         Même bloc que sur « Mon parcours ».
+         7. APPEL AU CONTACT : chaque étude de cas se termine par une action
+         (même carte que sur « Mon parcours »)
          ===================================================== -->
         <section class="projet__section">
             <div class="projet__conteneur">

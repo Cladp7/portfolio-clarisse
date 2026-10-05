@@ -1,13 +1,13 @@
 <?php
 /**
- * Carte d'un projet (réutilisée sur la page Projets ET plus tard sur l'accueil).
+ * Carte d'un projet (page Projets et section « Projets phares » de l'accueil).
  * S'utilise dans une Boucle : get_template_part('template-parts/carte-projet');
  */
 
 // Niveau du titre : h2 sur la page Projets, h3 dans la section de l'accueil (sous un h2)
 $niveau = isset($args['niveau']) ? $args['niveau'] : 'h2';
 
-// Couleur choisie dans ACF (violet, magenta ou orange) → devient une classe CSS
+// Couleur de la catégorie choisie dans ACF (violet, magenta, orange ou nuit) → devient une classe CSS
 $couleur = get_field('couleur_carte') ? get_field('couleur_carte') : 'violet';
 ?>
 
@@ -20,7 +20,7 @@ $couleur = get_field('couleur_carte') ? get_field('couleur_carte') : 'violet';
         <?php endif; ?>
     </div>
 
-    <!-- Le bas coloré de la carte -->
+    <!-- Le texte de la carte -->
     <div class="carte-projet__contenu">
         <?php if (get_field('etiquette')) : ?>
             <span class="etiquette etiquette--<?php echo esc_attr($couleur); ?>"><?php echo esc_html(get_field('etiquette')); ?></span>

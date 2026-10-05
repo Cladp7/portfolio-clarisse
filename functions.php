@@ -1,10 +1,27 @@
 <?php
-// Ce fichier s'exécute automatiquement quand le thème enfant est actif.
+/**
+ * FONCTIONS DU THÈME (s'exécute automatiquement quand le thème enfant est actif)
+ *
+ *  1. Chargement du CSS et des scripts
+ *  2. Images importées converties en WebP
+ *  3. Mise en page Kadence des pages Projets, Mon parcours et Contact
+ *  4. Pied de page
+ *  5. « Projets phares » sous le hero de l'accueil
+ *  6. Aperçu du lien quand on partage le portfolio (Open Graph)
+ *  7. Options ACF supplémentaires + tous les projets sur une page
+ *  8. Compétences (page Mon parcours)
+ *  9. Nom accessible du logo
+ *
+ * La version anglaise est dans inc/langue.php.
+ */
 
 // Version anglaise du portfolio (adresses /en/…, traductions, bouton FR / EN)
 require_once get_stylesheet_directory() . '/inc/langue.php';
 
-// On "accroche" notre fonction au moment où WordPress charge les styles et scripts du site.
+/* =========================================================
+   1. CHARGEMENT DU CSS ET DES SCRIPTS
+   On « accroche » nos fonctions au moment où WordPress charge les styles et scripts.
+   ========================================================= */
 add_action('wp_enqueue_scripts', 'clarisse_charger_styles');
 
 function clarisse_charger_styles()
@@ -18,10 +35,9 @@ function clarisse_charger_styles()
         // le numéro change et le navigateur recharge le CSS tout seul (plus besoin de Ctrl + F5)
     );
 }
-/* =========================================================
-   EN-TÊTE QUI RESTE EN HAUT (sticky) : petit script js/entete.js
-   « true » = chargé en bas de page, après le HTML (la page s'affiche plus vite).
-   ========================================================= */
+/* Scripts : js/entete.js (en-tête qui devient blanc quand on descend) partout,
+   js/visionneuse.js (images en grand) sur les pages projet.
+   « true » = chargés en bas de page, après le HTML : la page s'affiche plus vite. */
 add_action('wp_enqueue_scripts', 'clarisse_charger_scripts');
 
 function clarisse_charger_scripts()
@@ -46,7 +62,7 @@ function clarisse_charger_scripts()
 }
 
 /* =========================================================
-   CONVERSION AUTOMATIQUE EN WEBP
+   2. CONVERSION AUTOMATIQUE EN WEBP
    Quand j'importe une image PNG ou JPG dans la médiathèque,
    WordPress crée ses différentes tailles directement en WebP
    (plus léger → site plus rapide, idéal pour InfinityFree).
@@ -62,7 +78,7 @@ function clarisse_images_en_webp($formats)
 
 
 /* =========================================================
-   PAGE « PROJETS » (archive du type de contenu projet)
+   3. PAGES PROJETS, MON PARCOURS ET CONTACT
    On demande à Kadence : en-tête transparent (le dégradé passe derrière le menu,
    comme sur les autres pages) et pas de bandeau de titre gris par défaut :
    c'est notre modèle archive-projet.php qui affiche son propre titre.
@@ -82,7 +98,7 @@ function clarisse_mise_en_page_projets($layout)
 
 
 /* =========================================================
-   PIED DE PAGE
+   4. PIED DE PAGE
    On remplace le texte par défaut de Kadence (« Thème WordPress par Kadence WP »)
    par mon nom et mes liens. « theme_mod_footer_html_content » est un filtre
    automatique de WordPress sur le réglage du pied de page de Kadence.
@@ -98,7 +114,7 @@ function clarisse_pied_de_page($contenu)
 
 
 /* =========================================================
-   SECTION « PROJETS PHARES » SUR L'ACCUEIL
+   5. SECTION « PROJETS PHARES » SUR L'ACCUEIL
    On l'ajoute automatiquement après le contenu de la page d'accueil (le hero),
    grâce au filtre « the_content ». Le HTML est dans template-parts/accueil-projets.php.
    ========================================================= */
@@ -117,9 +133,8 @@ function clarisse_ajouter_projets_phares($contenu)
 
 
 /* =========================================================
-   Aperçu du lien quand on partage le portfolio (WhatsApp, Messenger, LinkedIn…)
-   Sans ces balises « Open Graph », les applis prenaient la 1re grande image de la page
-   (la carte de La Vallée du Savoir) : l'aperçu ne représentait pas le portfolio.
+   6. APERÇU DU LIEN quand on partage le portfolio (WhatsApp, Messenger, LinkedIn…)
+   Sans ces balises « Open Graph », les applis prennent la 1re grande image de la page.
    - Partout : l'image apercu-portfolio.jpg (1200 × 630 px, le format conseillé)
    - Sur une page projet : la couverture du projet + son résumé
    ========================================================= */
@@ -156,7 +171,7 @@ function clarisse_apercu_partage()
 
 
 /* =========================================================
-   Nouvelles options pour les fiches projet (ACF), sans toucher au groupe de champs :
+   7. OPTIONS ACF SUPPLÉMENTAIRES pour les fiches projet (sans toucher au groupe de champs) :
    - une 4e couleur de catégorie « nuit » (bleu nuit) pour les projets back-end
    - de nouveaux outils dans la liste à cocher
    ========================================================= */
@@ -190,11 +205,9 @@ function clarisse_tous_les_projets($requete)
 }
 
 /* =========================================================
-   COMPÉTENCES (page Mon parcours, FR et EN)
-   Retour de l'évaluateur : une compétence sans projet qui la montre
-   ne vaut qu'une déclaration. Chaque pastille est donc un LIEN vers
-   le projet qui la prouve. Ce qui n'est pas encore prouvé par un projet
-   va dans « En cours d'apprentissage ».
+   8. COMPÉTENCES (page Mon parcours, FR et EN)
+   Chaque pastille est un LIEN vers le projet qui la prouve.
+   Ce qui n'est pas encore prouvé par un projet va dans « En cours d'apprentissage ».
    ========================================================= */
 function clarisse_competences()
 {
@@ -282,9 +295,12 @@ function clarisse_competences()
     <?php
 }
 
-/* Le logo est un lien vers l'accueil, mais Kadence l'affiche en image de fond : le lien n'a donc
-   aucun texte. On lui ajoute un nom lisible par les lecteurs d'écran (WCAG 2.4.4).
-   Kadence n'offre pas de filtre pour ce lien : on « relit » le HTML de l'en-tête avant de l'afficher. */
+/* =========================================================
+   9. NOM ACCESSIBLE DU LOGO
+   Le logo est un lien vers l'accueil affiché en image de fond : le lien n'a donc aucun texte.
+   On lui ajoute un nom lisible par les lecteurs d'écran (WCAG 2.4.4). Kadence n'offre pas
+   de filtre pour ce lien : on « relit » le HTML de l'en-tête avant de l'afficher.
+   ========================================================= */
 add_action('kadence_before_header', function () {
     ob_start();
 }, 1);

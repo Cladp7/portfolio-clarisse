@@ -7,7 +7,7 @@
 get_header();
 ?>
 
-<div id="main" class="projet projets"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
+<div id="main" class="projet projets"> <!-- id="main" : cible du lien « Aller au contenu » (accessibilité) -->
 
     <!-- En-tête de la page -->
     <section class="projet__entete">

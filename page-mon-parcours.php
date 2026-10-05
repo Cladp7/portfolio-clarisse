@@ -15,8 +15,8 @@ if (clarisse_en()) {
 }
 
 
-// Lien vers le CV en PDF : à coller ici quand le PDF sera dans la médiathèque
-// (Médias → cliquer sur le PDF → « Copier l'URL »). Tant que c'est vide, le bouton ne s'affiche pas.
+// Le CV en PDF est rangé dans le thème (dossier « documents ») : pour le mettre à jour,
+// il suffit de remplacer ce fichier par le nouveau, avec le même nom.
 $lien_cv = get_stylesheet_directory_uri() . '/documents/cv-clarisse-dupont.pdf';
 
 // Lien vers la page Contact (on laisse WordPress trouver l'adresse tout seul)
@@ -25,7 +25,7 @@ $lien_contact = get_permalink(get_page_by_path('contact'));
 get_header();
 ?>
 
-<div id="main" class="projet projets parcours"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
+<div id="main" class="projet projets parcours"> <!-- id="main" : cible du lien « Aller au contenu » (accessibilité) -->
 
     <!-- 1. En-tête : même style que la page « Mes projets » -->
     <section class="projet__entete">
@@ -67,7 +67,7 @@ get_header();
                 </dl>
 
                 <div class="projet__actions">
-                    <?php if ($lien_cv) : // le bouton n'apparaît que si le lien est rempli ?>
+                    <?php if ($lien_cv) : ?>
                         <a class="bouton bouton--primaire" href="<?php echo esc_url($lien_cv); ?>" target="_blank" rel="noopener">Télécharger mon CV (PDF)</a>
                     <?php endif; ?>
                     <a class="bouton <?php echo $lien_cv ? 'bouton--secondaire' : 'bouton--primaire'; ?>" href="<?php echo esc_url($lien_contact); ?>">Me contacter</a>

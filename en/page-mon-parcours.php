@@ -1,16 +1,14 @@
 <?php
 /**
  * VERSION ANGLAISE de la page « Mon parcours » (/en/my-journey/).
- * Chargée automatiquement par page-mon-parcours.php quand l'adresse commence par /en/.
- * WordPress l'utilise automatiquement grâce à son nom : page-{slug de la page}.php
- * → la page dont le slug est « mon-parcours ».
+ * Chargée par page-mon-parcours.php quand l'adresse commence par /en/.
  *
  * Les textes sont écrits directement ici. Pour modifier une phrase :
  * on change le texte entre les balises, on enregistre, on recharge la page.
  */
 
-// Lien vers le CV en PDF : à coller ici quand le PDF sera dans la médiathèque
-// (Médias → cliquer sur le PDF → « Copier l'URL »). Tant que c'est vide, le bouton ne s'affiche pas.
+// Le CV en PDF est rangé dans le thème (dossier « documents ») : pour le mettre à jour,
+// il suffit de remplacer ce fichier par le nouveau, avec le même nom.
 $lien_cv = get_stylesheet_directory_uri() . '/documents/cv-clarisse-dupont.pdf';
 
 // Lien vers la page Contact (on laisse WordPress trouver l'adresse tout seul)
@@ -19,7 +17,7 @@ $lien_contact = get_permalink(get_page_by_path('contact'));
 get_header();
 ?>
 
-<div id="main" class="projet projets parcours"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
+<div id="main" class="projet projets parcours"> <!-- id="main" : cible du lien « Aller au contenu » (accessibilité) -->
 
     <!-- 1. En-tête : même style que la page « Mes projets » -->
     <section class="projet__entete">

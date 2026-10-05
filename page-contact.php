@@ -12,14 +12,14 @@ if (clarisse_en()) {
 }
 
 
-// Lien vers le CV (même adresse que sur la page Mon parcours)
+// Le CV en PDF (dossier « documents » du thème), comme sur la page Mon parcours
 $lien_cv = get_stylesheet_directory_uri() . '/documents/cv-clarisse-dupont.pdf';
 
 get_header();
 ?>
 
 <!-- On réutilise les classes existantes : même en-tête et mêmes cartes que Mon parcours -->
-<div id="main" class="projet projets parcours contact"> <!-- contenu principal (cible du lien « Aller au contenu ») : Kadence fournit déjà la balise « main » -->
+<div id="main" class="projet projets parcours contact"> <!-- id="main" : cible du lien « Aller au contenu » (accessibilité) -->
 
     <!-- 1. En-tête -->
     <section class="projet__entete">
