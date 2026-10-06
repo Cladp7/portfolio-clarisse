@@ -538,28 +538,37 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
 .entry-content > .hero.alignfull::before,
 .entry-content > .hero.alignfull::after { grid-column: 2; grid-row: 1; }
 
-/* L'illustration fondue (tableau, tablette, téléphone) : centrée sur la bulle et plus large qu'elle,
-   elle remplit l'espace vide tout autour de la photo. --bulle = diamètre de la bulle. */
-.entry-content > .hero.alignfull { --bulle: min(384px, calc(100svh - var(--hauteur-entete) - 192px)); }
+/* L'illustration fondue, dessinée autour de la bulle : tableau en haut à gauche, tablette en bas
+   à gauche, téléphone à droite. Même centre que la bulle, 1,92 fois plus large (1000 px de dessin
+   pour 520 px de bulle). Elle déborde dans la marge de droite, mais jamais hors de l'écran :
+   si la marge est trop petite (portable), la bulle et le dessin se décalent ensemble vers la gauche. */
+.entry-content > .hero.alignfull {
+  --bulle: min(384px, calc(100svh - var(--hauteur-entete) - 192px));   /* diamètre de la bulle */
+  /* espace entre la colonne et le bord de l'écran (= marge intérieure droite du hero) */
+  --marge-droite: calc(max(0px, (100vw - var(--global-content-width)) / 2) + var(--global-content-edge-padding));
+  --debord: min(calc(var(--bulle) * .4615), calc(var(--marge-droite) - 16px));   /* au moins 16 px d'air avec le bord de l'écran */
+  /* Taille réelle de la bulle : si le dessin n'a pas la place (colonne + débord + 48 px d'espace
+     entre colonnes), la bulle et le dessin rapetissent ensemble. Ici 100 % = largeur de la colonne. */
+  --b: min(var(--bulle), calc((100% + var(--debord) + 48px) / 1.923));
+}
 .entry-content > .hero.alignfull::before {
   content: "";
   justify-self: end;
-  width: calc(var(--bulle) * 1.75);
-  aspect-ratio: 900 / 720;                        /* proportions du dessin */
-  margin-right: calc(var(--bulle) * -0.375);      /* (1,75 − 1) ÷ 2 : même centre que la bulle */
+  width: calc(var(--b) * 1.923);
+  aspect-ratio: 1000 / 760;                       /* proportions du dessin */
+  margin-right: calc(var(--debord) * -1);
   background: url('images/hero-illustration.svg') center / contain no-repeat;
   opacity: .55;
-  -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);   /* bords estompés */
-  mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
   pointer-events: none;
 }
 
 /* La bulle avec la photo (la même que sur le CV) : on sait tout de suite qui est « Miss Clarisse ».
-   Calée à droite, sur le même bord que le menu (alignement). 384 px, jamais plus haute que la place sous le menu. */
+   Toujours au centre du dessin. 384 px (512 px sur grand écran), jamais plus haute que la place sous le menu. */
 .entry-content > .hero.alignfull::after {
   content: "";
   justify-self: end;
-  width: var(--bulle);
+  width: var(--b);
+  margin-right: calc(var(--b) * .4615 - var(--debord));   /* reste au centre du dessin */
   aspect-ratio: 1;
   background: url('images/bulle-clarisse.webp') center / contain no-repeat;
   filter: drop-shadow(0 24px 48px rgba(109, 79, 216, .25));   /* ombre douce violette : la bulle se détache */
