@@ -593,12 +593,16 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
   html[lang^="en"] .hero .hero__titre { font-size: 64px; line-height: 70px; }
 }
 
-/* --- Tablette et mobile : une seule colonne ; la photo devient un avatar de 64 px devant le surtitre --- */
+/* --- Tablette et mobile : une seule colonne ; la photo devient un avatar de 64 px devant le surtitre.
+   L'illustration est éclatée en 3 éléments posés dans les espaces libres (même transparence qu'en grand) :
+   la tablette à côté du titre, le téléphone à côté des boutons, le tableau en bas, avant la vague. --- */
 @media (max-width: 1024px) {
-  .entry-content > .hero.alignfull { grid-template-columns: 1fr; }
+  .entry-content > .hero.alignfull {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);      /* le texte, puis toute la place libre jusqu'à la vague */
+  }
   .hero .wp-block-group__inner-container::before { display: none; }   /* plus de place pour les étincelles */
-  .entry-content > .hero.alignfull::before,
-  .entry-content > .hero.alignfull::after { display: none; }
+  .entry-content > .hero.alignfull::after { display: none; }          /* la bulle devient l'avatar du surtitre */
   .hero .hero__surtitre {
     display: flex;
     align-items: center;
@@ -610,6 +614,80 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
     height: 64px;
     background: url('images/bulle-clarisse.webp') center / contain no-repeat;
   }
+
+  /* 1. Le tableau interactif : centré dans l'espace libre sous les pastilles (288 × 192 px maximum).
+     Il descend jusque sous la vague (-80 px), qui l'estompe : sans jamais rallonger le hero. */
+  .entry-content > .hero.alignfull::before {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    align-self: stretch;
+    width: min(100%, 288px);
+    max-height: 192px;
+    aspect-ratio: auto;
+    margin: 16px 0 -80px;
+    background: url('images/illu-tableau.svg') center / contain no-repeat;
+  }
+
+  /* 2. Le téléphone : à droite des boutons */
+  .hero .wp-block-buttons { position: relative; }
+  .hero .wp-block-buttons::after {
+    content: "";
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 64px;
+    aspect-ratio: 242 / 413;
+    background: url('images/illu-telephone.svg') center / contain no-repeat;
+    opacity: .55;
+    pointer-events: none;
+  }
+
+  /* 3. La tablette : à droite de la ligne de titre la plus courte (1lh = une ligne du titre) */
+  .hero .hero__titre { position: relative; }
+  .hero .hero__titre::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: calc(1lh - 4px);                         /* « à l'écran : », la 2e ligne (déborde de 4 px dans l'interligne) */
+    height: calc(1lh + 8px);
+    aspect-ratio: 372 / 287;
+    background: url('images/illu-tablette.svg') center / contain no-repeat;
+    opacity: .55;
+    pointer-events: none;
+  }
+  html[lang^="en"] .hero .hero__titre::after {    /* en anglais, c'est « From the », la 1re ligne */
+    top: -16px;                                   /* monte dans l'espace sous le surtitre */
+    height: calc(1lh + 12px);
+  }
+}
+/* Téléphones peu hauts (< 700 px) : pas la place pour le tableau sans qu'il soit coupé par l'écran */
+@media (max-width: 767px) and (max-height: 699px) {
+  .entry-content > .hero.alignfull::before { display: none; }
+}
+/* Tablette (768-1024 px) : le titre remplit ses lignes, la tablette passe à droite des pastilles */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .entry-content > .hero.alignfull::before { width: min(100%, 432px); max-height: 288px; }   /* plus de place : tableau plus grand */
+  .hero .hero__titre::after { display: none; }
+  .hero .wp-block-buttons::after {                /* boutons côte à côte : le téléphone suit les boutons */
+    position: static;
+    transform: none;
+    align-self: center;
+    margin: -32px 0 -32px 24px;                   /* plus haut que les boutons, sans les décaler */
+  }
+  .hero .hero__atouts { position: relative; }
+  .hero .hero__atouts::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -16px;                                /* à hauteur de la 2e ligne de pastilles, la plus courte */
+    height: 80px;
+    aspect-ratio: 372 / 287;
+    background: url('images/illu-tablette.svg') center / contain no-repeat;
+    opacity: .55;
+    pointer-events: none;
+  }
 }
 @media (max-width: 399px) {                       /* petits téléphones : avatar de 48 px, le surtitre tient sur 2 lignes */
   .hero .hero__surtitre::before { flex-basis: 48px; height: 48px; }
@@ -618,7 +696,6 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
 /* --- Mobile : le contenu commence sous le menu ; 96 px en bas = 80 px de vague + 16 px d'air --- */
 @media (max-width: 767px) {
   .entry-content > .hero.alignfull {
-    align-content: start;
     padding-top: calc(var(--hauteur-entete) + 24px);
     padding-bottom: 96px;
   }
@@ -637,10 +714,6 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
   .hero .hero__titre { margin-bottom: 32px; }
   .hero .wp-block-buttons { gap: 16px; }
   .hero .hero__atouts { margin-top: 48px; gap: 12px 8px; }
-}
-/* Grands téléphones (> 760 px de haut) : le contenu est centré verticalement */
-@media (max-width: 767px) and (min-height: 761px) {
-  .entry-content > .hero.alignfull { align-content: center; }
 }
 /* Anglais sur téléphone peu haut (≤ 700 px) : le titre, plus long, passe en Hero XS */
 @media (max-width: 767px) and (max-height: 700px) {
