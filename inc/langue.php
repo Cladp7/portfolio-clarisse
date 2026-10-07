@@ -250,6 +250,14 @@ add_filter('nav_menu_link_attributes', function ($attributs) {
 function clarisse_alts_en()
 {
     return array(
+        'blog-accueil' => 'Y a un truc qui blog: home page of the blog',
+        'blog-produit' => 'Y a un truc qui blog: product page',
+        'blog-couverture-site' => 'Y a un truc qui blog: home page and a product page',
+        'lb-accueil' => 'La Boucle: home page with the logo, the menu and the latest items',
+        'lb-cartes' => 'La Boucle: film and series cards',
+        'laboucle-couverture-site' => 'La Boucle: home page and content cards',
+        'vallee-couverture' => 'La Vallée du Savoir: home page of the website',
+        'cinqjs-couverture' => 'One page, five JS libraries: the carousel and the charts',
         'blog-vue-blade' => 'Blade code: loop displaying the products',
         'blog-couverture' => 'Laravel code: product routes and Product model',
         'pn-menu' => 'Philippe Noël website: full-screen mobile menu',
@@ -342,6 +350,8 @@ function clarisse_legendes_en()
         'ff-programmes' => array('The programmes', 'Three consistent cards: picture, length, level, short description and button.'),
         'lb-code-index' => array('The WordPress Loop', 'index.php: the Loop shows each item with its image, title, categories and an excerpt.'),
         'lb-code-functions' => array('The functions.php file', 'Theme settings: featured images and clean loading of the stylesheet.'),
+        'lb-accueil' => array('The home page', 'The logo, the category menu, the search bar and the latest items as cards.'),
+        'lb-cartes' => array('The content cards', 'The same template part everywhere: featured image, title, category, excerpt and a “Read more” link.'),
         'lb-contenus' => array('The content', 'Twenty films, series, books, comics and manga, each with its featured image.'),
         'Capture-decran-2026-09-26-141616' => array('Two paths, depending on the mood', 'Read alone or listen to a story: each world has its own colour so children find their way easily.'),
         'Capture-decran-2026-09-26-141715' => array('Stories that appear on their own', 'A query loop shows each new story, with its illustration and an excerpt.'),
@@ -360,6 +370,8 @@ function clarisse_legendes_en()
         'pn-desktop' => array('The desktop version', 'The mock-up\'s hero: full-screen photo, title on the left and a horizontal menu.'),
         'pn-mobile' => array('The smartphone version', 'The same hero rearranged: photo at the top, text and button below.'),
         'pn-menu' => array('The mobile menu', 'The burger button opens a full-screen menu with well-spaced links.'),
+        'blog-accueil' => array('The blog\'s home page', 'The blog provided by the teacher, with the “Products” entry in the menu, leading to the shop.'),
+        'blog-produit' => array('A product page', 'Name, price, image and category, with suggested products, in the blog\'s layout.'),
         'blog-couverture' => array('Routes and model', 'web.php sends the products to the view, and the Product model is linked to its category.'),
         'blog-vue-blade' => array('The Blade view', 'A @foreach loop shows each product in a card: category, name, excerpt, price and link.'),
     );

@@ -736,10 +736,11 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
 /* 128 px en bas = 48 px d'air + 80 px réservés à la vague */
 .projet__entete {
   position: relative;
+  /* 48 px entre le menu et le premier élément (fil d'Ariane ou titre), sur toutes les pages intérieures */
   padding: calc(var(--hauteur-entete) + 48px) 0 128px;
 }
-.projets .projet__entete {                        /* pages sans fil d'Ariane : plus d'air au-dessus du titre */
-  padding-top: calc(var(--hauteur-entete) + 96px);
+@media (max-width: 767px) {
+  .projet__entete { padding-top: calc(var(--hauteur-entete) + 32px); }   /* mobile : une marche plus bas */
 }
 
 /* Fil d'Ariane */
@@ -873,8 +874,13 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
 }
 .grille-projets .carte-projet {
   position: relative;                             /* repère pour le lien qui couvre toute la carte */
-  display: flex;
-  flex-direction: column;
+  /* Sous-grille : les 5 morceaux de la carte (image, étiquette, titre, texte, lien) partagent
+     les MÊMES lignes que les cartes voisines. Un titre sur 2 lignes fait descendre le texte
+     de toute la rangée : étiquettes, titres, textes et « Voir le projet » restent alignés. */
+  display: grid;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  row-gap: 0;
   background: #fff;
   border: 1px solid var(--violet-100);
   border-radius: var(--rayon-grand);
@@ -889,6 +895,7 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
 .carte-projet__image {
   aspect-ratio: 2 / 1;                            /* le format des images de couverture */
   background: var(--global-palette8);
+  border-bottom: 1px solid var(--violet-100);
 }
 .carte-projet__image img {
   display: block;
@@ -896,25 +903,28 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
   height: 100%;
   object-fit: cover;
   object-position: top;
-  border-bottom: 1px solid var(--violet-100);
 }
+/* Le bloc texte s'efface : ses 4 enfants deviennent des lignes de la sous-grille */
 .grille-projets .carte-projet .carte-projet__contenu {
-  flex: 1;                                        /* toutes les cartes d'une ligne ont la même hauteur */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 24px;
-  background: #fff;
+  display: contents;
   color: var(--violet-900);
 }
-.carte-projet .etiquette {
+.grille-projets .carte-projet .carte-projet__contenu > * {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+.grille-projets .carte-projet .etiquette {
+  justify-self: start;                            /* la pastille garde la largeur de son texte */
+  align-self: start;
+  margin-top: 24px;
   margin-bottom: 12px;
 }
 .grille-projets .carte-projet .carte-projet__titre {
   font-size: var(--fs-title-sm);
   line-height: var(--lh-title-sm);
   color: var(--violet-900);
-  margin: 0 0 12px;
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 .carte-projet__lien {
   font-size: var(--fs-title-sm);
@@ -930,10 +940,12 @@ html[lang^="en"] .hero__titre .mot { white-space: normal; }
 .carte-projet .carte-projet__texte {
   font-size: var(--fs-body-s);
   line-height: var(--lh-body-s);
-  margin: 0 0 16px;
-  flex: 1;                                        /* pousse « Voir le projet » tout en bas */
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 .grille-projets .carte-projet .carte-projet__voir {
+  align-self: end;                                /* « Voir le projet » tout en bas, à la même hauteur partout */
+  margin-bottom: 24px;
   font-size: var(--fs-btn-sm);
   line-height: var(--lh-btn-sm);
   font-weight: 700;
