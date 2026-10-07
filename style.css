@@ -302,7 +302,7 @@ body.content-style-unboxed .site {
   display: block;
   width: 128px;                                   /* 128 × 222/354 ≈ 80 px de haut : 16 + 80 + 16 = 112 */
   aspect-ratio: 354 / 222;
-  background: url('images/logo-miss-clarisse.webp') left center / contain no-repeat;
+  background: url('images/logo-miss-clarisse.webp?v=2026-10-07') left center / contain no-repeat;
 }
 .site-branding .site-title-wrap {                 /* texte caché visuellement, toujours lu à voix haute */
   position: absolute;
