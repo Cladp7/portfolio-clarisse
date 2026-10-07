@@ -17,7 +17,6 @@
 
 // Version anglaise du portfolio (adresses /en/…, traductions, bouton FR / EN)
 require_once get_stylesheet_directory() . '/inc/langue.php';
-require_once get_stylesheet_directory() . '/inc/mise-a-jour-contenus.php';   // nouvelles images et textes (une seule fois par site)
 
 /* =========================================================
    1. CHARGEMENT DU CSS ET DES SCRIPTS
